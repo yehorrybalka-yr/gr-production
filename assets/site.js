@@ -41,6 +41,31 @@ let LANG='ru';
 const t=k=>{const p=PAGE.T[LANG]||{};return p[k]!=null?p[k]:(SHARED[LANG]||{})[k]};
 const hooks=[];
 
+/* ---------- tracking: Meta Pixel + Microsoft Clarity ----------
+   track(name, params) sends a standard Meta event if the name is one, otherwise a custom event,
+   and mirrors the event name to Clarity. Exposed as window.grTrack for future buttons.
+   Automatic: any click on a WhatsApp / phone / email / Instagram / Telegram link = Contact;
+   any element with data-track="EventName" (optional data-track-label) is tracked on click. */
+const STD_EVENTS=['Lead','Contact','ViewContent','Schedule','SubmitApplication','CompleteRegistration','InitiateCheckout','AddToCart','Search','FindLocation','CustomizeProduct'];
+function track(name,params){
+  const p=Object.assign({page:PAGE.id||'main',lang:LANG},params||{});
+  try{if(window.fbq)(STD_EVENTS.includes(name)?fbq('track',name,p):fbq('trackCustom',name,p))}catch(e){}
+  try{if(window.clarity)clarity('event',name)}catch(e){}
+}
+window.grTrack=track;
+try{if(window.clarity)clarity('set','page',PAGE.id||'main')}catch(e){}
+const label=el=>(el.dataset.trackLabel||el.textContent||'').replace(/\s+/g,' ').trim().slice(0,60);
+const contactMethod=href=>/wa\.me|whatsapp/i.test(href)?'whatsapp':/^tel:/i.test(href)?'phone':/^mailto:/i.test(href)?'email':/instagram\.com/i.test(href)?'instagram':/t\.me\//i.test(href)?'telegram':'';
+document.addEventListener('click',e=>{
+  const el=e.target.closest('a,button,[data-track]');if(!el)return;
+  if(el.dataset.track){track(el.dataset.track,{label:label(el)});return}
+  const href=el.getAttribute('href')||'';
+  const method=contactMethod(href);
+  if(method){track('Contact',{method,label:label(el)});return}
+  if(href==='#contact'){const place=el.closest('.nav')?'nav':el.closest('#hero')?'hero':((el.closest('section')||{}).id||'other');track('CTAClick',{label:label(el),place});return}
+  if(/real-estate\//.test(href))track('OpenRealEstatePage',{label:label(el)});
+},true);
+
 /* ---------- i18n ---------- */
 function rng(seed){let s=seed>>>0;return()=>(s=(s*1664525+1013904223)>>>0)/4294967296}
 function splitInto(el,text){
@@ -162,7 +187,7 @@ hooks.push(()=>{reels.forEach(r=>{r.setAttribute('aria-label',(r.dataset.title||
 const lb=$('#lb'),lbv=$('#lbv');let lastFocus=null;
 function openLb(name){if(!lb)return;lastFocus=document.activeElement;lbv.src=`${BASE}v/${name}.mp4`;lbv.muted=false;lb.classList.add('open');document.body.style.overflow='hidden';reels.forEach(r=>{const v=r.querySelector('video');if(v)v.pause()});lbv.play().catch(()=>{});$('#lbclose').focus()}
 function closeLb(){lb.classList.remove('open');lbv.pause();lbv.removeAttribute('src');lbv.load();document.body.style.overflow='';if(lastFocus)lastFocus.focus()}
-reels.forEach(r=>r.addEventListener('click',()=>openLb(srcOf(r))));
+reels.forEach(r=>r.addEventListener('click',()=>{openLb(srcOf(r));track('ViewContent',{content_type:'video',content_name:r.dataset.title||r.dataset.v,content_ids:[r.dataset.v]})}));
 if(lb){$('#lbclose').addEventListener('click',closeLb);lb.addEventListener('click',e=>{if(e.target===lb)closeLb()});addEventListener('keydown',e=>{if(e.key==='Escape'&&lb.classList.contains('open'))closeLb()})}
 
 /* ---------- rail ---------- */
@@ -202,7 +227,7 @@ if(recbtn){
   function tick(now){
     const dt=Math.min(64,now-(last||now));last=now;
     if(holding)h=Math.min(1,h+dt/HOLD);else h=Math.max(0,h-dt/(HOLD*.6)*(.4+h));
-    let just=false;if(h>=1&&!done){done=true;holding=false;just=true}if(done)h=1;
+    let just=false;if(h>=1&&!done){done=true;holding=false;just=true;track('RecHoldComplete')}if(done)h=1;
     render(just);
     if((holding||h>0)&&!(done&&h===1))raf=requestAnimationFrame(tick);else{raf=null;last=0}
   }
@@ -232,7 +257,8 @@ if(revSec){
 }
 
 /* ---------- package buttons fill the form ---------- */
-$$('[data-pick]').forEach(b=>b.addEventListener('click',()=>{const sel=$('#form [name=package]');if(sel)sel.value=b.dataset.pick;const c=$('#contact');c&&c.scrollIntoView({behavior:RM.matches?'auto':'smooth'});setTimeout(()=>{const n=$('#form [name=name]');n&&n.focus({preventScroll:true})},RM.matches?0:700)}));
+const PACK_PRICE={one:650,three:1500,six:2500};
+$$('[data-pick]').forEach(b=>b.addEventListener('click',()=>{track('SelectPackage',{package:b.dataset.pick,value:PACK_PRICE[b.dataset.pick]||0,currency:'EUR'});const sel=$('#form [name=package]');if(sel)sel.value=b.dataset.pick;const c=$('#contact');c&&c.scrollIntoView({behavior:RM.matches?'auto':'smooth'});setTimeout(()=>{const n=$('#form [name=name]');n&&n.focus({preventScroll:true})},RM.matches?0:700)}));
 
 /* ---------- form to WhatsApp (source page + ad tags included) ---------- */
 const form=$('#form');
@@ -241,7 +267,7 @@ if(form){
   form.addEventListener('submit',e=>{
     e.preventDefault();
     const name=form.elements.name.value.trim();
-    if(!name){form.elements.name.focus();form.elements.name.setCustomValidity(t('f_err'));form.elements.name.reportValidity();setTimeout(()=>form.elements.name.setCustomValidity(''),2000);return}
+    if(!name){track('FormError',{field:'name'});form.elements.name.focus();form.elements.name.setCustomValidity(t('f_err'));form.elements.name.reportValidity();setTimeout(()=>form.elements.name.setCustomValidity(''),2000);return}
     const lines=[t('wa_hi'),'',`${t('wa_name')}: ${name}`];
     $$('[data-wa]',form).forEach(el=>{
       let v='';
@@ -253,9 +279,21 @@ if(form){
     lines.push('',`${t('wa_page')}: ${PAGE.label||PAGE.id}${utm?' · '+utm:''}`);
     const url=`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(lines.join('\n'))}`;
     form.classList.add('sent');
+    /* no personal data goes to the pixel: only what was chosen in the form and the ad source */
+    const el=form.elements, val=n=>{const f=el[n];if(!f)return undefined;if(f.tagName==='SELECT')return f.value||f.options[f.selectedIndex].textContent.trim();return f.value||undefined};
+    track('Lead',{content_name:PAGE.label||PAGE.id,method:'whatsapp_form',role:val('role'),package:val('package'),shoot_type:val('type'),value:PACK_PRICE[val('package')]||undefined,currency:PACK_PRICE[val('package')]?'EUR':undefined,utm_source:new URLSearchParams(location.search).get('utm_source')||undefined});
     const w=window.open(url,'_blank','noopener');if(!w)location.href=url;
   });
+  let started=false;
+  form.addEventListener('focusin',()=>{if(started)return;started=true;track('FormStart')});
 }
+
+/* ---------- section views worth knowing about (once per page load) ---------- */
+const seen=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;seen.unobserve(e.target);track(e.target.dataset.seenEvent)}),{threshold:.4});
+[['#packages','ViewPackages'],['#contact','ViewForm'],['#reviews','ViewReviews']].forEach(([s,n])=>{const el=$(s);if(el&&!el.hidden){el.dataset.seenEvent=n;seen.observe(el)}});
+
+/* ---------- FAQ: which questions people open ---------- */
+$$('.faq details').forEach(d=>d.addEventListener('toggle',()=>{if(d.open)track('FAQOpen',{question:label(d.querySelector('summary'))})}));
 
 /* ---------- reduced motion ---------- */
 function pin(){recApi&&recApi.finish();$$('.rv').forEach(el=>el.classList.add('in','done'));$$('[data-count]').forEach(el=>{el.textContent=el.dataset.count+(el.dataset.suffix||'')});reels.forEach(r=>{const v=r.querySelector('video');if(v)v.pause()})}
