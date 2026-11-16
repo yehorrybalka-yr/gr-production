@@ -6,6 +6,8 @@ const SITE = {
   whatsapp: '380675317874', // international format, digits only, e.g. 34600000000
   /* Google Apps Script web app URL (see google-apps-script/README.md). Empty = leads go to WhatsApp only. */
   leadsEndpoint: 'https://script.google.com/macros/s/AKfycbya89YpeqR7c74vf4GfUQIfeXYbFmgUZdx1zaO3ZdTtWO6NyaptHpDTPmpT0p5tzCFh/exec',
+  /* Data controller shown on the privacy page. Empty email = WhatsApp is shown as the contact. */
+  legal: { name: 'Gleb Rudakov', email: '', city: 'Valencia, España' },
   /* Real client quotes only. pages: which pages show it ('main', 'real-estate'). */
   reviews: [
     { name: 'Yarl', role: { ru: 'Недвижимость', en: 'Real estate', es: 'Inmobiliaria' }, orig: 'ru', pages: ['main', 'real-estate'], text: {
@@ -21,15 +23,21 @@ const SHARED = {
 ru:{skip:"К содержанию",photo_tag:"GLEB · DOP",rev_k:"Отзывы",rev_h:"Что говорят клиенты.",rev_tr:"Перевод с русского",
 f_name:"Имя",f_name_ph:"Как к вам обращаться",f_msg:"Пара слов о проекте",f_note:"Без спама. Отвечаю лично.",f_btn:"Отправить в WhatsApp",
 f_ok:"Открываем WhatsApp с вашей заявкой. Если окно не открылось, проверьте блокировщик всплывающих окон.",f_err:"Напишите, как к вам обращаться.",
-wa_name:"Имя",wa_page:"Страница",lb_close:"Закрыть",play:"смотреть со звуком"},
+wa_name:"Имя",wa_page:"Страница",lb_close:"Закрыть",play:"смотреть со звуком",
+ck_text:"Мы используем cookie Meta и Microsoft Clarity, чтобы понимать, как работает сайт, и показывать рекламу. Они включатся, только если вы согласитесь.",ck_more:"Подробнее",ck_accept:"Принять",ck_reject:"Только необходимые",ck_settings:"Настройки cookie",ck_label:"Согласие на cookie",
+privacy:"Политика конфиденциальности",f_privacy:"Отправляя заявку, вы соглашаетесь с",f_privacy_link:"политикой конфиденциальности"},
 en:{skip:"Skip to content",photo_tag:"GLEB · DOP",rev_k:"Reviews",rev_h:"What clients say.",rev_tr:"Translated from Russian",
 f_name:"Name",f_name_ph:"What should I call you",f_msg:"A few words about the project",f_note:"No spam. I reply personally.",f_btn:"Send via WhatsApp",
 f_ok:"Opening WhatsApp with your request. If nothing opened, check your pop-up blocker.",f_err:"Please tell me your name.",
-wa_name:"Name",wa_page:"Page",lb_close:"Close",play:"watch with sound"},
+wa_name:"Name",wa_page:"Page",lb_close:"Close",play:"watch with sound",
+ck_text:"We use Meta and Microsoft Clarity cookies to understand how the site works and to show ads. They are switched on only if you agree.",ck_more:"Learn more",ck_accept:"Accept",ck_reject:"Only necessary",ck_settings:"Cookie settings",ck_label:"Cookie consent",
+privacy:"Privacy policy",f_privacy:"By sending the request you agree to the",f_privacy_link:"privacy policy"},
 es:{skip:"Ir al contenido",photo_tag:"GLEB · DOP",rev_k:"Opiniones",rev_h:"Lo que dicen los clientes.",rev_tr:"Traducido del ruso",
 f_name:"Nombre",f_name_ph:"¿Cómo te llamas?",f_msg:"Unas palabras sobre el proyecto",f_note:"Sin spam. Respondo personalmente.",f_btn:"Enviar por WhatsApp",
 f_ok:"Abriendo WhatsApp con tu solicitud. Si no se abre, revisa el bloqueador de ventanas.",f_err:"Dime cómo te llamas.",
-wa_name:"Nombre",wa_page:"Página",lb_close:"Cerrar",play:"ver con sonido"}
+wa_name:"Nombre",wa_page:"Página",lb_close:"Cerrar",play:"ver con sonido",
+ck_text:"Usamos cookies de Meta y Microsoft Clarity para entender cómo funciona la web y mostrar publicidad. Solo se activan si las aceptas.",ck_more:"Más información",ck_accept:"Aceptar",ck_reject:"Solo necesarias",ck_settings:"Configuración de cookies",ck_label:"Consentimiento de cookies",
+privacy:"Política de privacidad",f_privacy:"Al enviar la solicitud aceptas la",f_privacy_link:"política de privacidad"}
 };
 
 (function(){
@@ -50,6 +58,7 @@ const hooks=[];
    any element with data-track="EventName" (optional data-track-label) is tracked on click. */
 const STD_EVENTS=['Lead','Contact','ViewContent','Schedule','SubmitApplication','CompleteRegistration','InitiateCheckout','AddToCart','Search','FindLocation','CustomizeProduct'];
 function track(name,params,opts){
+  if(store.get('gr-consent')!=='all')return; /* nothing is sent without cookie consent */
   const p=Object.assign({page:PAGE.id||'main',lang:LANG},params||{});
   /* opts.eventID lets the same event be deduplicated later if it is also sent server-side (Conversions API) */
   try{if(window.fbq)(STD_EVENTS.includes(name)?fbq('track',name,p,opts||{}):fbq('trackCustom',name,p,opts||{}))}catch(e){}
@@ -311,6 +320,67 @@ if(form){
   let started=false;
   form.addEventListener('focusin',()=>{if(started)return;started=true;track('FormStart')});
 }
+
+/* ---------- cookie consent ----------
+   Meta Pixel and Clarity start only after "Accept" (window.grLoadTracking lives in each page's <head>).
+   The choice is kept in localStorage 'gr-consent' = 'all' | 'necessary'.
+   "Cookie settings" in the footer reopens the banner; rejecting after accepting revokes consent and clears the cookies. */
+const ROOT=BASE.replace(/assets\/$/,'');
+const PRIVACY_URL=ROOT+'privacy/';
+const consentGet=()=>store.get('gr-consent');
+function wipeTrackingCookies(){
+  const h=location.hostname, doms=['',h,'.'+h,'.'+h.split('.').slice(-2).join('.')];
+  ['_fbp','_fbc','_clck','_clsk'].forEach(n=>doms.forEach(d=>{document.cookie=`${n}=; Max-Age=0; path=/`+(d?`; domain=${d}`:'')}));
+}
+const ck=document.createElement('div');ck.className='ck';ck.setAttribute('role','region');
+ck.innerHTML='<p class="ck-text"><span></span> <a class="ck-more"></a></p><div class="ck-btns"><button type="button" class="btn btn-ghost ck-reject"></button><button type="button" class="btn btn-accent ck-accept"></button></div>';
+document.body.appendChild(ck);
+const ckOpen=v=>{ck.classList.toggle('on',v);document.body.classList.toggle('ck-open',v)};
+ck.querySelector('.ck-more').href=PRIVACY_URL;
+ck.querySelector('.ck-accept').addEventListener('click',()=>{
+  store.set('gr-consent','all');ckOpen(false);
+  if(window.grLoadTracking)window.grLoadTracking();
+  try{window.clarity&&clarity('consentv2',{ad_Storage:'granted',analytics_Storage:'granted'})}catch(e){}
+  try{window.fbq&&fbq('consent','grant')}catch(e){}
+  track('ConsentGranted');
+});
+ck.querySelector('.ck-reject').addEventListener('click',()=>{
+  const wasOn=consentGet()==='all';store.set('gr-consent','necessary');ckOpen(false);
+  try{window.clarity&&clarity('consentv2',{ad_Storage:'denied',analytics_Storage:'denied'})}catch(e){}
+  try{window.fbq&&fbq('consent','revoke')}catch(e){}
+  if(wasOn)wipeTrackingCookies();
+});
+hooks.push(()=>{ck.querySelector('.ck-text span').textContent=t('ck_text');ck.querySelector('.ck-more').textContent=t('ck_more');ck.querySelector('.ck-accept').textContent=t('ck_accept');ck.querySelector('.ck-reject').textContent=t('ck_reject');ck.setAttribute('aria-label',t('ck_label'))});
+if(!consentGet())ckOpen(true);
+
+/* footer: privacy policy + cookie settings on every page */
+const foot=$('footer .wrap');
+if(foot){
+  const box=document.createElement('span');box.className='foot-legal';
+  const pa=document.createElement('a');pa.href=PRIVACY_URL;
+  const cb=document.createElement('button');cb.type='button';cb.addEventListener('click',()=>ckOpen(true));
+  box.append(pa,cb);foot.appendChild(box);
+  hooks.push(()=>{pa.textContent=t('privacy');cb.textContent=t('ck_settings')});
+}
+
+/* form: link to the privacy policy next to the send button */
+const fm=$('#form');
+if(fm){
+  const p=document.createElement('p');p.className='note privacy-note';
+  const s=document.createElement('span'),a=document.createElement('a');a.href=PRIVACY_URL;a.target='_blank';a.rel='noopener';
+  p.append(s,' ',a,'.');const ok=$('.ok',fm);fm.insertBefore(p,ok||null);
+  hooks.push(()=>{s.textContent=t('f_privacy');a.textContent=t('f_privacy_link')});
+}
+
+/* privacy page: controller details from SITE.legal */
+$$('[data-legal]').forEach(el=>{
+  const L=SITE.legal||{},k=el.dataset.legal;
+  if(k!=='contact'){el.textContent=L[k]||'';return}
+  el.textContent='';const a=document.createElement('a');
+  if(L.email){a.href='mailto:'+L.email;a.textContent=L.email}
+  else{a.href='https://wa.me/'+SITE.whatsapp;a.target='_blank';a.rel='noopener';a.textContent='WhatsApp +'+SITE.whatsapp}
+  el.appendChild(a);
+});
 
 /* ---------- sticky action bar on phones ----------
    Shown on screens up to 720px once the first screen is scrolled past, hidden while the form is on screen.
