@@ -153,6 +153,17 @@
       </div>
       <p class="lede ri" data-i18n="work_p" style="max-width:40ch">Нажмите на ролик, чтобы посмотреть со звуком.</p>
     </div>
+    <div class="reccue rv" id="reccue">
+      <button class="recgo ri" id="recgo" type="button" aria-pressed="false" aria-describedby="rechint">
+        <svg viewBox="0 0 64 64" aria-hidden="true"><circle class="trk" cx="32" cy="32" r="30"/><circle class="prog" cx="32" cy="32" r="30"/></svg>
+        <span class="core" aria-hidden="true"></span>
+        <span class="sr" data-i18n="rec2_sr">REC</span>
+      </button>
+      <div class="ri recinfo">
+        <div class="recmeta" aria-hidden="true"><span class="chip rec"><i></i><span id="recstate">STBY</span></span><span class="chip" id="rectc">00:00:00:00</span></div>
+        <p id="rechint" aria-live="polite"></p>
+      </div>
+    </div>
     <nav class="index rv" aria-label="Categories">
       <a class="ri" href="#c-food"><span>01</span><b data-i18n="c1">Кулинария</b></a>
       <a class="ri" href="#c-fashion"><span>02</span><b data-i18n="c2">Фэшн</b></a>
@@ -260,26 +271,16 @@
 
 <!-- PROCESS -->
 <section class="sec" id="process">
-  <div class="wrap process">
+  <div class="wrap process process-solo">
     <div class="rv">
       <div class="kicker ri"><b>03</b><span class="mono" data-i18n="proc_k">Как работаем</span></div>
       <h2 class="ri" data-i18n="proc_h">Один день съёмки. Месяц контента.</h2>
       <ol class="steps ri" id="steps">
-        <svg class="line" aria-hidden="true" preserveAspectRatio="none"><line x1="1" y1="0" x2="1" y2="100%"/><line class="draw" x1="1" y1="0" x2="1" y2="100%"/></svg>
-        <li><b data-i18n="s1t">Созвон</b><p data-i18n="s1p">Разбираем ваш бизнес, аудиторию и цель. Пишу план съёмки и сценарии.</p></li>
-        <li><b data-i18n="s2t">Съёмочный день</b><p data-i18n="s2p">Приезжаю на локацию в Валенсии или по Испании. За день снимаем материал на 20–30 роликов.</p></li>
-        <li><b data-i18n="s3t">Монтаж и цвет</b><p data-i18n="s3p">Монтирую, делаю цвет, звук и субтитры. Готовые ролики под рилс и сторис.</p></li>
+        <svg class="line" aria-hidden="true" preserveAspectRatio="none"><line x1="1" y1="0" x2="1" y2="100%"/><line class="draw" style="--d:1" x1="1" y1="0" x2="1" y2="100%"/></svg>
+        <li class="lit"><b data-i18n="s1t">Созвон</b><p data-i18n="s1p">Разбираем ваш бизнес, аудиторию и цель. Пишу план съёмки и сценарии.</p></li>
+        <li class="lit"><b data-i18n="s2t">Съёмочный день</b><p data-i18n="s2p">Приезжаю на локацию в Валенсии или по Испании. За день снимаем материал на 20–30 роликов.</p></li>
+        <li class="lit"><b data-i18n="s3t">Монтаж и цвет</b><p data-i18n="s3p">Монтирую, делаю цвет, звук и субтитры. Готовые ролики под рилс и сторис.</p></li>
       </ol>
-    </div>
-    <div class="recbox vf rv" id="recbox">
-      <i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i>
-      <div class="tc" aria-hidden="true"><span class="chip rec"><i></i>REC</span><span class="chip" id="tc3">00:00:00</span></div>
-      <button class="recbtn ri" id="recbtn" type="button" aria-describedby="rechint" data-max="30" data-final="20–30" data-lights="#steps li">
-        <svg viewBox="0 0 200 200" aria-hidden="true"><circle class="trk" cx="100" cy="100" r="95" fill="none" stroke-width="1"/><circle class="prog" cx="100" cy="100" r="95" fill="none" stroke-width="2.5"/></svg>
-        <span class="core"></span>
-        <span class="sr" data-i18n="rec_sr">Нажмите и удерживайте, чтобы снять день</span>
-      </button>
-      <div class="count" aria-live="polite"><div class="n" id="recn">0</div><span class="mono" id="rechint" data-i18n="rec_hint">Нажмите и держите REC</span></div>
     </div>
   </div>
 </section>

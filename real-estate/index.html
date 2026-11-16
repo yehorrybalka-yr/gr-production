@@ -133,6 +133,17 @@
       </div>
       <p class="lede ri" data-i18n="work_p" style="max-width:42ch">Настоящие объекты, настоящий свет. Сняли и смонтировали сами. Нажмите, чтобы смотреть со звуком.</p>
     </div>
+    <div class="reccue rv" id="reccue">
+      <button class="recgo ri" id="recgo" type="button" aria-pressed="false" aria-describedby="rechint">
+        <svg viewBox="0 0 64 64" aria-hidden="true"><circle class="trk" cx="32" cy="32" r="30"/><circle class="prog" cx="32" cy="32" r="30"/></svg>
+        <span class="core" aria-hidden="true"></span>
+        <span class="sr" data-i18n="rec2_sr">REC</span>
+      </button>
+      <div class="ri recinfo">
+        <div class="recmeta" aria-hidden="true"><span class="chip rec"><i></i><span id="recstate">STBY</span></span><span class="chip" id="rectc">00:00:00:00</span></div>
+        <p id="rechint" aria-live="polite"></p>
+      </div>
+    </div>
     <div class="trio" style="margin-top:56px">
       <figure>
         <button class="reel vf" data-v="estate1" data-v-en="estate1-en" data-title="Villa · Barcelona"><i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i><div class="screen"></div><div class="hud"><span class="chip">01</span><span class="play"><svg viewBox="0 0 12 12" fill="currentColor"><path d="M2 1l9 5-9 5z"/></svg></span></div></button>
@@ -166,26 +177,16 @@
 
 <!-- ONE VISIT + interactive moment -->
 <section class="sec" id="visit">
-  <div class="wrap process">
+  <div class="wrap process process-solo">
     <div class="rv">
       <div class="kicker ri"><b>03</b><span class="mono" data-i18n="visit_k">Один выезд</span></div>
       <h2 class="ri" data-i18n="visit_h">Один выезд. Три результата.</h2>
-      <p class="lede ri" style="margin-top:24px" data-i18n="visit_p">Удерживайте REC. Вот что мы привозим с одной съёмки.</p>
+      <p class="lede ri" style="margin-top:24px" data-i18n="visit_p">Вот что мы привозим с одной съёмки.</p>
       <div class="deliv ri" id="deliv">
-        <div class="item"><div class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 6h2"/><path d="M10.5 11.5l4 2.5-4 2.5z" fill="currentColor"/></svg></div><div><h3 data-i18n="v1h">Reels</h3><p data-i18n="v1p">Вертикальный ролик для Reels и TikTok, 45–60 секунд, с титрами: метры, террасы, цена.</p></div></div>
-        <div class="item"><div class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2.5" y="5.5" width="19" height="13" rx="2.5"/><path d="M10 9.5l4.5 2.5L10 14.5z" fill="currentColor"/></svg></div><div><h3 data-i18n="v2h">Версия для Idealista</h3><p data-i18n="v2p">Горизонтальная версия для Idealista и вашего сайта: объявления с видео получают больше кликов.</p></div></div>
-        <div class="item"><div class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3.5 8.5h4l1.5-2.5h6l1.5 2.5h4v10h-17z"/><circle cx="12" cy="13" r="3.4"/></svg></div><div><h3 data-i18n="v3h">Фото</h3><p data-i18n="v3p">Каждая комната, терраса и вид, в том же свете, что и ролик.</p></div></div>
+        <div class="item lit"><div class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 6h2"/><path d="M10.5 11.5l4 2.5-4 2.5z" fill="currentColor"/></svg></div><div><h3 data-i18n="v1h">Reels</h3><p data-i18n="v1p">Вертикальный ролик для Reels и TikTok, 45–60 секунд, с титрами: метры, террасы, цена.</p></div></div>
+        <div class="item lit"><div class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2.5" y="5.5" width="19" height="13" rx="2.5"/><path d="M10 9.5l4.5 2.5L10 14.5z" fill="currentColor"/></svg></div><div><h3 data-i18n="v2h">Версия для Idealista</h3><p data-i18n="v2p">Горизонтальная версия для Idealista и вашего сайта: объявления с видео получают больше кликов.</p></div></div>
+        <div class="item lit"><div class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3.5 8.5h4l1.5-2.5h6l1.5 2.5h4v10h-17z"/><circle cx="12" cy="13" r="3.4"/></svg></div><div><h3 data-i18n="v3h">Фото</h3><p data-i18n="v3p">Каждая комната, терраса и вид, в том же свете, что и ролик.</p></div></div>
       </div>
-    </div>
-    <div class="recbox vf rv" id="recbox">
-      <i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i>
-      <div class="tc" aria-hidden="true"><span class="chip rec"><i></i>REC</span><span class="chip" id="tc3">00:00:00</span></div>
-      <button class="recbtn ri" id="recbtn" type="button" aria-describedby="rechint" data-max="3" data-final="3" data-lights="#deliv .item" data-done-key="rec_done">
-        <svg viewBox="0 0 200 200" aria-hidden="true"><circle class="trk" cx="100" cy="100" r="95" fill="none" stroke-width="1"/><circle class="prog" cx="100" cy="100" r="95" fill="none" stroke-width="2.5"/></svg>
-        <span class="core"></span>
-        <span class="sr" data-i18n="rec_sr">Нажмите и удерживайте, чтобы снять объект</span>
-      </button>
-      <div class="count" aria-live="polite"><div class="n" id="recn">0</div><span class="mono" id="rechint" data-i18n="rec_hint">Удерживайте REC</span></div>
     </div>
   </div>
 </section>
@@ -347,7 +348,7 @@ h4_big:"Нажмите REC на вашем объекте.",h4_sub:"Расска
 work_k:"Работы",work_h:"Последние работы.",work_p:"Настоящие объекты, настоящий свет. Сняли и смонтировали сами. Нажмите, чтобы смотреть со звуком.",
 w_c1:"Вилла · 311 м² · Барселона",w_t1:"Вилла с террасой",w_c2:"Вилла · Costa Blanca · 950 000 €",w_t2:"Вилла с бассейном",w_c3:"Дом · 2 террасы · 415 000 €",w_t3:"Дом с двумя террасами",work_after:"Хотите такой ролик для своего объекта?",
 case_k:"Результат",case_m:"просмотров у одного ролика о недвижимости",case_f1:"заявок за один день",case_f2n:"Вся Испания",case_f2:"виллы, квартиры, новостройки",case_f3:"титры на языке ваших покупателей",
-visit_k:"Один выезд",visit_h:"Один выезд. Три результата.",visit_p:"Удерживайте REC. Вот что мы привозим с одной съёмки.",
+visit_k:"Один выезд",visit_h:"Один выезд. Три результата.",visit_p:"Вот что мы привозим с одной съёмки.",
 v1h:"Reels",v1p:"Вертикальный ролик для Reels и TikTok, 45–60 секунд, с титрами: метры, террасы, цена.",v2h:"Версия для Idealista",v2p:"Горизонтальная версия для Idealista и вашего сайта: объявления с видео получают больше кликов.",v3h:"Фото",v3p:"Каждая комната, терраса и вид, в том же свете, что и ролик.",
 rec_sr:"Нажмите и удерживайте, чтобы снять объект",rec_hint:"Удерживайте REC",rec_done:"результата с одного выезда",
 proc_k:"Как мы работаем",proc_h:"Четыре шага. Без напоминаний.",p1h:"Заявка",p1p:"Вы присылаете адрес и задачу. Мы отвечаем с датой и ценой.",p2h:"Планируем свет",p2p:"Смотрим, где солнце, и выбираем час: утро для гостиной, вечер для террасы.",p3h:"Съёмка",p3p:"Один выезд. Видео, фото и дрон, где он разрешён, за один раз.",p4h:"Сдача",p4p:"Называем дату сдачи до съёмки и держим её. Все файлы одной ссылкой.",
@@ -369,7 +370,7 @@ h4_big:"Press REC on your property.",h4_sub:"Tell us about the property. We repl
 work_k:"Work",work_h:"Recent films.",work_p:"Real properties, real light. Filmed and edited by us. Tap to watch with sound.",
 w_c1:"Villa · 311 m² · Barcelona",w_t1:"Villa with a terrace",w_c2:"Villa · Costa Blanca · €950,000",w_t2:"Villa with a pool",w_c3:"House · 2 terraces · €415,000",w_t3:"House with two terraces",work_after:"Want a film like this for your property?",
 case_k:"Result",case_m:"views on a single real estate film",case_f1:"leads in one day",case_f2n:"All of Spain",case_f2:"villas, apartments, new builds",case_f3:"titles in your buyers' language",
-visit_k:"One visit",visit_h:"One visit. Three results.",visit_p:"Hold REC. This is what we bring back from a single shoot.",
+visit_k:"One visit",visit_h:"One visit. Three results.",visit_p:"This is what we bring back from a single shoot.",
 v1h:"Reel",v1p:"Vertical film for Reels and TikTok, 45 to 60 seconds, with titles: metres, terraces, price.",v2h:"Idealista version",v2p:"Horizontal version for Idealista and your website, where listings with video get more clicks.",v3h:"Photos",v3p:"Every room, the terrace and the view, shot in the same light as the film.",
 rec_sr:"Press and hold to film a property",rec_hint:"Hold REC",rec_done:"results from one visit",
 proc_k:"How it works",proc_h:"Four steps. No chasing.",p1h:"Request",p1p:"You send the address and what you need. We reply with a date and a price.",p2h:"Plan the light",p2p:"We check where the sun is and pick the hour: morning for living rooms, evening for terraces.",p3h:"Shoot",p3p:"One visit. Video, photos and drone where it is allowed, in one go.",p4h:"Delivery",p4p:"We name the delivery date before the shoot and keep it. Every file in one link.",
@@ -391,7 +392,7 @@ h4_big:"Dale a REC en tu propiedad.",h4_sub:"Cuéntanos sobre la propiedad. Te r
 work_k:"Trabajos",work_h:"Trabajos recientes.",work_p:"Propiedades reales, luz real. Rodados y montados por nosotros. Toca para verlos con sonido.",
 w_c1:"Villa · 311 m² · Barcelona",w_t1:"Villa con terraza",w_c2:"Villa · Costa Blanca · 950.000 €",w_t2:"Villa con piscina",w_c3:"Casa · 2 terrazas · 415.000 €",w_t3:"Casa con dos terrazas",work_after:"¿Quieres un vídeo así para tu propiedad?",
 case_k:"Resultado",case_m:"visualizaciones de un solo vídeo inmobiliario",case_f1:"contactos en un día",case_f2n:"Toda España",case_f2:"villas, pisos, obra nueva",case_f3:"títulos en el idioma de tus compradores",
-visit_k:"Una visita",visit_h:"Una visita. Tres resultados.",visit_p:"Mantén REC. Esto es lo que traemos de un solo rodaje.",
+visit_k:"Una visita",visit_h:"Una visita. Tres resultados.",visit_p:"Esto es lo que traemos de un solo rodaje.",
 v1h:"Reel",v1p:"Vídeo vertical para Reels y TikTok, de 45 a 60 segundos, con títulos: metros, terrazas, precio.",v2h:"Versión para Idealista",v2p:"Versión horizontal para Idealista y tu web, donde los anuncios con vídeo reciben más clics.",v3h:"Fotos",v3p:"Cada estancia, la terraza y las vistas, con la misma luz que el vídeo.",
 rec_sr:"Mantén pulsado para grabar una propiedad",rec_hint:"Mantén REC",rec_done:"resultados de una visita",
 proc_k:"Cómo trabajamos",proc_h:"Cuatro pasos. Sin perseguir a nadie.",p1h:"Solicitud",p1p:"Nos envías la dirección y lo que necesitas. Te respondemos con fecha y precio.",p2h:"Planificamos la luz",p2p:"Miramos dónde está el sol y elegimos la hora: mañana para el salón, tarde para la terraza.",p3h:"Rodaje",p3p:"Una visita. Vídeo, fotos y dron donde está permitido, todo de una vez.",p4h:"Entrega",p4p:"Fijamos la fecha de entrega antes del rodaje y la cumplimos. Todos los archivos en un enlace.",

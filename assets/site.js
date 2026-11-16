@@ -25,19 +25,19 @@ f_name:"Имя",f_name_ph:"Как к вам обращаться",f_msg:"Пар�
 f_ok:"Открываем WhatsApp с вашей заявкой. Если окно не открылось, проверьте блокировщик всплывающих окон.",f_err:"Напишите, как к вам обращаться.",
 wa_name:"Имя",wa_page:"Страница",lb_close:"Закрыть",play:"смотреть со звуком",
 ck_text:"Мы используем cookie Meta и Microsoft Clarity, чтобы понимать, как работает сайт, и показывать рекламу. Они включатся, только если вы согласитесь.",ck_more:"Подробнее",ck_accept:"Принять",ck_reject:"Только необходимые",ck_settings:"Настройки cookie",ck_label:"Согласие на cookie",
-privacy:"Политика конфиденциальности",f_privacy:"Отправляя заявку, вы соглашаетесь с",f_privacy_link:"политикой конфиденциальности"},
+privacy:"Политика конфиденциальности",rec2_hint:"Нажмите REC, чтобы включить работы",rec2_live:"Идёт запись. Нажмите на ролик, чтобы смотреть со звуком.",rec2_sr:"Включить запись: оживить работы",f_privacy:"Отправляя заявку, вы соглашаетесь с",f_privacy_link:"политикой конфиденциальности"},
 en:{skip:"Skip to content",photo_tag:"GLIB · DOP",rev_k:"Reviews",rev_h:"What clients say.",rev_tr:"Translated from Russian",
 f_name:"Name",f_name_ph:"What should I call you",f_msg:"A few words about the project",f_note:"No spam. I reply personally.",f_btn:"Send via WhatsApp",
 f_ok:"Opening WhatsApp with your request. If nothing opened, check your pop-up blocker.",f_err:"Please tell me your name.",
 wa_name:"Name",wa_page:"Page",lb_close:"Close",play:"watch with sound",
 ck_text:"We use Meta and Microsoft Clarity cookies to understand how the site works and to show ads. They are switched on only if you agree.",ck_more:"Learn more",ck_accept:"Accept",ck_reject:"Only necessary",ck_settings:"Cookie settings",ck_label:"Cookie consent",
-privacy:"Privacy policy",f_privacy:"By sending the request you agree to the",f_privacy_link:"privacy policy"},
+privacy:"Privacy policy",rec2_hint:"Press REC to bring the work to life",rec2_live:"Recording. Tap a film to watch it with sound.",rec2_sr:"Start recording: bring the work to life",f_privacy:"By sending the request you agree to the",f_privacy_link:"privacy policy"},
 es:{skip:"Ir al contenido",photo_tag:"GLIB · DOP",rev_k:"Opiniones",rev_h:"Lo que dicen los clientes.",rev_tr:"Traducido del ruso",
 f_name:"Nombre",f_name_ph:"¿Cómo te llamas?",f_msg:"Unas palabras sobre el proyecto",f_note:"Sin spam. Respondo personalmente.",f_btn:"Enviar por WhatsApp",
 f_ok:"Abriendo WhatsApp con tu solicitud. Si no se abre, revisa el bloqueador de ventanas.",f_err:"Dime cómo te llamas.",
 wa_name:"Nombre",wa_page:"Página",lb_close:"Cerrar",play:"ver con sonido",
 ck_text:"Usamos cookies de Meta y Microsoft Clarity para entender cómo funciona la web y mostrar publicidad. Solo se activan si las aceptas.",ck_more:"Más información",ck_accept:"Aceptar",ck_reject:"Solo necesarias",ck_settings:"Configuración de cookies",ck_label:"Consentimiento de cookies",
-privacy:"Política de privacidad",f_privacy:"Al enviar la solicitud aceptas la",f_privacy_link:"política de privacidad"}
+privacy:"Política de privacidad",rec2_hint:"Pulsa REC para dar vida a los trabajos",rec2_live:"Grabando. Pulsa un vídeo para verlo con sonido.",rec2_sr:"Empezar a grabar: dar vida a los trabajos",f_privacy:"Al enviar la solicitud aceptas la",f_privacy_link:"política de privacidad"}
 };
 
 (function(){
@@ -191,7 +191,7 @@ const autoplayOK=()=>!RM.matches&&!saveData&&canHover.matches;
 const rObs=new IntersectionObserver(es=>es.forEach(e=>{
   const r=e.target;
   if(e.isIntersecting&&e.intersectionRatio>.35){
-    if(!autoplayOK())return;
+    if(!autoplayOK()||r.closest('.rec-standby'))return; /* works stay still until REC */
     let v=r.querySelector('video');
     if(!v){v=document.createElement('video');v.muted=true;v.loop=true;v.playsInline=true;v.setAttribute('playsinline','');v.preload='auto';v.setAttribute('aria-hidden','true');v.tabIndex=-1;v.src=`${BASE}v/${srcOf(r)}.mp4`;v.dataset.cur=srcOf(r);r.querySelector('.screen').appendChild(v);v.addEventListener('playing',()=>r.classList.add('playing'))}
     v.play().catch(()=>{});
@@ -225,37 +225,48 @@ if(cutting){const tc2=$('#tc2');let on=false,last='',lt=0;
 const catLine=$('.cat-line');
 if(catLine){const dot=catLine.querySelector('i');let dl=-1;const up=()=>{const r=catLine.getBoundingClientRect();const p=clamp((innerHeight-r.top)/(innerHeight*.9),0,1);const x=Math.round(p*(r.width-7));if(x!==dl){dl=x;dot.style.setProperty('--x',x+'px')}};addEventListener('scroll',up,{passive:true});up()}
 
-/* ---------- the interactive moment: hold REC ----------
-   #recbtn with data-max (number shown at the end), data-done-key, and data-lights (selector of items that light up). */
-const recbtn=$('#recbtn');let recApi=null;
-if(recbtn){
-  const recn=$('#recn'),hint=$('#rechint'),tc3=$('#tc3');
-  const max=+recbtn.dataset.max||30, finalTxt=recbtn.dataset.final||String(max);
-  const lights=$$(recbtn.dataset.lights||'#steps li'), line=$('#steps line.draw'), steps=$('#steps');
-  if(steps&&line){const measure=()=>line.style.setProperty('--len',steps.querySelector('svg.line').getBoundingClientRect().height||300);measure();addEventListener('resize',measure)}
-  let h=0,holding=false,raf=null,last=0,done=false,lastN=-1,lastH=-1;const HOLD=2200;
-  function render(force){
-    const hr=Math.round(h*1000)/1000;
-    if(hr!==lastH||force){lastH=hr;recbtn.style.setProperty('--h',hr);line&&line.style.setProperty('--d',hr);lights.forEach((li,i)=>li.classList.toggle('lit',done||h>=(i+.5)/lights.length))}
-    const n=Math.round(max*h);
-    if(n!==lastN||force){lastN=n;recn.textContent=done?finalTxt:n;if(tc3)tc3.textContent=['08','12','16','20'][Math.min(3,Math.floor(h*4))]+':00:'+String(Math.floor(h*59)).padStart(2,'0')}
-    hint.textContent=done?t(recbtn.dataset.doneKey||'rec_done'):t('rec_hint');
+/* ---------- REC brings the work to life ----------
+   The works section starts in "standby": covers muted, no autoplay. It goes "live" when the visitor presses REC
+   (a tap, or a short 0.7 s hold), taps any reel, keeps the first reels on screen for 1.8 s, or scrolls past the button.
+   Live = covers regain colour one by one, previews start on desktop, a timecode runs. Tracked as RecStart {method}. */
+const work=$('#work'), recgo=$('#recgo');let recApi=null;
+if(work&&recgo){
+  const state=$('#recstate'),tcEl=$('#rectc'),hint=$('#rechint'),cue=$('#reccue');
+  const wreels=$$('.reel',work);wreels.forEach((r,i)=>r.style.setProperty('--d',(Math.min(i,8)*90)+'ms'));
+  let live=false,h=0,holding=false,raf=null,last=0,t0=0,autoTimer=null,tcOn=false;const HOLD=700;
+  work.classList.add('rec-standby');
+  const setHint=()=>{hint.textContent=t(live?'rec2_live':'rec2_hint')};hooks.push(setHint);
+  function runTc(){if(RM.matches)return;const step=n=>{if(!tcOn||!live)return;const s=(n-t0)/1000,f=Math.floor((s%1)*25);tcEl.textContent='00:'+String(Math.floor(s/60)%60).padStart(2,'0')+':'+String(Math.floor(s)%60).padStart(2,'0')+':'+String(f).padStart(2,'0');requestAnimationFrame(step)};requestAnimationFrame(step)}
+  function activate(method){
+    if(live)return;live=true;holding=false;h=1;clearTimeout(autoTimer);
+    recgo.style.setProperty('--h',1);recgo.setAttribute('aria-pressed','true');
+    work.classList.remove('rec-standby');work.classList.add('rec-live');state.textContent='REC';setHint();
+    t0=performance.now();runTc();
+    wreels.forEach(r=>{rObs.unobserve(r);rObs.observe(r)}); /* re-check which previews should play now */
+    track('RecStart',{method});
   }
   function tick(now){
     const dt=Math.min(64,now-(last||now));last=now;
-    if(holding)h=Math.min(1,h+dt/HOLD);else h=Math.max(0,h-dt/(HOLD*.6)*(.4+h));
-    let just=false;if(h>=1&&!done){done=true;holding=false;just=true;track('RecHoldComplete')}if(done)h=1;
-    render(just);
-    if((holding||h>0)&&!(done&&h===1))raf=requestAnimationFrame(tick);else{raf=null;last=0}
+    if(holding)h=Math.min(1,h+dt/HOLD);else if(!live)h=Math.max(0,h-dt/300);
+    recgo.style.setProperty('--h',Math.round(h*1000)/1000);
+    if(h>=1&&!live)activate('hold');
+    if(!live&&(holding||h>0))raf=requestAnimationFrame(tick);else{raf=null;last=0}
   }
-  const start=e=>{if(done)return;e.preventDefault();holding=true;if(!raf){last=0;raf=requestAnimationFrame(tick)}};
-  const stop=()=>{holding=false;if(!raf&&!done){last=0;raf=requestAnimationFrame(tick)}};
-  recbtn.addEventListener('pointerdown',start);['pointerup','pointerleave','pointercancel'].forEach(x=>recbtn.addEventListener(x,stop));
-  recbtn.addEventListener('keydown',e=>{if((e.key===' '||e.key==='Enter')&&!e.repeat)start(e)});
-  recbtn.addEventListener('keyup',e=>{if(e.key===' '||e.key==='Enter')stop()});
-  recbtn.addEventListener('contextmenu',e=>e.preventDefault());
-  hooks.push(()=>render(true));
-  recApi={finish(){done=true;h=1;render(true)}};
+  recgo.addEventListener('pointerdown',()=>{if(live)return;holding=true;if(!raf)raf=requestAnimationFrame(tick)});
+  recgo.addEventListener('pointerup',()=>{if(!live&&holding)activate('tap')}); /* released before the ring fills = a tap, still counts */
+  ['pointerleave','pointercancel'].forEach(x=>recgo.addEventListener(x,()=>{holding=false}));
+  recgo.addEventListener('click',()=>activate('tap')); /* keyboard Enter/Space and any other click */
+  recgo.addEventListener('contextmenu',e=>e.preventDefault());
+  work.addEventListener('click',e=>{if(e.target.closest('.reel'))activate('reel')},true);
+  new IntersectionObserver(es=>{tcOn=es[0].isIntersecting;if(tcOn&&live)runTc()}).observe(recgo);
+  /* auto-start: any reel at least half on screen for 1.8 s without a press */
+  const seenNow=new Set();
+  const autoObs=new IntersectionObserver(es=>{if(live)return;es.forEach(e=>e.intersectionRatio>=.5?seenNow.add(e.target):seenNow.delete(e.target));
+    if(seenNow.size){if(!autoTimer)autoTimer=setTimeout(()=>activate('auto'),1800)}else{clearTimeout(autoTimer);autoTimer=null}},{threshold:[0,.5]});
+  wreels.forEach(r=>autoObs.observe(r));
+  /* ...or the visitor is already well past the button (more than a screen and a half below it) */
+  if(cue)addEventListener('scroll',function past(){if(live){removeEventListener('scroll',past);return}if(cue.getBoundingClientRect().bottom<-innerHeight*1.5)activate('auto')},{passive:true});
+  recApi={activate};
 }
 
 /* ---------- reviews ---------- */
@@ -417,7 +428,7 @@ const seen=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)retu
 $$('.faq details').forEach(d=>d.addEventListener('toggle',()=>{if(d.open)track('FAQOpen',{question:label(d.querySelector('summary'))})}));
 
 /* ---------- reduced motion ---------- */
-function pin(){recApi&&recApi.finish();$$('.rv').forEach(el=>el.classList.add('in','done'));$$('[data-count]').forEach(el=>{el.textContent=el.dataset.count+(el.dataset.suffix||'')});reels.forEach(r=>{const v=r.querySelector('video');if(v)v.pause()})}
+function pin(){recApi&&recApi.activate('reduced_motion');$$('.rv').forEach(el=>el.classList.add('in','done'));$$('[data-count]').forEach(el=>{el.textContent=el.dataset.count+(el.dataset.suffix||'')});reels.forEach(r=>{const v=r.querySelector('video');if(v)v.pause()})}
 RM.addEventListener('change',e=>{if(e.matches)pin();heroApi&&heroApi.apply()});
 if(RM.matches)pin();
 
