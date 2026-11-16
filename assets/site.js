@@ -58,11 +58,12 @@ const hooks=[];
    any element with data-track="EventName" (optional data-track-label) is tracked on click. */
 const STD_EVENTS=['Lead','Contact','ViewContent','Schedule','SubmitApplication','CompleteRegistration','InitiateCheckout','AddToCart','Search','FindLocation','CustomizeProduct'];
 function track(name,params,opts){
-  if(store.get('gr-consent')!=='all')return; /* nothing is sent without cookie consent */
+  /* Clarity always gets the event (cookieless until consent); Meta Pixel only with cookie consent */
+  try{if(window.clarity)clarity('event',name)}catch(e){}
+  if(store.get('gr-consent')!=='all')return;
   const p=Object.assign({page:PAGE.id||'main',lang:LANG},params||{});
   /* opts.eventID lets the same event be deduplicated later if it is also sent server-side (Conversions API) */
   try{if(window.fbq)(STD_EVENTS.includes(name)?fbq('track',name,p,opts||{}):fbq('trackCustom',name,p,opts||{}))}catch(e){}
-  try{if(window.clarity)clarity('event',name)}catch(e){}
 }
 window.grTrack=track;
 try{if(window.clarity)clarity('set','page',PAGE.id||'main')}catch(e){}
