@@ -184,7 +184,10 @@ const saveData=navigator.connection&&navigator.connection.saveData;
 const reels=$$('.reel');
 const srcOf=r=>(LANG!=='ru'&&r.dataset.vEn)?r.dataset.vEn:r.dataset.v;
 reels.forEach(r=>{r.querySelector('.screen').style.backgroundImage=`url('${BASE}v/${r.dataset.v}.jpg')`});
-const autoplayOK=()=>!RM.matches&&!saveData;
+/* autoplay previews only on desktop with a mouse: on phones and tablets each reel is 4-15 MB,
+   so they show the cover and load the video only when tapped (7.10) */
+const canHover=matchMedia('(hover: hover) and (pointer: fine)');
+const autoplayOK=()=>!RM.matches&&!saveData&&canHover.matches;
 const rObs=new IntersectionObserver(es=>es.forEach(e=>{
   const r=e.target;
   if(e.isIntersecting&&e.intersectionRatio>.35){

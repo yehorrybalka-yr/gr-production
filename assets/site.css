@@ -1,3 +1,4 @@
+[hidden]{display:none!important}
 :root{
   color-scheme:dark;
   --canvas:#0e0c10;
@@ -254,7 +255,7 @@ h3{font:500 clamp(22px,2vw,30px)/1.15 var(--display);letter-spacing:-.01em}
 .steps p{color:var(--text-2);font-size:15px;max-width:44ch}
 .recbox{position:relative;background:var(--panel);border-radius:6px;aspect-ratio:1/1;display:grid;place-items:center;overflow:hidden;max-width:520px;width:100%;justify-self:center}
 .recbox .tc{position:absolute;top:18px;left:18px;right:18px;display:flex;justify-content:space-between}
-.recbtn{position:relative;width:min(52%,240px);aspect-ratio:1;border-radius:50%;border:0;background:none;cursor:pointer;display:grid;place-items:center;touch-action:none;-webkit-user-select:none;user-select:none}
+.recbtn{position:relative;width:min(52%,240px);aspect-ratio:1;border-radius:50%;border:0;background:none;cursor:pointer;display:grid;place-items:center;touch-action:pan-y;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 .recbtn svg{position:absolute;inset:0;width:100%;height:100%}
 .recbtn .trk{stroke:var(--line-strong)}
 .recbtn .prog{stroke:var(--accent);stroke-dasharray:597;stroke-dashoffset:calc(597 * (1 - var(--h,0)));transform:rotate(-90deg);transform-origin:50% 50%}
