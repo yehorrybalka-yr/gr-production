@@ -153,17 +153,6 @@
       </div>
       <p class="lede ri" data-i18n="work_p" style="max-width:40ch">Нажмите на ролик, чтобы посмотреть со звуком.</p>
     </div>
-    <div class="reccue rv" id="reccue">
-      <button class="recgo ri" id="recgo" type="button" aria-pressed="false" aria-describedby="rechint">
-        <svg viewBox="0 0 64 64" aria-hidden="true"><circle class="trk" cx="32" cy="32" r="30"/><circle class="prog" cx="32" cy="32" r="30"/></svg>
-        <span class="core" aria-hidden="true"></span>
-        <span class="sr" data-i18n="rec2_sr">REC</span>
-      </button>
-      <div class="ri recinfo">
-        <div class="recmeta" aria-hidden="true"><span class="chip rec"><i></i><span id="recstate">STBY</span></span><span class="chip" id="rectc">00:00:00:00</span></div>
-        <p id="rechint" aria-live="polite"></p>
-      </div>
-    </div>
     <nav class="index rv" aria-label="Categories">
       <a class="ri" href="#c-food"><span>01</span><b data-i18n="c1">Кулинария</b></a>
       <a class="ri" href="#c-fashion"><span>02</span><b data-i18n="c2">Фэшн</b></a>
@@ -183,9 +172,22 @@
         <p class="lede ri" data-i18n="food_p">Масло, которое тянется. Хлеб, который хрустит в кадре. Снимаем так, что зритель идёт к вам поесть.</p>
         <div class="tags ri"><span data-i18n="t_rest">Рестораны</span><span data-i18n="t_street">Стритфуд</span><span data-i18n="t_menu">Меню</span></div>
       </div>
+      <div class="recwrap">
+        <div class="reccue rv" id="reccue">
+          <button class="recgo ri" id="recgo" type="button" aria-pressed="false" aria-describedby="rechint">
+            <svg viewBox="0 0 64 64" aria-hidden="true"><circle class="trk" cx="32" cy="32" r="30"/><circle class="prog" cx="32" cy="32" r="30"/></svg>
+            <span class="core" aria-hidden="true"></span>
+            <span class="sr" data-i18n="rec2_sr">REC</span>
+          </button>
+          <div class="ri recinfo">
+            <div class="recmeta" aria-hidden="true"><span class="chip rec"><i></i><span id="recstate">STBY</span></span><span class="chip" id="rectc">00:00:00:00</span></div>
+            <p id="rechint" aria-live="polite"></p>
+          </div>
+        </div>
       <div class="pair">
         <button class="reel vf" data-v="culinary" data-title="Кулинария"><i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i><div class="screen"></div><div class="hud"><span class="chip" data-i18n="r_kitchen">Кухня</span><span class="play"><svg viewBox="0 0 12 12" fill="currentColor"><path d="M2 1l9 5-9 5z"/></svg></span></div></button>
         <button class="reel vf" data-v="shawarma" data-title="Shawarma"><i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i><div class="screen"></div><div class="hud"><span class="chip">SHAWARMA</span><span class="play"><svg viewBox="0 0 12 12" fill="currentColor"><path d="M2 1l9 5-9 5z"/></svg></span></div></button>
+      </div>
       </div>
     </article>
 
