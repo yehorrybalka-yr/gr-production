@@ -7,32 +7,32 @@ const SITE = {
   /* Google Apps Script web app URL (see google-apps-script/README.md). Empty = leads go to WhatsApp only. */
   leadsEndpoint: 'https://script.google.com/macros/s/AKfycbya89YpeqR7c74vf4GfUQIfeXYbFmgUZdx1zaO3ZdTtWO6NyaptHpDTPmpT0p5tzCFh/exec',
   /* Data controller shown on the privacy page. Empty email = WhatsApp is shown as the contact. */
-  legal: { name: 'Gleb Rudakov', email: '', city: 'Valencia, España' },
+  legal: { name: 'Glib Rudakov', email: '', city: 'Valencia, España' },
   /* Real client quotes only. pages: which pages show it ('main', 'real-estate'). */
   reviews: [
     { name: 'Yarl', role: { ru: 'Недвижимость', en: 'Real estate', es: 'Inmobiliaria' }, orig: 'ru', pages: ['main', 'real-estate'], text: {
       ru: 'Вау, Глеб, это реально очень круто. Видно сразу, что поработали профессионалы. Я теперь понял, о каком уровне видео ты говорил! Я уже много раз пересмотрел и наслаждаюсь. Реально хочется сотрудничать с такими профессионалами.\n\nВот это мне зашло больше всего. Реально видно, что работали профессионалы и не за один вечер сделано.',
-      en: 'Wow, Gleb, this is really great. You can see right away that professionals made it. Now I understand what level of video you were talking about! I have rewatched it many times and I enjoy it. It really makes me want to work with professionals like this.\n\nThis one I liked the most. You can really see professionals worked on it, and it was not made in one evening.',
-      es: 'Gleb, de verdad, esto está genial. Se ve enseguida que lo han hecho profesionales. ¡Ahora entiendo de qué nivel de vídeo hablabas! Ya lo he visto muchas veces y lo disfruto. Dan ganas de colaborar con profesionales así.\n\nEste es el que más me ha gustado. Se nota que han trabajado profesionales y que no se hizo en una tarde.'
+      en: 'Wow, Glib, this is really great. You can see right away that professionals made it. Now I understand what level of video you were talking about! I have rewatched it many times and I enjoy it. It really makes me want to work with professionals like this.\n\nThis one I liked the most. You can really see professionals worked on it, and it was not made in one evening.',
+      es: 'Glib, de verdad, esto está genial. Se ve enseguida que lo han hecho profesionales. ¡Ahora entiendo de qué nivel de vídeo hablabas! Ya lo he visto muchas veces y lo disfruto. Dan ganas de colaborar con profesionales así.\n\nEste es el que más me ha gustado. Se nota que han trabajado profesionales y que no se hizo en una tarde.'
     } }
   ]
 };
 
 /* ===== copy shared by all pages (a page's own T overrides any key) ===== */
 const SHARED = {
-ru:{skip:"К содержанию",photo_tag:"GLEB · DOP",rev_k:"Отзывы",rev_h:"Что говорят клиенты.",rev_tr:"Перевод с русского",
+ru:{skip:"К содержанию",photo_tag:"GLIB · DOP",rev_k:"Отзывы",rev_h:"Что говорят клиенты.",rev_tr:"Перевод с русского",
 f_name:"Имя",f_name_ph:"Как к вам обращаться",f_msg:"Пара слов о проекте",f_note:"Без спама. Отвечаю лично.",f_btn:"Отправить в WhatsApp",
 f_ok:"Открываем WhatsApp с вашей заявкой. Если окно не открылось, проверьте блокировщик всплывающих окон.",f_err:"Напишите, как к вам обращаться.",
 wa_name:"Имя",wa_page:"Страница",lb_close:"Закрыть",play:"смотреть со звуком",
 ck_text:"Мы используем cookie Meta и Microsoft Clarity, чтобы понимать, как работает сайт, и показывать рекламу. Они включатся, только если вы согласитесь.",ck_more:"Подробнее",ck_accept:"Принять",ck_reject:"Только необходимые",ck_settings:"Настройки cookie",ck_label:"Согласие на cookie",
 privacy:"Политика конфиденциальности",f_privacy:"Отправляя заявку, вы соглашаетесь с",f_privacy_link:"политикой конфиденциальности"},
-en:{skip:"Skip to content",photo_tag:"GLEB · DOP",rev_k:"Reviews",rev_h:"What clients say.",rev_tr:"Translated from Russian",
+en:{skip:"Skip to content",photo_tag:"GLIB · DOP",rev_k:"Reviews",rev_h:"What clients say.",rev_tr:"Translated from Russian",
 f_name:"Name",f_name_ph:"What should I call you",f_msg:"A few words about the project",f_note:"No spam. I reply personally.",f_btn:"Send via WhatsApp",
 f_ok:"Opening WhatsApp with your request. If nothing opened, check your pop-up blocker.",f_err:"Please tell me your name.",
 wa_name:"Name",wa_page:"Page",lb_close:"Close",play:"watch with sound",
 ck_text:"We use Meta and Microsoft Clarity cookies to understand how the site works and to show ads. They are switched on only if you agree.",ck_more:"Learn more",ck_accept:"Accept",ck_reject:"Only necessary",ck_settings:"Cookie settings",ck_label:"Cookie consent",
 privacy:"Privacy policy",f_privacy:"By sending the request you agree to the",f_privacy_link:"privacy policy"},
-es:{skip:"Ir al contenido",photo_tag:"GLEB · DOP",rev_k:"Opiniones",rev_h:"Lo que dicen los clientes.",rev_tr:"Traducido del ruso",
+es:{skip:"Ir al contenido",photo_tag:"GLIB · DOP",rev_k:"Opiniones",rev_h:"Lo que dicen los clientes.",rev_tr:"Traducido del ruso",
 f_name:"Nombre",f_name_ph:"¿Cómo te llamas?",f_msg:"Unas palabras sobre el proyecto",f_note:"Sin spam. Respondo personalmente.",f_btn:"Enviar por WhatsApp",
 f_ok:"Abriendo WhatsApp con tu solicitud. Si no se abre, revisa el bloqueador de ventanas.",f_err:"Dime cómo te llamas.",
 wa_name:"Nombre",wa_page:"Página",lb_close:"Cerrar",play:"ver con sonido",
