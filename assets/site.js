@@ -205,6 +205,54 @@ const lb=$('#lb'),lbv=$('#lbv');let lastFocus=null;
 function openLb(name){if(!lb)return;lastFocus=document.activeElement;lbv.src=`${BASE}v/${name}.mp4`;lbv.muted=false;lb.classList.add('open');document.body.style.overflow='hidden';reels.forEach(r=>{const v=r.querySelector('video');if(v)v.pause()});lbv.play().catch(()=>{});$('#lbclose').focus()}
 function closeLb(){lb.classList.remove('open');lbv.pause();lbv.removeAttribute('src');lbv.load();document.body.style.overflow='';if(lastFocus)lastFocus.focus()}
 reels.forEach(r=>r.addEventListener('click',()=>{openLb(srcOf(r));track('ViewContent',{content_type:'video',content_name:r.dataset.title||r.dataset.v,content_ids:[r.dataset.v]})}));
+/* ---------- hero wall (variant A) ---------- */
+const hw=$('#hero.hwall');
+if(hw){
+  const hreels=$$('.hw-reel',hw), wall=$('#hwwall'), strip=$('#hwstrip'), rot=$('#hwrot');
+  let onScreen=true;
+  const wallVisible=()=>wall&&getComputedStyle(wall).display!=='none';
+  // desktop: light 5 s loops, only while the hero is on screen
+  // desktop: light 5 s loops, created lazily and played only while that tile is actually on screen
+  const vis=new Set();
+  function tile(r,go){
+    let v=r.querySelector('video');
+    if(go&&!v){v=document.createElement('video');v.muted=true;v.loop=true;v.playsInline=true;v.setAttribute('playsinline','');v.preload='auto';v.setAttribute('aria-hidden','true');v.tabIndex=-1;v.src=`${BASE}h/${r.dataset.v}.mp4`;v.addEventListener('playing',()=>r.classList.add('playing'));r.querySelector('.hw-scr').appendChild(v)}
+    if(!v)return; if(go)v.play().catch(()=>{}); else v.pause();
+  }
+  function syncVideos(){const ok=onScreen&&autoplayOK()&&wallVisible();$$('.hw-reel',wall||hw).forEach(r=>tile(r,ok&&vis.has(r)))}
+  const tObs=new IntersectionObserver(es=>{es.forEach(e=>{e.isIntersecting?vis.add(e.target):vis.delete(e.target);tile(e.target,e.isIntersecting&&onScreen&&autoplayOK()&&wallVisible())})},{rootMargin:'120px 0px'});
+  if(wall)$$('.hw-reel',wall).forEach(r=>tObs.observe(r));
+  new IntersectionObserver(es=>{onScreen=es[0].isIntersecting;hw.classList.toggle('paused',!onScreen);syncVideos()}).observe(hw);
+  canHover.addEventListener('change',syncVideos);RM.addEventListener('change',syncVideos);addEventListener('resize',()=>syncVideos(),{passive:true});
+  // click a reel → full film with sound
+  hreels.forEach(r=>r.addEventListener('click',()=>{openLb(r.dataset.v);track('ViewContent',{content_type:'video',content_name:r.dataset.title||r.dataset.v,content_ids:[r.dataset.v],place:'hero'})}));
+  // phones: self-moving strip that the visitor can also swipe
+  if(strip){
+    let pausedUntil=0,interacted=false,x=null,last=0;
+    const hold=()=>{pausedUntil=performance.now()+2600};
+    strip.addEventListener('touchstart',hold,{passive:true});strip.addEventListener('pointerdown',hold);strip.addEventListener('wheel',hold,{passive:true});
+    strip.addEventListener('touchend',()=>{pausedUntil=performance.now()+2600},{passive:true});
+    const step=now=>{
+      requestAnimationFrame(step);
+      if(!onScreen||RM.matches||getComputedStyle(strip).display==='none'||now<pausedUntil){last=now;x=null;return}
+      const dt=Math.min(50,now-(last||now));last=now;
+      if(x===null)x=strip.scrollLeft;
+      const half=strip.scrollWidth/2; x+=dt*0.028; if(x>=half)x-=half;
+      strip.scrollLeft=x;
+    };
+    requestAnimationFrame(step);
+    strip.addEventListener('scroll',()=>{if(performance.now()<pausedUntil){if(!interacted){interacted=true;track('HeroStripSwipe')}const half=strip.scrollWidth/2;if(strip.scrollLeft>=half)strip.scrollLeft-=half}},{passive:true});
+  }
+  // rotating accent line (texts from the old scroll captions)
+  if(rot){
+    const keys=['h2_big','h3_big','h4_big'];let i=0;
+    setInterval(()=>{
+      if(!onScreen||RM.matches||document.hidden)return;
+      rot.classList.add('out');
+      setTimeout(()=>{i=(i+1)%keys.length;rot.dataset.i18n=keys[i];rot.textContent=t(keys[i]);rot.classList.remove('out')},450);
+    },3400);
+  }
+}
 if(lb){$('#lbclose').addEventListener('click',closeLb);lb.addEventListener('click',e=>{if(e.target===lb)closeLb()});addEventListener('keydown',e=>{if(e.key==='Escape'&&lb.classList.contains('open'))closeLb()})}
 
 /* ---------- rail ---------- */

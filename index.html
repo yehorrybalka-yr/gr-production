@@ -78,44 +78,29 @@
 
 <main id="main" tabindex="-1">
 <span id="top"></span>
-<section id="hero" aria-label="GR Production">
-  <div class="stage" id="stage">
-    <div class="frame vf" id="frame">
-      <i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i>
-      <div class="screen" id="poster">
-        <video id="herov" preload="none" muted playsinline aria-hidden="true" tabindex="-1"></video>
+<section id="hero" class="hwall" aria-label="GR Production">
+  <div class="hw-in">
+    <div class="hw-copy">
+      <span class="mono hw-kick" data-i18n="hw_kicker">GR Production · Валенсия</span>
+      <h1 data-i18n="hw_title">Рилс и реклама для бизнеса по всей Испании.</h1>
+      <p class="hw-rot" aria-hidden="true"><span id="hwrot" data-i18n="h2_big">Кадр, ради которого останавливают ленту.</span></p>
+      <p class="hw-sub" data-i18n="hw_sub">Свет, цвет и монтаж уровня кино. Один съёмочный день даёт 20–30 роликов на месяц вперёд.</p>
+      <div class="ctas">
+        <a class="btn btn-accent" href="#contact" data-i18n="cta_main">Обсудить съёмку</a>
+        <a class="btn btn-ghost" href="#work" data-i18n="cta_work">Смотреть работы</a>
       </div>
-      <div class="hud" aria-hidden="true"><span class="chip rec"><i></i>REC</span><span class="chip" id="tc">00:00:00:00</span></div>
-      <div class="hud b" aria-hidden="true"><span class="chip">9:16 · 25P</span><span class="chip">VALENCIA</span></div>
-      <svg class="ring" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="20" fill="none" stroke="currentColor" stroke-opacity=".25" stroke-width="2"/><circle id="ringp" cx="24" cy="24" r="20" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="126" style="stroke-dashoffset:var(--ld,126)"/></svg>
+      <ul class="hw-facts">
+        <li><b>2M+</b><span data-i18n="hw_f1">просмотров у ролика клиента</span></li>
+        <li><b>150+</b><span data-i18n="hw_f2">заявок за день после публикации</span></li>
+        <li><b>20–30</b><span data-i18n="hw_f3">роликов за один съёмочный день</span></li>
+      </ul>
     </div>
-
-    <div class="band b1" data-a="0" data-b="0.22">
-      <div class="l">
-        <span class="mono fade0" data-i18n="h_kicker">Видеопродакшн · Валенсия</span>
-        <h1 class="split" data-split="h_title">GR Production</h1>
-      </div>
-      <div class="r"><p class="sub split" data-split="h_sub">Снимаем рекламу, рилс и истории для бизнеса по всей Испании.</p></div>
+    <div class="hw-wall" id="hwwall">
+      <div class="hw-col hw-c1"><div class="hw-track"><button class="hw-reel" type="button" data-v="culinary" data-title="Кулинария"><span class="hw-scr" style="background-image:url('assets/h/culinary.jpg')"></span></button><button class="hw-reel" type="button" data-v="fashion" data-title="Muralla Roja"><span class="hw-scr" style="background-image:url('assets/h/fashion.jpg')"></span></button><button class="hw-reel" type="button" data-v="bmw" data-title="Car Pro · BMW M4"><span class="hw-scr" style="background-image:url('assets/h/bmw.jpg')"></span></button><button class="hw-reel" type="button" data-v="love1" data-title="Love story · Calpe"><span class="hw-scr" style="background-image:url('assets/h/love1.jpg')"></span></button><button class="hw-reel" type="button" data-v="culinary" data-title="Кулинария" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('assets/h/culinary.jpg')"></span></button><button class="hw-reel" type="button" data-v="fashion" data-title="Muralla Roja" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('assets/h/fashion.jpg')"></span></button><button class="hw-reel" type="button" data-v="bmw" data-title="Car Pro · BMW M4" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('assets/h/bmw.jpg')"></span></button><button class="hw-reel" type="button" data-v="love1" data-title="Love story · Calpe" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('assets/h/love1.jpg')"></span></button></div></div>
+      <div class="hw-col hw-c2"><div class="hw-track"><button class="hw-reel" type="button" data-v="potal" data-title="Potal'"><span class="hw-scr" style="background-image:url('assets/h/potal.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate1" data-title="Villa · 01"><span class="hw-scr" style="background-image:url('assets/h/estate1.jpg')"></span></button><button class="hw-reel" type="button" data-v="barber" data-title="Barber"><span class="hw-scr" style="background-image:url('assets/h/barber.jpg')"></span></button><button class="hw-reel" type="button" data-v="boxing1" data-title="Boxing"><span class="hw-scr" style="background-image:url('assets/h/boxing1.jpg')"></span></button><button class="hw-reel" type="button" data-v="love2" data-title="Love story · Muralla Roja"><span class="hw-scr" style="background-image:url('assets/h/love2.jpg')"></span></button><button class="hw-reel" type="button" data-v="potal" data-title="Potal'" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('assets/h/potal.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate1" data-title="Villa · 01" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('assets/h/estate1.jpg')"></span></button><button class="hw-reel" type="button" data-v="barber" data-title="Barber" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('assets/h/barber.jpg')"></span></button><button class="hw-reel" type="button" data-v="boxing1" data-title="Boxing" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('assets/h/boxing1.jpg')"></span></button><button class="hw-reel" type="button" data-v="love2" data-title="Love story · Muralla Roja" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('assets/h/love2.jpg')"></span></button></div></div>
+      <div class="hw-col hw-c3"><div class="hw-track"><button class="hw-reel" type="button" data-v="shawarma" data-title="Shawarma"><span class="hw-scr" style="background-image:url('assets/h/shawarma.jpg')"></span></button><button class="hw-reel" type="button" data-v="blogger" data-title="Blogger"><span class="hw-scr" style="background-image:url('assets/h/blogger.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate2" data-title="Villa · 02"><span class="hw-scr" style="background-image:url('assets/h/estate2.jpg')"></span></button><button class="hw-reel" type="button" data-v="boxing2" data-title="Boxing club"><span class="hw-scr" style="background-image:url('assets/h/boxing2.jpg')"></span></button><button class="hw-reel" type="button" data-v="shawarma" data-title="Shawarma" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('assets/h/shawarma.jpg')"></span></button><button class="hw-reel" type="button" data-v="blogger" data-title="Blogger" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('assets/h/blogger.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate2" data-title="Villa · 02" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('assets/h/estate2.jpg')"></span></button><button class="hw-reel" type="button" data-v="boxing2" data-title="Boxing club" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('assets/h/boxing2.jpg')"></span></button></div></div>
     </div>
-    <div class="band b2 mid" data-a="0.26" data-b="0.48">
-      <div class="l"><p class="big split" data-split="h2_big">Кадр, ради которого останавливают ленту.</p></div>
-      <div class="r"><p class="sub fade" data-i18n="h2_sub">Свет, цвет и монтаж уровня кино. В вертикальном формате, где сейчас ваши клиенты.</p></div>
-    </div>
-    <div class="band b3 mid" data-a="0.52" data-b="0.74">
-      <div class="l"><p class="sub fade" data-i18n="h3_sub">Ресторан, бренд одежды, свадьба или эксперт. Снимаем всё, что можно показать красиво.</p></div>
-      <div class="r"><p class="big split" data-split="h3_big">Еда. Мода. Любовь. Бренды.</p></div>
-    </div>
-    <div class="band b4" data-a="0.78" data-b="1">
-      <div class="l"><p class="big split" data-split="h4_big">Контент это инвестиция, а не расход.</p></div>
-      <div class="r">
-        <p class="sub fade" data-i18n="h4_sub">Один съёмочный день даёт 20–30 роликов на месяц вперёд.</p>
-        <div class="ctas fade2">
-          <a class="btn btn-accent" href="#contact" data-i18n="cta_main">Обсудить съёмку</a>
-          <a class="btn btn-ghost" href="#work" data-i18n="cta_work">Смотреть работы</a>
-        </div>
-      </div>
-    </div>
-    <div class="cue mono" id="cue" aria-hidden="true"><span></span></div>
+    <div class="hw-strip" id="hwstrip"><div class="hw-strack"><button class="hw-reel" type="button" data-v="culinary" data-title="Кулинария"><span class="hw-scr" style="background-image:url('assets/h/culinary.jpg')"></span></button><button class="hw-reel" type="button" data-v="fashion" data-title="Muralla Roja"><span class="hw-scr" style="background-image:url('assets/h/fashion.jpg')"></span></button><button class="hw-reel" type="button" data-v="bmw" data-title="Car Pro · BMW M4"><span class="hw-scr" style="background-image:url('assets/h/bmw.jpg')"></span></button><button class="hw-reel" type="button" data-v="love1" data-title="Love story · Calpe"><span class="hw-scr" style="background-image:url('assets/h/love1.jpg')"></span></button><button class="hw-reel" type="button" data-v="potal" data-title="Potal'"><span class="hw-scr" style="background-image:url('assets/h/potal.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate1" data-title="Villa · 01"><span class="hw-scr" style="background-image:url('assets/h/estate1.jpg')"></span></button><button class="hw-reel" type="button" data-v="barber" data-title="Barber"><span class="hw-scr" style="background-image:url('assets/h/barber.jpg')"></span></button><button class="hw-reel" type="button" data-v="boxing1" data-title="Boxing"><span class="hw-scr" style="background-image:url('assets/h/boxing1.jpg')"></span></button><button class="hw-reel" type="button" data-v="love2" data-title="Love story · Muralla Roja"><span class="hw-scr" style="background-image:url('assets/h/love2.jpg')"></span></button><button class="hw-reel" type="button" data-v="shawarma" data-title="Shawarma"><span class="hw-scr" style="background-image:url('assets/h/shawarma.jpg')"></span></button><button class="hw-reel" type="button" data-v="blogger" data-title="Blogger"><span class="hw-scr" style="background-image:url('assets/h/blogger.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate2" data-title="Villa · 02"><span class="hw-scr" style="background-image:url('assets/h/estate2.jpg')"></span></button><button class="hw-reel" type="button" data-v="boxing2" data-title="Boxing club"><span class="hw-scr" style="background-image:url('assets/h/boxing2.jpg')"></span></button><button class="hw-reel" type="button" data-v="culinary" data-title="Кулинария" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('assets/h/culinary.jpg')"></span></button><button class="hw-reel" type="button" data-v="fashion" data-title="Muralla Roja" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('assets/h/fashion.jpg')"></span></button><button class="hw-reel" type="button" data-v="bmw" data-title="Car Pro · BMW M4" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('assets/h/bmw.jpg')"></span></button><button class="hw-reel" type="button" data-v="love1" data-title="Love story · Calpe" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('assets/h/love1.jpg')"></span></button><button class="hw-reel" type="button" data-v="potal" data-title="Potal'" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('assets/h/potal.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate1" data-title="Villa · 01" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('assets/h/estate1.jpg')"></span></button><button class="hw-reel" type="button" data-v="barber" data-title="Barber" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('assets/h/barber.jpg')"></span></button><button class="hw-reel" type="button" data-v="boxing1" data-title="Boxing" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('assets/h/boxing1.jpg')"></span></button><button class="hw-reel" type="button" data-v="love2" data-title="Love story · Muralla Roja" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('assets/h/love2.jpg')"></span></button><button class="hw-reel" type="button" data-v="shawarma" data-title="Shawarma" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('assets/h/shawarma.jpg')"></span></button><button class="hw-reel" type="button" data-v="blogger" data-title="Blogger" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('assets/h/blogger.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate2" data-title="Villa · 02" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('assets/h/estate2.jpg')"></span></button><button class="hw-reel" type="button" data-v="boxing2" data-title="Boxing club" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('assets/h/boxing2.jpg')"></span></button></div></div>
   </div>
 </section>
 
@@ -348,11 +333,10 @@
 <script>
 window.PAGE = {
   id: 'main', label: 'GR Production', base: 'assets/',
-  hero: { src: 'assets/hero-scrub.mp4', bytes: 2771170, poster: 'assets/hero-poster.jpg', ending: 'assets/hero-ending.jpg', duration: 11.24 },
   T: {
 ru:{
 skip:"К содержанию",nav_about:"Обо мне",nav_work:"Работы",nav_process:"Как работаем",nav_cta:"Обсудить съёмку",
-h_kicker:"Видеопродакшн · Валенсия",h_title:"GR Production",h_sub:"Снимаем рекламу, рилс и истории для бизнеса по всей Испании.",
+hw_kicker:"GR Production · Валенсия",hw_title:"Рилс и реклама для бизнеса по всей Испании.",hw_sub:"Свет, цвет и монтаж уровня кино. Один съёмочный день даёт 20–30 роликов на месяц вперёд.",hw_f1:"просмотров у ролика клиента",hw_f2:"заявок за день после публикации",hw_f3:"роликов за один съёмочный день",h_kicker:"Видеопродакшн · Валенсия",h_title:"GR Production",h_sub:"Снимаем рекламу, рилс и истории для бизнеса по всей Испании.",
 h2_big:"Кадр, ради которого останавливают ленту.",h2_sub:"Свет, цвет и монтаж уровня кино. В вертикальном формате, где сейчас ваши клиенты.",
 h3_sub:"Ресторан, бренд одежды, свадьба или эксперт. Снимаем всё, что можно показать красиво.",h3_big:"Еда. Мода. Любовь. Бренды.",
 h4_big:"Контент это инвестиция, а не расход.",h4_sub:"Один съёмочный день даёт 20–30 роликов на месяц вперёд.",cta_main:"Обсудить съёмку",cta_work:"Смотреть работы",
@@ -376,7 +360,7 @@ f_name:"Имя",f_name_ph:"Как к вам обращаться",f_type:"Что
 wa_hi:"Здравствуйте, Глеб! Заявка с сайта GR Production.",re_link:"Агентам и агентствам: всё о съёмке недвижимости",wa_type:"Съёмка",wa_msg:"О проекте",ft:"Валенсия · Испания",title:"GR Production · Видеопродакшн в Валенсии"},
 en:{
 skip:"Skip to content",nav_about:"About",nav_work:"Work",nav_process:"Process",nav_cta:"Plan a shoot",
-h_kicker:"Video production · Valencia",h_title:"GR Production",h_sub:"Ads, reels and stories for businesses across Spain.",
+hw_kicker:"GR Production · Valencia",hw_title:"Reels and ads for businesses across Spain.",hw_sub:"Cinema-grade light, colour and editing. One shoot day gives you 20–30 videos for the month ahead.",hw_f1:"views on a client video",hw_f2:"leads in a day after posting",hw_f3:"videos from one shoot day",h_kicker:"Video production · Valencia",h_title:"GR Production",h_sub:"Ads, reels and stories for businesses across Spain.",
 h2_big:"The shot that stops the scroll.",h2_sub:"Cinema-grade light, colour and editing. In vertical, where your clients are now.",
 h3_sub:"A restaurant, a clothing brand, a wedding or an expert. If it can look beautiful, we film it.",h3_big:"Food. Fashion. Love. Brands.",
 h4_big:"Content is an investment, not a cost.",h4_sub:"One shoot day gives you 20–30 videos for the month ahead.",cta_main:"Plan a shoot",cta_work:"See the work",
@@ -400,7 +384,7 @@ f_name:"Name",f_name_ph:"What should I call you",f_type:"What are we filming",f_
 wa_hi:"Hi Glib! A request from the GR Production website.",re_link:"For agents and agencies: real estate filming in detail",wa_type:"Shoot",wa_msg:"About the project",ft:"Valencia · Spain",title:"GR Production · Video production in Valencia"},
 es:{
 skip:"Ir al contenido",nav_about:"Sobre mí",nav_work:"Trabajos",nav_process:"Cómo trabajo",nav_cta:"Hablemos",
-h_kicker:"Productora de vídeo · Valencia",h_title:"GR Production",h_sub:"Anuncios, reels e historias para negocios en toda España.",
+hw_kicker:"GR Production · Valencia",hw_title:"Reels y anuncios para negocios en toda España.",hw_sub:"Luz, color y montaje de cine. Un día de rodaje te da 20–30 vídeos para todo el mes.",hw_f1:"visualizaciones de un vídeo de cliente",hw_f2:"contactos en un día tras publicarlo",hw_f3:"vídeos en un día de rodaje",h_kicker:"Productora de vídeo · Valencia",h_title:"GR Production",h_sub:"Anuncios, reels e historias para negocios en toda España.",
 h2_big:"El plano que detiene el scroll.",h2_sub:"Luz, color y montaje de cine. En vertical, donde están tus clientes.",
 h3_sub:"Un restaurante, una marca de ropa, una boda o un experto. Si puede verse bonito, lo grabamos.",h3_big:"Comida. Moda. Amor. Marcas.",
 h4_big:"El contenido es una inversión, no un gasto.",h4_sub:"Un día de rodaje te da 20–30 vídeos para todo el mes.",cta_main:"Hablemos de tu rodaje",cta_work:"Ver trabajos",
