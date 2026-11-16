@@ -1,0 +1,270 @@
+/* GR Production · shared site engine for every page.
+   A page sets window.PAGE = { id, base, T:{ru,en,es}, hero:{src,bytes,poster,ending} } before loading this file. */
+
+/* ===== settings shared by all pages ===== */
+const SITE = {
+  whatsapp: '',          // international format, digits only, e.g. 34600000000
+  /* Real client quotes only. pages: which pages show it ('main', 'real-estate'). */
+  reviews: [
+    { name: 'Yarl', role: { ru: 'Недвижимость', en: 'Real estate', es: 'Inmobiliaria' }, orig: 'ru', pages: ['main', 'real-estate'], text: {
+      ru: 'Вау, Глеб, это реально очень круто. Видно сразу, что поработали профессионалы. Я теперь понял, о каком уровне видео ты говорил! Я уже много раз пересмотрел и наслаждаюсь. Реально хочется сотрудничать с такими профессионалами.\n\nВот это мне зашло больше всего. Реально видно, что работали профессионалы и не за один вечер сделано.',
+      en: 'Wow, Gleb, this is really great. You can see right away that professionals made it. Now I understand what level of video you were talking about! I have rewatched it many times and I enjoy it. It really makes me want to work with professionals like this.\n\nThis one I liked the most. You can really see professionals worked on it, and it was not made in one evening.',
+      es: 'Gleb, de verdad, esto está genial. Se ve enseguida que lo han hecho profesionales. ¡Ahora entiendo de qué nivel de vídeo hablabas! Ya lo he visto muchas veces y lo disfruto. Dan ganas de colaborar con profesionales así.\n\nEste es el que más me ha gustado. Se nota que han trabajado profesionales y que no se hizo en una tarde.'
+    } }
+  ]
+};
+
+/* ===== copy shared by all pages (a page's own T overrides any key) ===== */
+const SHARED = {
+ru:{skip:"К содержанию",photo_tag:"GLEB · DOP",rev_k:"Отзывы",rev_h:"Что говорят клиенты.",rev_tr:"Перевод с русского",
+f_name:"Имя",f_name_ph:"Как к вам обращаться",f_msg:"Пара слов о проекте",f_note:"Без спама. Отвечаю лично.",f_btn:"Отправить в WhatsApp",
+f_ok:"Открываем WhatsApp с вашей заявкой. Если окно не открылось, проверьте блокировщик всплывающих окон.",f_err:"Напишите, как к вам обращаться.",
+wa_name:"Имя",wa_page:"Страница",lb_close:"Закрыть",play:"смотреть со звуком"},
+en:{skip:"Skip to content",photo_tag:"GLEB · DOP",rev_k:"Reviews",rev_h:"What clients say.",rev_tr:"Translated from Russian",
+f_name:"Name",f_name_ph:"What should I call you",f_msg:"A few words about the project",f_note:"No spam. I reply personally.",f_btn:"Send via WhatsApp",
+f_ok:"Opening WhatsApp with your request. If nothing opened, check your pop-up blocker.",f_err:"Please tell me your name.",
+wa_name:"Name",wa_page:"Page",lb_close:"Close",play:"watch with sound"},
+es:{skip:"Ir al contenido",photo_tag:"GLEB · DOP",rev_k:"Opiniones",rev_h:"Lo que dicen los clientes.",rev_tr:"Traducido del ruso",
+f_name:"Nombre",f_name_ph:"¿Cómo te llamas?",f_msg:"Unas palabras sobre el proyecto",f_note:"Sin spam. Respondo personalmente.",f_btn:"Enviar por WhatsApp",
+f_ok:"Abriendo WhatsApp con tu solicitud. Si no se abre, revisa el bloqueador de ventanas.",f_err:"Dime cómo te llamas.",
+wa_name:"Nombre",wa_page:"Página",lb_close:"Cerrar",play:"ver con sonido"}
+};
+
+(function(){
+const PAGE = window.PAGE || {T:{ru:{},en:{},es:{}}};
+const BASE = PAGE.base || 'assets/';
+const $ = (s,r=document)=>r.querySelector(s), $$ = (s,r=document)=>[...r.querySelectorAll(s)];
+const clamp=(v,lo,hi)=>Math.min(hi,Math.max(lo,v));
+const RM = matchMedia('(prefers-reduced-motion: reduce)');
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+let LANG='ru';
+const t=k=>{const p=PAGE.T[LANG]||{};return p[k]!=null?p[k]:(SHARED[LANG]||{})[k]};
+const hooks=[];
+
+/* ---------- i18n ---------- */
+function rng(seed){let s=seed>>>0;return()=>(s=(s*1664525+1013904223)>>>0)/4294967296}
+function splitInto(el,text){
+  el.textContent='';
+  const sr=document.createElement('span');sr.className='sr';sr.textContent=text;el.appendChild(sr);
+  const vis=document.createElement('span');vis.setAttribute('aria-hidden','true');
+  const words=text.split(' ');const r=rng(text.length*7+3);
+  words.forEach((w,i)=>{const s=document.createElement('span');s.className='w';s.textContent=w;s.style.setProperty('--th',(i/words.length*.45+r()*.05).toFixed(3));vis.appendChild(s);if(i<words.length-1)vis.appendChild(document.createTextNode(' '))});
+  el.appendChild(vis);
+}
+function setLang(l){
+  if(!PAGE.T[l]) l='ru'; LANG=l;
+  document.documentElement.lang=l; if(t('title')) document.title=t('title');
+  $$('[data-i18n]').forEach(e=>{const v=t(e.dataset.i18n);if(v!=null)e.textContent=v});
+  $$('[data-i18n-html]').forEach(e=>{const v=t(e.dataset.i18nHtml);if(v!=null)e.innerHTML=v});
+  $$('[data-i18n-ph]').forEach(e=>{const v=t(e.dataset.i18nPh);if(v!=null)e.placeholder=v});
+  $$('[data-split]').forEach(e=>{const v=t(e.dataset.split);if(v!=null)splitInto(e,v)});
+  $$('.lang button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.lang===l));
+  store.set('gr-lang',l);
+  hooks.forEach(f=>{try{f(l)}catch(e){}});
+}
+$$('.lang button').forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.lang)));
+
+/* ---------- nav ---------- */
+const nav=$('#nav');let navSolid=false;
+function navCheck(){const s=scrollY>innerHeight*.6;if(s!==navSolid){navSolid=s;nav&&nav.classList.toggle('solid',s)}}
+addEventListener('scroll',navCheck,{passive:true});navCheck();
+
+/* ---------- reveals ---------- */
+const rvObs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');rvObs.unobserve(e.target);setTimeout(()=>e.target.classList.add('done'),1500)}}),{rootMargin:'0px 0px -12% 0px'});
+$$('.rv').forEach(el=>rvObs.observe(el));
+
+/* ---------- counters ---------- */
+function runCount(el){const to=+el.dataset.count,suf=el.dataset.suffix||'';if(RM.matches){el.textContent=to+suf;return}const t0=performance.now(),D=1600;(function f(n){const k=clamp((n-t0)/D,0,1),e=1-Math.pow(1-k,3);el.textContent=Math.round(to*e)+suf;if(k<1)requestAnimationFrame(f)})(t0)}
+const cObs=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;cObs.unobserve(e.target);runCount(e.target)}),{threshold:.6});
+$$('[data-count]').forEach(el=>cObs.observe(el));
+
+/* ---------- hero scrub ---------- */
+const hero=$('#hero'),stage=$('#stage'),video=$('#herov');
+let heroApi=null;
+if(hero&&stage&&video&&PAGE.hero){
+  const H=PAGE.hero, frame=$('#frame'), poster=$('#poster'), tcEl=$('#tc'), cue=$('#cue'), ringP=$('#ringp');
+  stage.style.setProperty('--ending',`url('${H.ending}')`);
+  const bands=$$('.band').map((el,i,a)=>({el,a:+el.dataset.a,b:+el.dataset.b,first:i===0,last:i===a.length-1,op:-1,k:-1}));
+  const smooth=(p,e0,e1)=>{const x=clamp((p-e0)/(e1-e0),0,1);return x*x*(3-2*x)};
+  let scrubOn=false,target=0,shown=0,rafId=null,lastTick=0,heroOnScreen=true,seekBusy=false,pendingTime=null,loadK=0,loadStart=performance.now();
+  let lastTc='',lastTcAt=0,lastFs=-1,lastP=-1;
+  const heroProgress=()=>{const r=hero.getBoundingClientRect();const range=hero.offsetHeight-innerHeight;return range>0?clamp(-r.top/range,0,1):0};
+  function requestSeek(x){if(!video.duration||!isFinite(x))return;if(seekBusy){pendingTime=x;return}seekBusy=true;video.currentTime=x}
+  video.addEventListener('seeked',()=>{seekBusy=false;if(pendingTime!==null){const x=pendingTime;pendingTime=null;requestSeek(x)}});
+  video.addEventListener('error',()=>{seekBusy=false;pendingTime=null;failVideo()});
+  const fmtTc=sec=>{const f=Math.floor((sec%1)*25),s=Math.floor(sec)%60,m=Math.floor(sec/60);return '00:'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')+':'+String(f).padStart(2,'0')};
+  function updateCaptions(p,now){
+    loadK=clamp((now-loadStart)/1400,0,1);loadK=loadK*loadK*(3-2*loadK);
+    for(const b of bands){
+      const f=Math.min(0.02,(b.b-b.a)/3);
+      let op=(b.first?1:smooth(p,b.a,b.a+f))*(b.last?1:1-smooth(p,b.b-f,b.b));op=Math.round(op*1000)/1000;
+      let k=clamp((p-b.a)/Math.min(0.06,(b.b-b.a)*.35),0,1);if(b.first)k=Math.max(k,loadK);k=Math.round(k*1000)/1000;
+      if(op!==b.op){b.op=op;b.el.style.opacity=op;b.el.classList.toggle('on',op>.5)}
+      if(Math.abs(k-b.k)>=.008||(k===1&&b.k!==1)||(k===0&&b.k!==0)){b.k=k;b.el.style.setProperty('--k',k)}
+    }
+    const fs=Math.round((1+p*.05)*1000)/1000;if(fs!==lastFs){lastFs=fs;frame.style.setProperty('--fs',fs)}
+    const pp=Math.round(p*100)/100;if(pp!==lastP){lastP=pp;cue&&cue.style.setProperty('--p',pp)}
+    if(now-lastTcAt>100){const s=fmtTc(p*(video.duration||H.duration||10));if(s!==lastTc){lastTc=s;lastTcAt=now;tcEl.textContent=s}}
+  }
+  function tick(now){
+    const dt=Math.min(100,now-(lastTick||now));lastTick=now;
+    shown+=(target-shown)*(1-Math.pow(1-.16,dt/16.667));
+    if(Math.abs(target-shown)<.0005&&loadK>=1){shown=target;rafId=null;lastTick=0}else rafId=requestAnimationFrame(tick);
+    if(video.duration) requestSeek(shown*video.duration);
+    updateCaptions(shown,now);
+  }
+  function onScroll(){if(!scrubOn)return;target=heroProgress();if(rafId===null&&heroOnScreen)rafId=requestAnimationFrame(tick)}
+  new IntersectionObserver(es=>{heroOnScreen=es[0].isIntersecting;if(heroOnScreen)onScroll()}).observe(hero);
+  let inited=false;
+  function initHeroOnce(){
+    if(inited)return;inited=true;poster.style.backgroundImage=`url('${H.poster}')`;
+    let started=false;const go=()=>{if(started)return;started=true;loadHeroBlob().catch(failVideo)};
+    const im=new Image();im.onload=go;im.onerror=go;im.src=H.poster;setTimeout(go,4000);
+  }
+  async function loadHeroBlob(){
+    const ctrl=new AbortController();let wd=setTimeout(()=>ctrl.abort(),20000);
+    const res=await fetch(H.src,{priority:'low',signal:ctrl.signal});if(!res.ok)throw new Error('video '+res.status);
+    const total=Number(res.headers.get('Content-Length'))||H.bytes;const reader=res.body.getReader();const chunks=[];let got=0,last=0;
+    for(;;){const {done,value}=await reader.read();if(done)break;clearTimeout(wd);wd=setTimeout(()=>ctrl.abort(),20000);chunks.push(value);got+=value.length;const fr=Math.min(1,got/total);const n=performance.now();if(n-last>100||fr===1){last=n;ringP&&ringP.style.setProperty('--ld',Math.round(126*(1-fr)))}}
+    clearTimeout(wd);ringP&&ringP.style.setProperty('--ld',0);
+    video.src=URL.createObjectURL(new Blob(chunks,{type:'video/mp4'}));video.load();
+    video.addEventListener('canplay',()=>{requestSeek(heroProgress()*video.duration);stage.classList.add('video-ready')},{once:true});
+  }
+  function failVideo(){stage.classList.add('video-failed');video.style.display='none';poster.style.backgroundImage=`url('${H.ending}')`}
+  const GATES=['(max-width: 720px)','(orientation: portrait) and (max-width: 1024px)','(orientation: portrait) and (pointer: coarse)','(orientation: landscape) and (pointer: coarse) and (max-height: 560px)','(prefers-reduced-motion: reduce)'];
+  const MQLS=GATES.map(q=>matchMedia(q));
+  function enableScrub(){if(scrubOn)return;scrubOn=true;initHeroOnce();addEventListener('scroll',onScroll,{passive:true});bands.forEach(b=>{b.op=-1;b.k=-1;b.el.style.opacity='';b.el.style.removeProperty('--k')});loadStart=performance.now();updateCaptions(heroProgress(),performance.now());onScroll()}
+  function disableScrub(){if(!scrubOn)return;scrubOn=false;removeEventListener('scroll',onScroll);if(rafId!==null){cancelAnimationFrame(rafId);rafId=null}bands.forEach(b=>{b.el.style.opacity='';b.el.style.setProperty('--k',1)})}
+  const apply=()=>{if(MQLS.some(m=>m.matches))disableScrub();else enableScrub()};
+  MQLS.forEach(m=>m.addEventListener('change',apply));
+  heroApi={apply};
+}
+
+/* ---------- reels: lazy, play in view, language versions ---------- */
+const saveData=navigator.connection&&navigator.connection.saveData;
+const reels=$$('.reel');
+const srcOf=r=>(LANG!=='ru'&&r.dataset.vEn)?r.dataset.vEn:r.dataset.v;
+reels.forEach(r=>{r.querySelector('.screen').style.backgroundImage=`url('${BASE}v/${r.dataset.v}.jpg')`});
+const autoplayOK=()=>!RM.matches&&!saveData;
+const rObs=new IntersectionObserver(es=>es.forEach(e=>{
+  const r=e.target;
+  if(e.isIntersecting&&e.intersectionRatio>.35){
+    if(!autoplayOK())return;
+    let v=r.querySelector('video');
+    if(!v){v=document.createElement('video');v.muted=true;v.loop=true;v.playsInline=true;v.setAttribute('playsinline','');v.preload='auto';v.setAttribute('aria-hidden','true');v.tabIndex=-1;v.src=`${BASE}v/${srcOf(r)}.mp4`;v.dataset.cur=srcOf(r);r.querySelector('.screen').appendChild(v);v.addEventListener('playing',()=>r.classList.add('playing'))}
+    v.play().catch(()=>{});
+  }else{const v=r.querySelector('video');if(v)v.pause()}
+}),{threshold:[0,.35,.6]});
+reels.forEach(r=>rObs.observe(r));
+hooks.push(()=>{reels.forEach(r=>{r.setAttribute('aria-label',(r.dataset.title||r.dataset.v)+': '+t('play'));const v=r.querySelector('video');if(v&&r.dataset.vEn&&v.dataset.cur!==srcOf(r)){const was=!v.paused;v.dataset.cur=srcOf(r);r.classList.remove('playing');v.src=`${BASE}v/${srcOf(r)}.mp4`;if(was)v.play().catch(()=>{})}})});
+
+/* ---------- lightbox ---------- */
+const lb=$('#lb'),lbv=$('#lbv');let lastFocus=null;
+function openLb(name){if(!lb)return;lastFocus=document.activeElement;lbv.src=`${BASE}v/${name}.mp4`;lbv.muted=false;lb.classList.add('open');document.body.style.overflow='hidden';reels.forEach(r=>{const v=r.querySelector('video');if(v)v.pause()});lbv.play().catch(()=>{});$('#lbclose').focus()}
+function closeLb(){lb.classList.remove('open');lbv.pause();lbv.removeAttribute('src');lbv.load();document.body.style.overflow='';if(lastFocus)lastFocus.focus()}
+reels.forEach(r=>r.addEventListener('click',()=>openLb(srcOf(r))));
+if(lb){$('#lbclose').addEventListener('click',closeLb);lb.addEventListener('click',e=>{if(e.target===lb)closeLb()});addEventListener('keydown',e=>{if(e.key==='Escape'&&lb.classList.contains('open'))closeLb()})}
+
+/* ---------- rail ---------- */
+const rail=$('#rail');
+if(rail){const step=()=>rail.querySelector('.item').offsetWidth+20;
+  $('#prev').addEventListener('click',()=>rail.scrollBy({left:-step()*2,behavior:RM.matches?'auto':'smooth'}));
+  $('#next').addEventListener('click',()=>rail.scrollBy({left:step()*2,behavior:RM.matches?'auto':'smooth'}))}
+
+/* ---------- "in the edit" timecode ---------- */
+const cutting=$('#cutting');
+if(cutting){const tc2=$('#tc2');let on=false,last='',lt=0;
+  const fmt=sec=>{const f=Math.floor((sec%1)*25),s=Math.floor(sec)%60,m=Math.floor(sec/60)%60;return '00:'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')+':'+String(f).padStart(2,'0')};
+  const tick=n=>{if(!on)return;if(n-lt>80){const s=fmt(n/1000);if(s!==last){last=s;lt=n;tc2.textContent=s}}requestAnimationFrame(tick)};
+  new IntersectionObserver(es=>{on=es[0].isIntersecting;if(on&&!RM.matches)requestAnimationFrame(tick)}).observe(cutting);
+  const setCw=()=>cutting.style.setProperty('--cw',cutting.offsetWidth+'px');setCw();addEventListener('resize',setCw)}
+
+/* ---------- divider dot ---------- */
+const catLine=$('.cat-line');
+if(catLine){const dot=catLine.querySelector('i');let dl=-1;const up=()=>{const r=catLine.getBoundingClientRect();const p=clamp((innerHeight-r.top)/(innerHeight*.9),0,1);const x=Math.round(p*(r.width-7));if(x!==dl){dl=x;dot.style.setProperty('--x',x+'px')}};addEventListener('scroll',up,{passive:true});up()}
+
+/* ---------- the interactive moment: hold REC ----------
+   #recbtn with data-max (number shown at the end), data-done-key, and data-lights (selector of items that light up). */
+const recbtn=$('#recbtn');let recApi=null;
+if(recbtn){
+  const recn=$('#recn'),hint=$('#rechint'),tc3=$('#tc3');
+  const max=+recbtn.dataset.max||30, finalTxt=recbtn.dataset.final||String(max);
+  const lights=$$(recbtn.dataset.lights||'#steps li'), line=$('#steps line.draw'), steps=$('#steps');
+  if(steps&&line){const measure=()=>line.style.setProperty('--len',steps.querySelector('svg.line').getBoundingClientRect().height||300);measure();addEventListener('resize',measure)}
+  let h=0,holding=false,raf=null,last=0,done=false,lastN=-1,lastH=-1;const HOLD=2200;
+  function render(force){
+    const hr=Math.round(h*1000)/1000;
+    if(hr!==lastH||force){lastH=hr;recbtn.style.setProperty('--h',hr);line&&line.style.setProperty('--d',hr);lights.forEach((li,i)=>li.classList.toggle('lit',done||h>=(i+.5)/lights.length))}
+    const n=Math.round(max*h);
+    if(n!==lastN||force){lastN=n;recn.textContent=done?finalTxt:n;if(tc3)tc3.textContent=['08','12','16','20'][Math.min(3,Math.floor(h*4))]+':00:'+String(Math.floor(h*59)).padStart(2,'0')}
+    hint.textContent=done?t(recbtn.dataset.doneKey||'rec_done'):t('rec_hint');
+  }
+  function tick(now){
+    const dt=Math.min(64,now-(last||now));last=now;
+    if(holding)h=Math.min(1,h+dt/HOLD);else h=Math.max(0,h-dt/(HOLD*.6)*(.4+h));
+    let just=false;if(h>=1&&!done){done=true;holding=false;just=true}if(done)h=1;
+    render(just);
+    if((holding||h>0)&&!(done&&h===1))raf=requestAnimationFrame(tick);else{raf=null;last=0}
+  }
+  const start=e=>{if(done)return;e.preventDefault();holding=true;if(!raf){last=0;raf=requestAnimationFrame(tick)}};
+  const stop=()=>{holding=false;if(!raf&&!done){last=0;raf=requestAnimationFrame(tick)}};
+  recbtn.addEventListener('pointerdown',start);['pointerup','pointerleave','pointercancel'].forEach(x=>recbtn.addEventListener(x,stop));
+  recbtn.addEventListener('keydown',e=>{if((e.key===' '||e.key==='Enter')&&!e.repeat)start(e)});
+  recbtn.addEventListener('keyup',e=>{if(e.key===' '||e.key==='Enter')stop()});
+  recbtn.addEventListener('contextmenu',e=>e.preventDefault());
+  hooks.push(()=>render(true));
+  recApi={finish(){done=true;h=1;render(true)}};
+}
+
+/* ---------- reviews ---------- */
+const revSec=$('#reviews');
+if(revSec){
+  const list=SITE.reviews.filter(r=>r.pages.includes(PAGE.id));
+  if(!list.length) revSec.hidden=true;
+  else hooks.push(()=>{const box=$('#quotes');box.textContent='';list.forEach(r=>{
+    const fig=document.createElement('figure');fig.className='quote';
+    const p=document.createElement('p');p.textContent=r.text[LANG]||r.text[r.orig];fig.appendChild(p);
+    const who=document.createElement('figcaption');who.className='who';
+    const b=document.createElement('b');b.textContent=r.name;who.appendChild(b);
+    const s=document.createElement('span');s.className='mono';s.textContent=(r.role&&(r.role[LANG]||r.role.ru))||'';who.appendChild(s);
+    if(LANG!==r.orig&&r.text[LANG]){const tr=document.createElement('span');tr.className='tr';tr.textContent=t('rev_tr');who.appendChild(tr)}
+    fig.appendChild(who);box.appendChild(fig)})});
+}
+
+/* ---------- package buttons fill the form ---------- */
+$$('[data-pick]').forEach(b=>b.addEventListener('click',()=>{const sel=$('#form [name=package]');if(sel)sel.value=b.dataset.pick;const c=$('#contact');c&&c.scrollIntoView({behavior:RM.matches?'auto':'smooth'});setTimeout(()=>{const n=$('#form [name=name]');n&&n.focus({preventScroll:true})},RM.matches?0:700)}));
+
+/* ---------- form to WhatsApp (source page + ad tags included) ---------- */
+const form=$('#form');
+if(form){
+  const utm=(()=>{try{const q=new URLSearchParams(location.search);return ['utm_source','utm_campaign','utm_content'].map(k=>q.get(k)?k.replace('utm_','')+'='+q.get(k):'').filter(Boolean).join(', ')}catch(e){return ''}})();
+  form.addEventListener('submit',e=>{
+    e.preventDefault();
+    const name=form.elements.name.value.trim();
+    if(!name){form.elements.name.focus();form.elements.name.setCustomValidity(t('f_err'));form.elements.name.reportValidity();setTimeout(()=>form.elements.name.setCustomValidity(''),2000);return}
+    const lines=[t('wa_hi'),'',`${t('wa_name')}: ${name}`];
+    $$('[data-wa]',form).forEach(el=>{
+      let v='';
+      if(el.tagName==='FIELDSET'){const c=$('input:checked',el);v=c?c.parentElement.textContent.trim():''}
+      else if(el.tagName==='SELECT'){v=el.options[el.selectedIndex].textContent.trim()}
+      else v=el.value.trim();
+      if(v)lines.push(`${String(t(el.dataset.wa)).replace(/[?¿]/g,'').trim()}: ${v}`);
+    });
+    lines.push('',`${t('wa_page')}: ${PAGE.label||PAGE.id}${utm?' · '+utm:''}`);
+    const url=`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(lines.join('\n'))}`;
+    form.classList.add('sent');
+    const w=window.open(url,'_blank','noopener');if(!w)location.href=url;
+  });
+}
+
+/* ---------- reduced motion ---------- */
+function pin(){recApi&&recApi.finish();$$('.rv').forEach(el=>el.classList.add('in','done'));$$('[data-count]').forEach(el=>{el.textContent=el.dataset.count+(el.dataset.suffix||'')});reels.forEach(r=>{const v=r.querySelector('video');if(v)v.pause()})}
+RM.addEventListener('change',e=>{if(e.matches)pin();heroApi&&heroApi.apply()});
+if(RM.matches)pin();
+
+document.addEventListener('visibilitychange',()=>document.body.classList.toggle('paused',document.hidden));
+
+/* ---------- start ---------- */
+(function(){const s=store.get('gr-lang');const n=(navigator.language||'ru').slice(0,2);setLang(s||(n==='es'||n==='ca'?'es':(n==='ru'||n==='uk'?'ru':'en')))})();
+heroApi&&heroApi.apply();
+})();
