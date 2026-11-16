@@ -8,7 +8,7 @@
 /* ===== настройки ===== */
 const SHEET_NAME = 'Заявки';
 const TIMEZONE = 'Europe/Madrid';
-const NOTIFY_EMAIL = '';   // адрес для письма о каждой новой заявке, например 'gleb@example.com'. Пусто = без писем
+const NOTIFY_EMAIL = 'glibrudakov@gmail.com';   // адрес для письма о каждой новой заявке, например 'gleb@example.com'. Пусто = без писем
 
 /* Колонки таблицы: [ключ из формы, заголовок, ширина в px] */
 const COLUMNS = [

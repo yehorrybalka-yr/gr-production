@@ -3,11 +3,12 @@
 
 /* ===== settings shared by all pages ===== */
 const SITE = {
-  whatsapp: '380675317874', // international format, digits only, e.g. 34600000000
+  whatsapp: '34695275229', // international format, digits only, e.g. 34600000000
+  phone: '+34 695 275 229', // how the number is shown on the site
   /* Google Apps Script web app URL (see google-apps-script/README.md). Empty = leads go to WhatsApp only. */
   leadsEndpoint: 'https://script.google.com/macros/s/AKfycbya89YpeqR7c74vf4GfUQIfeXYbFmgUZdx1zaO3ZdTtWO6NyaptHpDTPmpT0p5tzCFh/exec',
   /* Data controller shown on the privacy page. Empty email = WhatsApp is shown as the contact. */
-  legal: { name: 'Glib Rudakov', email: '', city: 'Valencia, España' },
+  legal: { name: 'Glib Rudakov', email: 'glibrudakov@gmail.com', city: 'Valencia, España' },
   /* Real client quotes only. pages: which pages show it ('main', 'real-estate'). */
   reviews: [
     { name: 'Yarl', role: { ru: 'Недвижимость', en: 'Real estate', es: 'Inmobiliaria' }, orig: 'ru', pages: ['main', 'real-estate'], text: {
@@ -25,19 +26,19 @@ f_name:"Имя",f_name_ph:"Как к вам обращаться",f_msg:"Пар�
 f_ok:"Открываем WhatsApp с вашей заявкой. Если окно не открылось, проверьте блокировщик всплывающих окон.",f_err:"Напишите, как к вам обращаться.",
 wa_name:"Имя",wa_page:"Страница",lb_close:"Закрыть",play:"смотреть со звуком",
 ck_text:"Мы используем cookie Meta и Microsoft Clarity, чтобы понимать, как работает сайт, и показывать рекламу. Они включатся, только если вы согласитесь.",ck_more:"Подробнее",ck_accept:"Принять",ck_reject:"Только необходимые",ck_settings:"Настройки cookie",ck_label:"Согласие на cookie",
-privacy:"Политика конфиденциальности",rec2_hint:"Нажмите REC, чтобы включить работы",rec2_live:"Идёт запись. Нажмите на ролик, чтобы смотреть со звуком.",rec2_sr:"Включить запись: оживить работы",f_privacy:"Отправляя заявку, вы соглашаетесь с",f_privacy_link:"политикой конфиденциальности"},
+privacy:"Политика конфиденциальности",ct_direct:"Или напишите напрямую:",rec2_hint:"Нажмите REC, чтобы включить работы",rec2_live:"Идёт запись. Нажмите на ролик, чтобы смотреть со звуком.",rec2_sr:"Включить запись: оживить работы",f_privacy:"Отправляя заявку, вы соглашаетесь с",f_privacy_link:"политикой конфиденциальности"},
 en:{skip:"Skip to content",photo_tag:"GLIB · DOP",rev_k:"Reviews",rev_h:"What clients say.",rev_tr:"Translated from Russian",
 f_name:"Name",f_name_ph:"What should I call you",f_msg:"A few words about the project",f_note:"No spam. I reply personally.",f_btn:"Send via WhatsApp",
 f_ok:"Opening WhatsApp with your request. If nothing opened, check your pop-up blocker.",f_err:"Please tell me your name.",
 wa_name:"Name",wa_page:"Page",lb_close:"Close",play:"watch with sound",
 ck_text:"We use Meta and Microsoft Clarity cookies to understand how the site works and to show ads. They are switched on only if you agree.",ck_more:"Learn more",ck_accept:"Accept",ck_reject:"Only necessary",ck_settings:"Cookie settings",ck_label:"Cookie consent",
-privacy:"Privacy policy",rec2_hint:"Press REC to bring the work to life",rec2_live:"Recording. Tap a film to watch it with sound.",rec2_sr:"Start recording: bring the work to life",f_privacy:"By sending the request you agree to the",f_privacy_link:"privacy policy"},
+privacy:"Privacy policy",ct_direct:"Or reach me directly:",rec2_hint:"Press REC to bring the work to life",rec2_live:"Recording. Tap a film to watch it with sound.",rec2_sr:"Start recording: bring the work to life",f_privacy:"By sending the request you agree to the",f_privacy_link:"privacy policy"},
 es:{skip:"Ir al contenido",photo_tag:"GLIB · DOP",rev_k:"Opiniones",rev_h:"Lo que dicen los clientes.",rev_tr:"Traducido del ruso",
 f_name:"Nombre",f_name_ph:"¿Cómo te llamas?",f_msg:"Unas palabras sobre el proyecto",f_note:"Sin spam. Respondo personalmente.",f_btn:"Enviar por WhatsApp",
 f_ok:"Abriendo WhatsApp con tu solicitud. Si no se abre, revisa el bloqueador de ventanas.",f_err:"Dime cómo te llamas.",
 wa_name:"Nombre",wa_page:"Página",lb_close:"Cerrar",play:"ver con sonido",
 ck_text:"Usamos cookies de Meta y Microsoft Clarity para entender cómo funciona la web y mostrar publicidad. Solo se activan si las aceptas.",ck_more:"Más información",ck_accept:"Aceptar",ck_reject:"Solo necesarias",ck_settings:"Configuración de cookies",ck_label:"Consentimiento de cookies",
-privacy:"Política de privacidad",rec2_hint:"Pulsa REC para dar vida a los trabajos",rec2_live:"Grabando. Pulsa un vídeo para verlo con sonido.",rec2_sr:"Empezar a grabar: dar vida a los trabajos",f_privacy:"Al enviar la solicitud aceptas la",f_privacy_link:"política de privacidad"}
+privacy:"Política de privacidad",ct_direct:"O escríbeme directamente:",rec2_hint:"Pulsa REC para dar vida a los trabajos",rec2_live:"Grabando. Pulsa un vídeo para verlo con sonido.",rec2_sr:"Empezar a grabar: dar vida a los trabajos",f_privacy:"Al enviar la solicitud aceptas la",f_privacy_link:"política de privacidad"}
 };
 
 (function(){
@@ -435,13 +436,29 @@ if(fm){
   hooks.push(()=>{s.textContent=t('f_privacy');a.textContent=t('f_privacy_link')});
 }
 
+/* direct contacts (WhatsApp + email) under the form intro and in the footer; clicks are tracked as Contact automatically */
+function contactLinks(){
+  const out=[];
+  if(SITE.whatsapp){const a=document.createElement('a');a.href=`https://wa.me/${SITE.whatsapp}`;a.target='_blank';a.rel='noopener';a.textContent='WhatsApp '+(SITE.phone||'+'+SITE.whatsapp);out.push(a)}
+  const em=(SITE.legal||{}).email;
+  if(em){const a=document.createElement('a');a.href='mailto:'+em;a.textContent=em;out.push(a)}
+  return out;
+}
+const ctLede=$('#contact .lede');
+if(ctLede&&(SITE.whatsapp||(SITE.legal||{}).email)){
+  const p=document.createElement('p');p.className='ct-direct ri';const lab=document.createElement('span');
+  p.appendChild(lab);contactLinks().forEach((a,i)=>{if(i)p.append(' · ');p.append(' ',a)});
+  ctLede.after(p);hooks.push(()=>{lab.textContent=t('ct_direct')});
+}
+if(foot){const fc=document.createElement('span');fc.className='foot-contact';contactLinks().forEach((a,i)=>{if(i)fc.append(' · ');fc.append(a)});if(fc.childNodes.length)foot.insertBefore(fc,foot.querySelector('.foot-legal'))}
+
 /* privacy page: controller details from SITE.legal */
 $$('[data-legal]').forEach(el=>{
   const L=SITE.legal||{},k=el.dataset.legal;
   if(k!=='contact'){el.textContent=L[k]||'';return}
   el.textContent='';const a=document.createElement('a');
   if(L.email){a.href='mailto:'+L.email;a.textContent=L.email}
-  else{a.href='https://wa.me/'+SITE.whatsapp;a.target='_blank';a.rel='noopener';a.textContent='WhatsApp +'+SITE.whatsapp}
+  else{a.href='https://wa.me/'+SITE.whatsapp;a.target='_blank';a.rel='noopener';a.textContent='WhatsApp '+(SITE.phone||'+'+SITE.whatsapp)}
   el.appendChild(a);
 });
 
