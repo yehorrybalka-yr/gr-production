@@ -5,6 +5,8 @@
 const SITE = {
   whatsapp: '34695275229', // international format, digits only, e.g. 34600000000
   phone: '+34 695 275 229', // how the number is shown on the site
+  /* Site languages that are switched on. The Spanish texts stay in the code: add 'es' back here (and the ES button in the pages) to bring it back. */
+  langs: ['ru','en'],
   /* Google Apps Script web app URL (see google-apps-script/README.md). Empty = leads go to WhatsApp only. */
   leadsEndpoint: 'https://script.google.com/macros/s/AKfycbya89YpeqR7c74vf4GfUQIfeXYbFmgUZdx1zaO3ZdTtWO6NyaptHpDTPmpT0p5tzCFh/exec',
   /* Data controller shown on the privacy page. Empty email = WhatsApp is shown as the contact. */
@@ -91,6 +93,7 @@ function splitInto(el,text){
   el.appendChild(vis);
 }
 function setLang(l){
+  if(!SITE.langs.includes(l)) l=(l==='es'&&SITE.langs.includes('en'))?'en':'ru';
   if(!PAGE.T[l]) l='ru'; LANG=l;
   document.documentElement.lang=l; if(t('title')) document.title=t('title');
   $$('[data-i18n]').forEach(e=>{const v=t(e.dataset.i18n);if(v!=null)e.textContent=v});
@@ -500,6 +503,14 @@ if(RM.matches)pin();
 document.addEventListener('visibilitychange',()=>document.body.classList.toggle('paused',document.hidden));
 
 /* ---------- start ---------- */
-(function(){const s=store.get('gr-lang');const n=(navigator.language||'ru').slice(0,2);setLang(s||(n==='es'||n==='ca'?'es':(n==='ru'||n==='uk'?'ru':'en')))})();
+/* language on first visit, from the device language:
+   English, Spanish, Catalan/Valencian, Galician, Basque → English; everything else (Russian, Ukrainian, Belarusian, Kazakh, Uzbek…) → Russian, the default.
+   A choice made with the RU/EN switch is remembered and wins. */
+(function(){
+  const EN=['en','es','ca','gl','eu'];
+  const first=((navigator.languages&&navigator.languages[0])||navigator.language||'ru').toLowerCase().split(/[-_]/)[0];
+  const auto=EN.includes(first)?'en':'ru';
+  setLang(store.get('gr-lang')||auto);
+})();
 heroApi&&heroApi.apply();
 })();
