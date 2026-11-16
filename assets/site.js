@@ -5,7 +5,7 @@
 const SITE = {
   whatsapp: '380675317874', // international format, digits only, e.g. 34600000000
   /* Google Apps Script web app URL (see google-apps-script/README.md). Empty = leads go to WhatsApp only. */
-  leadsEndpoint: '',
+  leadsEndpoint: 'https://script.google.com/macros/s/AKfycbya89YpeqR7c74vf4GfUQIfeXYbFmgUZdx1zaO3ZdTtWO6NyaptHpDTPmpT0p5tzCFh/exec',
   /* Real client quotes only. pages: which pages show it ('main', 'real-estate'). */
   reviews: [
     { name: 'Yarl', role: { ru: 'Недвижимость', en: 'Real estate', es: 'Inmobiliaria' }, orig: 'ru', pages: ['main', 'real-estate'], text: {
