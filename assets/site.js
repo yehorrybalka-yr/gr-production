@@ -62,7 +62,7 @@ document.addEventListener('click',e=>{
   const href=el.getAttribute('href')||'';
   const method=contactMethod(href);
   if(method){track('Contact',{method,label:label(el)});return}
-  if(href==='#contact'){const place=el.closest('.nav')?'nav':el.closest('#hero')?'hero':((el.closest('section')||{}).id||'other');track('CTAClick',{label:label(el),place});return}
+  if(href==='#contact'){const place=el.closest('.nav')?'nav':el.closest('.mbar')?'sticky_bar':el.closest('#hero')?'hero':((el.closest('section')||{}).id||'other');track('CTAClick',{label:label(el),place});return}
   if(/real-estate\//.test(href))track('OpenRealEstatePage',{label:label(el)});
 },true);
 
@@ -108,7 +108,8 @@ const hero=$('#hero'),stage=$('#stage'),video=$('#herov');
 let heroApi=null;
 if(hero&&stage&&video&&PAGE.hero){
   const H=PAGE.hero, frame=$('#frame'), poster=$('#poster'), tcEl=$('#tc'), cue=$('#cue'), ringP=$('#ringp');
-  stage.style.setProperty('--ending',`url('${H.ending}')`);
+  /* absolute URL: a relative url() inside a CSS variable resolves against site.css, not the page (broke the main page on mobile) */
+  stage.style.setProperty('--ending',`url('${new URL(H.ending,location.href).href}')`);
   const bands=$$('.band').map((el,i,a)=>({el,a:+el.dataset.a,b:+el.dataset.b,first:i===0,last:i===a.length-1,op:-1,k:-1}));
   const smooth=(p,e0,e1)=>{const x=clamp((p-e0)/(e1-e0),0,1);return x*x*(3-2*x)};
   let scrubOn=false,target=0,shown=0,rafId=null,lastTick=0,heroOnScreen=true,seekBusy=false,pendingTime=null,loadK=0,loadStart=performance.now();
@@ -287,6 +288,28 @@ if(form){
   let started=false;
   form.addEventListener('focusin',()=>{if(started)return;started=true;track('FormStart')});
 }
+
+/* ---------- sticky action bar on phones ----------
+   Shown on screens up to 720px once the first screen is scrolled past, hidden while the form is on screen.
+   The WhatsApp button appears by itself as soon as SITE.whatsapp is filled in. */
+(function(){
+  const contact=$('#contact');if(!contact)return;
+  const bar=document.createElement('div');bar.className='mbar';bar.setAttribute('role','region');
+  const cta=document.createElement('a');cta.className='btn btn-accent';cta.href='#contact';bar.appendChild(cta);
+  if(SITE.whatsapp){
+    const wa=document.createElement('a');wa.className='btn btn-ghost mbar-wa';wa.href=`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(t('wa_hi')||'')}`;wa.target='_blank';wa.rel='noopener';
+    wa.innerHTML='<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7a2.8 2.8 0 0 0 1.8-1.3 2.3 2.3 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3Z"/></svg><span>WhatsApp</span>';
+    bar.appendChild(wa);
+  }
+  document.body.appendChild(bar);document.body.classList.add('has-mbar');
+  hooks.push(()=>{cta.textContent=t('cta_request')||t('nav_cta')||t('cta_main');bar.setAttribute('aria-label',cta.textContent)});
+  let heroOn=!!$('#hero'),formOn=false;
+  const sync=()=>bar.classList.toggle('on',!heroOn&&!formOn);
+  const hero=$('#hero');
+  if(hero)new IntersectionObserver(es=>{heroOn=es[0].isIntersecting;sync()}).observe(hero);
+  new IntersectionObserver(es=>{formOn=es[0].isIntersecting;sync()},{threshold:.15}).observe(contact);
+  sync();
+})();
 
 /* ---------- section views worth knowing about (once per page load) ---------- */
 const seen=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;seen.unobserve(e.target);track(e.target.dataset.seenEvent)}),{threshold:.4});
