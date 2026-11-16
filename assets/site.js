@@ -3,7 +3,9 @@
 
 /* ===== settings shared by all pages ===== */
 const SITE = {
-  whatsapp: '',          // international format, digits only, e.g. 34600000000
+  whatsapp: '380675317874', // international format, digits only, e.g. 34600000000
+  /* Google Apps Script web app URL (see google-apps-script/README.md). Empty = leads go to WhatsApp only. */
+  leadsEndpoint: '',
   /* Real client quotes only. pages: which pages show it ('main', 'real-estate'). */
   reviews: [
     { name: 'Yarl', role: { ru: 'Недвижимость', en: 'Real estate', es: 'Inmobiliaria' }, orig: 'ru', pages: ['main', 'real-estate'], text: {
@@ -47,9 +49,10 @@ const hooks=[];
    Automatic: any click on a WhatsApp / phone / email / Instagram / Telegram link = Contact;
    any element with data-track="EventName" (optional data-track-label) is tracked on click. */
 const STD_EVENTS=['Lead','Contact','ViewContent','Schedule','SubmitApplication','CompleteRegistration','InitiateCheckout','AddToCart','Search','FindLocation','CustomizeProduct'];
-function track(name,params){
+function track(name,params,opts){
   const p=Object.assign({page:PAGE.id||'main',lang:LANG},params||{});
-  try{if(window.fbq)(STD_EVENTS.includes(name)?fbq('track',name,p):fbq('trackCustom',name,p))}catch(e){}
+  /* opts.eventID lets the same event be deduplicated later if it is also sent server-side (Conversions API) */
+  try{if(window.fbq)(STD_EVENTS.includes(name)?fbq('track',name,p,opts||{}):fbq('trackCustom',name,p,opts||{}))}catch(e){}
   try{if(window.clarity)clarity('event',name)}catch(e){}
 }
 window.grTrack=track;
@@ -261,14 +264,35 @@ if(revSec){
 const PACK_PRICE={one:650,three:1500,six:2500};
 $$('[data-pick]').forEach(b=>b.addEventListener('click',()=>{track('SelectPackage',{package:b.dataset.pick,value:PACK_PRICE[b.dataset.pick]||0,currency:'EUR'});const sel=$('#form [name=package]');if(sel)sel.value=b.dataset.pick;const c=$('#contact');c&&c.scrollIntoView({behavior:RM.matches?'auto':'smooth'});setTimeout(()=>{const n=$('#form [name=name]');n&&n.focus({preventScroll:true})},RM.matches?0:700)}));
 
+/* ---------- lead log: a copy of every request goes to the Google Sheet before WhatsApp opens ----------
+   sendBeacon survives the page switching to WhatsApp; the urlencoded body needs no CORS preflight. */
+function sendLead(d){
+  if(!SITE.leadsEndpoint)return;
+  const body=new URLSearchParams();Object.entries(d).forEach(([k,v])=>{if(v!=null&&v!=='')body.append(k,String(v))});
+  try{if(navigator.sendBeacon&&navigator.sendBeacon(SITE.leadsEndpoint,new Blob([body.toString()],{type:'application/x-www-form-urlencoded'})))return}catch(e){}
+  try{fetch(SITE.leadsEndpoint,{method:'POST',mode:'no-cors',keepalive:true,body})}catch(e){}
+}
+const cookie=n=>{const m=document.cookie.match('(?:^|; )'+n+'=([^;]*)');return m?decodeURIComponent(m[1]):''};
+
 /* ---------- form to WhatsApp (source page + ad tags included) ---------- */
 const form=$('#form');
 if(form){
-  const utm=(()=>{try{const q=new URLSearchParams(location.search);return ['utm_source','utm_campaign','utm_content'].map(k=>q.get(k)?k.replace('utm_','')+'='+q.get(k):'').filter(Boolean).join(', ')}catch(e){return ''}})();
+  const Q=new URLSearchParams(location.search);
+  const utm=['utm_source','utm_campaign','utm_content'].map(k=>Q.get(k)?k.replace('utm_','')+'='+Q.get(k):'').filter(Boolean).join(', ');
+  /* honeypot: invisible to people, bots fill it in */
+  const hp=document.createElement('input');hp.type='text';hp.name='company_site';hp.tabIndex=-1;hp.autocomplete='off';hp.setAttribute('aria-hidden','true');hp.style.cssText='position:absolute;left:-9999px;width:1px;height:1px;opacity:0';form.appendChild(hp);
   form.addEventListener('submit',e=>{
     e.preventDefault();
     const name=form.elements.name.value.trim();
     if(!name){track('FormError',{field:'name'});form.elements.name.focus();form.elements.name.setCustomValidity(t('f_err'));form.elements.name.reportValidity();setTimeout(()=>form.elements.name.setCustomValidity(''),2000);return}
+    if(hp.value){form.classList.add('sent');return}
+    const el=form.elements, val=n=>{const f=el[n];if(!f)return undefined;if(f.tagName==='SELECT')return f.value||f.options[f.selectedIndex].textContent.trim();return (f.value||'').trim()||undefined};
+    const leadId=Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7);
+    const fbclid=Q.get('fbclid');
+    sendLead({lead_id:leadId,page:PAGE.id||'main',lang:LANG,name,role:val('role'),shoot_type:val('type'),package:val('package'),location:val('location'),message:val('msg'),
+      utm_source:Q.get('utm_source'),utm_medium:Q.get('utm_medium'),utm_campaign:Q.get('utm_campaign'),utm_content:Q.get('utm_content'),utm_term:Q.get('utm_term'),
+      device:matchMedia('(pointer:coarse)').matches?'mobile':'desktop',referrer:document.referrer,url:location.href.split('#')[0],
+      fbp:cookie('_fbp'),fbc:cookie('_fbc')||(fbclid?`fb.1.${Date.now()}.${fbclid}`:'')});
     const lines=[t('wa_hi'),'',`${t('wa_name')}: ${name}`];
     $$('[data-wa]',form).forEach(el=>{
       let v='';
@@ -277,12 +301,11 @@ if(form){
       else v=el.value.trim();
       if(v)lines.push(`${String(t(el.dataset.wa)).replace(/[?¿]/g,'').trim()}: ${v}`);
     });
-    lines.push('',`${t('wa_page')}: ${PAGE.label||PAGE.id}${utm?' · '+utm:''}`);
+    lines.push('',`${t('wa_page')}: ${PAGE.label||PAGE.id}${utm?' · '+utm:''}`,`ID: ${leadId}`);
     const url=`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(lines.join('\n'))}`;
     form.classList.add('sent');
     /* no personal data goes to the pixel: only what was chosen in the form and the ad source */
-    const el=form.elements, val=n=>{const f=el[n];if(!f)return undefined;if(f.tagName==='SELECT')return f.value||f.options[f.selectedIndex].textContent.trim();return f.value||undefined};
-    track('Lead',{content_name:PAGE.label||PAGE.id,method:'whatsapp_form',role:val('role'),package:val('package'),shoot_type:val('type'),value:PACK_PRICE[val('package')]||undefined,currency:PACK_PRICE[val('package')]?'EUR':undefined,utm_source:new URLSearchParams(location.search).get('utm_source')||undefined});
+    track('Lead',{content_name:PAGE.label||PAGE.id,method:'whatsapp_form',role:val('role'),package:val('package'),shoot_type:val('type'),value:PACK_PRICE[val('package')]||undefined,currency:PACK_PRICE[val('package')]?'EUR':undefined,utm_source:Q.get('utm_source')||undefined},{eventID:leadId});
     const w=window.open(url,'_blank','noopener');if(!w)location.href=url;
   });
   let started=false;
@@ -296,13 +319,14 @@ if(form){
   const contact=$('#contact');if(!contact)return;
   const bar=document.createElement('div');bar.className='mbar';bar.setAttribute('role','region');
   const cta=document.createElement('a');cta.className='btn btn-accent';cta.href='#contact';bar.appendChild(cta);
+  let wa=null;
   if(SITE.whatsapp){
-    const wa=document.createElement('a');wa.className='btn btn-ghost mbar-wa';wa.href=`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(t('wa_hi')||'')}`;wa.target='_blank';wa.rel='noopener';
+    wa=document.createElement('a');wa.className='btn btn-ghost mbar-wa';wa.href=`https://wa.me/${SITE.whatsapp}`;wa.target='_blank';wa.rel='noopener';
     wa.innerHTML='<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7a2.8 2.8 0 0 0 1.8-1.3 2.3 2.3 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3Z"/></svg><span>WhatsApp</span>';
     bar.appendChild(wa);
   }
   document.body.appendChild(bar);document.body.classList.add('has-mbar');
-  hooks.push(()=>{cta.textContent=t('cta_request')||t('nav_cta')||t('cta_main');bar.setAttribute('aria-label',cta.textContent)});
+  hooks.push(()=>{cta.textContent=t('cta_request')||t('nav_cta')||t('cta_main');bar.setAttribute('aria-label',cta.textContent);if(wa)wa.href=`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(t('wa_hi')||'')}`});
   let heroOn=!!$('#hero'),formOn=false;
   const sync=()=>bar.classList.toggle('on',!heroOn&&!formOn);
   const hero=$('#hero');
