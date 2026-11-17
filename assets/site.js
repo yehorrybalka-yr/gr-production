@@ -206,7 +206,10 @@ hooks.push(()=>{reels.forEach(r=>{r.setAttribute('aria-label',(r.dataset.title||
 
 /* ---------- lightbox ---------- */
 const lb=$('#lb'),lbv=$('#lbv');let lastFocus=null;
-function openLb(name){if(!lb)return;lastFocus=document.activeElement;lbv.src=`${BASE}v/${name}.mp4`;lbv.muted=false;lb.classList.add('open');document.body.style.overflow='hidden';reels.forEach(r=>{const v=r.querySelector('video');if(v)v.pause()});lbv.play().catch(()=>{});$('#lbclose').focus()}
+const lbBox=lb&&lb.querySelector('.box');
+const isH=name=>!!document.querySelector(`[data-v="${name}"][data-orient="h"],[data-v-en="${name}"][data-orient="h"]`);
+if(lbv)lbv.addEventListener('loadedmetadata',()=>{if(lbBox&&lbv.videoWidth)lbBox.classList.toggle('h',lbv.videoWidth>lbv.videoHeight)});
+function openLb(name){if(!lb)return;lastFocus=document.activeElement;if(lbBox)lbBox.classList.toggle('h',isH(name));lbv.src=`${BASE}v/${name}.mp4`;lbv.muted=false;lbv.volume=1;lb.classList.add('open');document.body.style.overflow='hidden';reels.forEach(r=>{const v=r.querySelector('video');if(v)v.pause()});lbv.play().catch(()=>{});$('#lbclose').focus()}
 function closeLb(){lb.classList.remove('open');lbv.pause();lbv.removeAttribute('src');lbv.load();document.body.style.overflow='';if(lastFocus)lastFocus.focus()}
 reels.forEach(r=>r.addEventListener('click',()=>{openLb(srcOf(r));track('ViewContent',{content_type:'video',content_name:r.dataset.title||r.dataset.v,content_ids:[r.dataset.v]})}));
 /* ---------- hero wall (variant A) ---------- */

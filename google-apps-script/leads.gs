@@ -45,7 +45,7 @@ const LABELS = {
   page:       { 'main': 'GR Production (главная)', 'real-estate': 'GReat Vision (недвижимость)' },
   role:       { agency: 'Агентство', developer: 'Застройщик', owner: 'Владелец' },
   package:    { one: 'Один ролик · от 650 €', three: 'Три ролика · 1 500 €', six: 'Шесть роликов · 2 500 €', unsure: 'Пока не знаю' },
-  shoot_type: { food: 'Кулинария', fashion: 'Фэшн', events: 'Ивенты', love_story: 'Love story', real_estate: 'Недвижимость', business: 'Бизнес и эксперты', other: 'Другое' },
+  shoot_type: { food: 'Кулинария', fashion: 'Фэшн', podcast: 'Подкасты / Интервью', events: 'Ивенты', love_story: 'Love story', real_estate: 'Недвижимость', business: 'Бизнес и эксперты', other: 'Другое' },
   lang:       { ru: 'RU', en: 'EN', es: 'ES' },
   device:     { mobile: 'Телефон / планшет', desktop: 'Компьютер' },
 };
