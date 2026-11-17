@@ -293,17 +293,26 @@
       <h2 class="ri" data-i18n-html="ct_h">Расскажите о проекте. <em>Я отвечу сегодня.</em></h2>
       <p class="lede ri" style="margin-top:28px" data-i18n="ct_p">Заполните форму, и откроется WhatsApp с готовым сообщением. Останется нажать «отправить».</p>
     </div>
-    <form id="form" class="rv" novalidate>
-      <label class="ri"><span data-i18n="f_name">Имя</span><input name="name" required autocomplete="name" data-i18n-ph="f_name_ph" placeholder="Как к вам обращаться"></label>
-      <label class="ri"><span data-i18n="f_type">Что снимаем</span>
-        <select name="type" data-wa="f_type">
-          <option value="food" data-i18n="c1">Кулинария</option><option value="fashion" data-i18n="c2">Фэшн</option><option value="podcast" data-i18n="c3">Подкасты / Интервью</option><option value="love_story" data-i18n="c4">Love story</option><option value="real_estate" data-i18n="c5">Недвижимость</option><option value="business" data-i18n="c6">Бизнес и эксперты</option><option value="other" data-i18n="f_other">Другое</option>
-        </select></label>
-      <label class="ri"><span data-i18n="f_msg">Пара слов о проекте</span><textarea name="msg" data-wa="f_msg" data-i18n-ph="f_msg_ph" placeholder="Что за бизнес, где снимаем, когда удобно"></textarea></label>
-      <button class="btn btn-accent ri" type="submit" data-i18n="f_btn">Отправить в WhatsApp</button>
-      <p class="note ri" data-i18n="f_note">Без спама. Отвечаю лично.</p>
-      <p class="ok" role="status" data-i18n="f_ok">Открываем WhatsApp. Если окно не открылось, проверьте блокировщик всплывающих окон.</p>
-    </form>
+    <form id="form" class="rv quiz" novalidate>
+        <div class="qprog" aria-hidden="true"><div class="bar"><i></i></div><span class="qcount">1 / 3</span></div>
+        <fieldset class="qstep" data-step="1" data-wa="f_type" data-req data-auto><legend class="qh" data-i18n="q1_t">Что снимаем?</legend>
+          <div class="qcards"><label><input type="radio" name="type" value="food"><span data-i18n="c1">Кулинария</span></label><label><input type="radio" name="type" value="fashion"><span data-i18n="c2">Фэшн</span></label><label><input type="radio" name="type" value="podcast"><span data-i18n="c3">Подкасты / Интервью</span></label><label><input type="radio" name="type" value="love_story"><span data-i18n="c4">Love story</span></label><label><input type="radio" name="type" value="real_estate"><span data-i18n="c5">Недвижимость</span></label><label><input type="radio" name="type" value="business"><span data-i18n="c6">Бизнес и эксперты</span></label><label><input type="radio" name="type" value="other"><span data-i18n="f_other">Другое</span></label></div>
+          <small class="qerr" aria-live="polite"></small>
+        </fieldset>
+        <div class="qstep" data-step="2" hidden><p class="qh" data-i18n="q2_t">Сроки и объём</p>
+          <fieldset data-wa="q_when" data-req><legend data-i18n="q_when">Когда нужна съёмка?</legend><div class="chips"><label><input type="radio" name="when" value="1_2_weeks"><span data-i18n="w1">В ближайшие 1–2 недели</span></label><label><input type="radio" name="when" value="this_month"><span data-i18n="w2">В этом месяце</span></label><label><input type="radio" name="when" value="1_3_months"><span data-i18n="w3">Через 1–3 месяца</span></label></div><small class="qerr" aria-live="polite"></small></fieldset>
+          <fieldset data-wa="q_vol" data-req><legend data-i18n="q_vol">Сколько контента нужно?</legend><div class="chips"><label><input type="radio" name="volume" value="one"><span data-i18n="v1">Один ролик</span></label><label><input type="radio" name="volume" value="month"><span data-i18n="v2">Контент на месяц</span></label><label><input type="radio" name="volume" value="regular"><span data-i18n="v3">Регулярно, каждый месяц</span></label></div><small class="qerr" aria-live="polite"></small></fieldset>
+          <div class="qnav"><button type="button" class="btn btn-ghost qback" data-i18n="q_back">Назад</button><button type="button" class="btn btn-accent qnext" data-i18n="q_next">Дальше</button></div>
+        </div>
+        <div class="qstep" data-step="3" hidden><p class="qh" data-i18n="q3_t">Куда прислать ответ?</p>
+          <label><span data-i18n="f_name">Имя</span><input name="name" required autocomplete="name" data-i18n-ph="f_name_ph" placeholder="Как к вам обращаться"></label>
+          <label class="qphone"><span data-i18n="f_phone">Номер WhatsApp</span><input name="phone" type="tel" inputmode="tel" autocomplete="tel" required data-wa="f_phone" data-i18n-ph="f_phone_ph" placeholder="+34 600 000 000"><small class="qerr" aria-live="polite"></small></label>
+          <label><span><b data-i18n="f_link">Instagram или сайт</b> <em class="opt" data-i18n="q_opt">по желанию</em></span><input name="link" data-wa="f_link" data-i18n-ph="f_link_ph" placeholder="@ваш_бизнес или ссылка"></label>
+          <label><span><b data-i18n="f_msg">Пара слов о проекте</b> <em class="opt" data-i18n="q_opt">по желанию</em></span><textarea name="msg" data-wa="f_msg" data-i18n-ph="f_msg_ph" placeholder="Что за бизнес, где снимаем, когда удобно"></textarea></label>
+          <div class="qnav"><button type="button" class="btn btn-ghost qback" data-i18n="q_back">Назад</button><button class="btn btn-accent qsubmit" type="submit" data-i18n="f_btn">Отправить в WhatsApp</button></div>
+          <p class="note" data-i18n="f_note">Без спама. Отвечаю лично.</p><p class="ok" role="status" data-i18n="f_ok">Открываем WhatsApp.</p>
+        </div>
+      </form>
   </div>
 </section>
 </main>
@@ -347,7 +356,7 @@ proc_k:"Как работаем",proc_h:"Один день съёмки. Мес�
 rec_sr:"Нажмите и удерживайте, чтобы снять день",rec_hint:"Нажмите и держите REC",rec_done:"роликов на месяц вперёд",rec_unit:"роликов",
 faq_k:"Вопросы",faq_h:"Коротко о главном.",q1:"Где вы снимаете?",a1:"Базируюсь в Валенсии. Выезжаю на съёмки по всей Испании.",q2:"Что я получу после съёмочного дня?",a2:"Готовые смонтированные ролики под рилс, сторис и рекламу. Обычно это 20–30 единиц контента, которых хватает на месяц публикаций.",q3:"Сколько стоит съёмка?",a3:"Зависит от задачи, локации и количества роликов. Напишите пару слов о проекте, и я пришлю расчёт.",q4:"Мне нужно что-то готовить?",a4:"Нет. План съёмки и сценарии пишу я. От вас нужна локация и пара часов вашего времени.",
 ct_k:"Заявка",ct_h:"Расскажите о проекте. <em>Я отвечу сегодня.</em>",ct_p:"Заполните форму, и откроется WhatsApp с готовым сообщением. Останется нажать «отправить».",
-f_name:"Имя",f_name_ph:"Как к вам обращаться",f_type:"Что снимаем",f_other:"Другое",f_msg:"Пара слов о проекте",f_msg_ph:"Что за бизнес, где снимаем, когда удобно",f_btn:"Отправить в WhatsApp",f_note:"Без спама. Отвечаю лично.",f_ok:"Открываем WhatsApp. Если окно не открылось, проверьте блокировщик всплывающих окон.",f_err:"Напишите, как к вам обращаться.",
+q1_t:"Что снимаем?",q2_t:"Сроки и объём",q3_t:"Куда прислать ответ?",q_vol:"Сколько контента нужно?",v1:"Один ролик",v2:"Контент на месяц",v3:"Регулярно, каждый месяц",f_link:"Instagram или сайт",f_link_ph:"@ваш_бизнес или ссылка",f_name:"Имя",f_name_ph:"Как к вам обращаться",f_type:"Что снимаем",f_other:"Другое",f_msg:"Пара слов о проекте",f_msg_ph:"Что за бизнес, где снимаем, когда удобно",f_btn:"Отправить в WhatsApp",f_note:"Без спама. Отвечаю лично.",f_ok:"Открываем WhatsApp. Если окно не открылось, проверьте блокировщик всплывающих окон.",f_err:"Напишите, как к вам обращаться.",
 wa_hi:"Здравствуйте, Глеб! Заявка с сайта GR Production.",re_link:"Агентам и агентствам: всё о съёмке недвижимости",wa_type:"Съёмка",wa_msg:"О проекте",ft:"Валенсия · Испания",title:"GR Production · Видеопродакшн в Валенсии"},
 en:{
 skip:"Skip to content",nav_about:"About",nav_work:"Work",nav_process:"Process",nav_cta:"Plan a shoot",
@@ -371,7 +380,7 @@ proc_k:"Process",proc_h:"One shoot day. A month of content.",s1t:"Call",s1p:"We 
 rec_sr:"Press and hold to film a day",rec_hint:"Press and hold REC",rec_done:"videos for the month ahead",rec_unit:"videos",
 faq_k:"Questions",faq_h:"The short version.",q1:"Where do you film?",a1:"I am based in Valencia and travel for shoots all over Spain.",q2:"What do I get after the shoot day?",a2:"Finished, edited videos for reels, stories and ads. Usually 20–30 pieces of content, enough for a month of posting.",q3:"How much does a shoot cost?",a3:"It depends on the task, the location and the number of videos. Send a few words about your project and I will send you a quote.",q4:"Do I need to prepare anything?",a4:"No. I write the shot plan and scripts. You bring the location and a couple of hours of your time.",
 ct_k:"Request",ct_h:"Tell me about your project. <em>I reply the same day.</em>",ct_p:"Fill in the form and WhatsApp opens with your message ready. You just press send.",
-f_name:"Name",f_name_ph:"What should I call you",f_type:"What are we filming",f_other:"Something else",f_msg:"A few words about the project",f_msg_ph:"Your business, location, dates that suit you",f_btn:"Send via WhatsApp",f_note:"No spam. I reply personally.",f_ok:"Opening WhatsApp. If nothing opened, check your pop-up blocker.",f_err:"Please tell me your name.",
+q1_t:"What are we filming?",q2_t:"Timing and volume",q3_t:"Where should I reply?",q_vol:"How much content do you need?",v1:"One video",v2:"Content for a month",v3:"Regularly, every month",f_link:"Instagram or website",f_link_ph:"@your_business or a link",f_name:"Name",f_name_ph:"What should I call you",f_type:"What are we filming",f_other:"Something else",f_msg:"A few words about the project",f_msg_ph:"Your business, location, dates that suit you",f_btn:"Send via WhatsApp",f_note:"No spam. I reply personally.",f_ok:"Opening WhatsApp. If nothing opened, check your pop-up blocker.",f_err:"Please tell me your name.",
 wa_hi:"Hi Glib! A request from the GR Production website.",re_link:"For agents and agencies: real estate filming in detail",wa_type:"Shoot",wa_msg:"About the project",ft:"Valencia · Spain",title:"GR Production · Video production in Valencia"},
 es:{
 skip:"Ir al contenido",nav_about:"Sobre mí",nav_work:"Trabajos",nav_process:"Cómo trabajo",nav_cta:"Hablemos",
@@ -395,7 +404,7 @@ proc_k:"Cómo trabajo",proc_h:"Un día de rodaje. Un mes de contenido.",s1t:"Lla
 rec_sr:"Mantén pulsado para grabar un día",rec_hint:"Mantén pulsado REC",rec_done:"vídeos para todo el mes",rec_unit:"vídeos",
 faq_k:"Preguntas",faq_h:"Lo esencial.",q1:"¿Dónde grabas?",a1:"Estoy en Valencia y me desplazo a rodajes en toda España.",q2:"¿Qué recibo tras el día de rodaje?",a2:"Vídeos montados y listos para reels, stories y anuncios. Normalmente 20–30 piezas, suficientes para un mes de publicaciones.",q3:"¿Cuánto cuesta un rodaje?",a3:"Depende del proyecto, la localización y el número de vídeos. Escríbeme unas palabras y te envío un presupuesto.",q4:"¿Tengo que preparar algo?",a4:"No. Yo escribo el plan de rodaje y los guiones. Tú pones el lugar y un par de horas de tu tiempo.",
 ct_k:"Contacto",ct_h:"Cuéntame tu proyecto. <em>Respondo hoy mismo.</em>",ct_p:"Rellena el formulario y se abrirá WhatsApp con tu mensaje listo. Solo tienes que enviarlo.",
-f_name:"Nombre",f_name_ph:"¿Cómo te llamas?",f_type:"Qué grabamos",f_other:"Otro",f_msg:"Unas palabras sobre el proyecto",f_msg_ph:"Tu negocio, dónde grabamos, cuándo te va bien",f_btn:"Enviar por WhatsApp",f_note:"Sin spam. Respondo personalmente.",f_ok:"Abriendo WhatsApp. Si no se abre, revisa el bloqueador de ventanas.",f_err:"Dime cómo te llamas.",
+q1_t:"¿Qué grabamos?",q2_t:"Plazos y volumen",q3_t:"¿Dónde te respondo?",q_vol:"¿Cuánto contenido necesitas?",v1:"Un vídeo",v2:"Contenido para un mes",v3:"Cada mes, de forma regular",f_link:"Instagram o web",f_link_ph:"@tu_negocio o un enlace",f_name:"Nombre",f_name_ph:"¿Cómo te llamas?",f_type:"Qué grabamos",f_other:"Otro",f_msg:"Unas palabras sobre el proyecto",f_msg_ph:"Tu negocio, dónde grabamos, cuándo te va bien",f_btn:"Enviar por WhatsApp",f_note:"Sin spam. Respondo personalmente.",f_ok:"Abriendo WhatsApp. Si no se abre, revisa el bloqueador de ventanas.",f_err:"Dime cómo te llamas.",
 wa_hi:"¡Hola, Glib! Una solicitud desde la web de GR Production.",re_link:"Para agentes e inmobiliarias: todo sobre el vídeo inmobiliario",wa_type:"Rodaje",wa_msg:"Sobre el proyecto",ft:"Valencia · España",title:"GR Production · Productora de vídeo en Valencia"}
 }
 };

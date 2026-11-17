@@ -24,19 +24,19 @@ const SITE = {
 /* ===== copy shared by all pages (a page's own T overrides any key) ===== */
 const SHARED = {
 ru:{skip:"К содержанию",photo_tag:"GLIB · DOP",rev_k:"Отзывы",rev_h:"Что говорят клиенты.",rev_tr:"Перевод с русского",
-f_name:"Имя",f_name_ph:"Как к вам обращаться",f_msg:"Пара слов о проекте",f_note:"Без спама. Отвечаю лично.",f_btn:"Отправить в WhatsApp",
+q_next:"Дальше",q_back:"Назад",q_opt:"по желанию",q_pick:"Выберите вариант",q_fill:"Заполните это поле",q_when:"Когда нужна съёмка?",w1:"В ближайшие 1–2 недели",w2:"В этом месяце",w3:"Через 1–3 месяца",f_phone:"Номер WhatsApp",f_phone_ph:"+34 600 000 000",ph_empty:"Укажите номер, чтобы Глиб мог ответить",ph_cc:"Добавьте код страны, например +34",ph_long:"В номере лишние цифры — проверьте",ph_short:"Номер слишком короткий — проверьте",ph_es:"Испанские номера начинаются с 6, 7, 8 или 9",f_name:"Имя",f_name_ph:"Как к вам обращаться",f_msg:"Пара слов о проекте",f_note:"Без спама. Отвечаю лично.",f_btn:"Отправить в WhatsApp",
 f_ok:"Открываем WhatsApp с вашей заявкой. Если окно не открылось, проверьте блокировщик всплывающих окон.",f_err:"Напишите, как к вам обращаться.",
 wa_name:"Имя",wa_page:"Страница",lb_close:"Закрыть",play:"смотреть со звуком",
 ck_text:"Мы используем cookie Meta и Microsoft Clarity, чтобы понимать, как работает сайт, и показывать рекламу. Они включатся, только если вы согласитесь.",ck_more:"Подробнее",ck_accept:"Принять",ck_reject:"Только необходимые",ck_settings:"Настройки cookie",ck_label:"Согласие на cookie",
 privacy:"Политика конфиденциальности",ct_direct:"Или напишите напрямую:",rec2_hint:"Нажмите REC, чтобы включить работы",rec2_live:"Идёт запись. Нажмите на ролик, чтобы смотреть со звуком.",rec2_sr:"Включить запись: оживить работы",f_privacy:"Отправляя заявку, вы соглашаетесь с",f_privacy_link:"политикой конфиденциальности"},
 en:{skip:"Skip to content",photo_tag:"GLIB · DOP",rev_k:"Reviews",rev_h:"What clients say.",rev_tr:"Translated from Russian",
-f_name:"Name",f_name_ph:"What should I call you",f_msg:"A few words about the project",f_note:"No spam. I reply personally.",f_btn:"Send via WhatsApp",
+q_next:"Next",q_back:"Back",q_opt:"optional",q_pick:"Choose an option",q_fill:"Please fill this in",q_when:"When do you need the shoot?",w1:"In the next 1–2 weeks",w2:"This month",w3:"In 1–3 months",f_phone:"WhatsApp number",f_phone_ph:"+34 600 000 000",ph_empty:"Add your number so Glib can reply",ph_cc:"Add the country code, e.g. +34",ph_long:"Too many digits — please check",ph_short:"The number is too short — please check",ph_es:"Spanish numbers start with 6, 7, 8 or 9",f_name:"Name",f_name_ph:"What should I call you",f_msg:"A few words about the project",f_note:"No spam. I reply personally.",f_btn:"Send via WhatsApp",
 f_ok:"Opening WhatsApp with your request. If nothing opened, check your pop-up blocker.",f_err:"Please tell me your name.",
 wa_name:"Name",wa_page:"Page",lb_close:"Close",play:"watch with sound",
 ck_text:"We use Meta and Microsoft Clarity cookies to understand how the site works and to show ads. They are switched on only if you agree.",ck_more:"Learn more",ck_accept:"Accept",ck_reject:"Only necessary",ck_settings:"Cookie settings",ck_label:"Cookie consent",
 privacy:"Privacy policy",ct_direct:"Or reach me directly:",rec2_hint:"Press REC to bring the work to life",rec2_live:"Recording. Tap a film to watch it with sound.",rec2_sr:"Start recording: bring the work to life",f_privacy:"By sending the request you agree to the",f_privacy_link:"privacy policy"},
 es:{skip:"Ir al contenido",photo_tag:"GLIB · DOP",rev_k:"Opiniones",rev_h:"Lo que dicen los clientes.",rev_tr:"Traducido del ruso",
-f_name:"Nombre",f_name_ph:"¿Cómo te llamas?",f_msg:"Unas palabras sobre el proyecto",f_note:"Sin spam. Respondo personalmente.",f_btn:"Enviar por WhatsApp",
+q_next:"Siguiente",q_back:"Atrás",q_opt:"opcional",q_pick:"Elige una opción",q_fill:"Rellena este campo",q_when:"¿Cuándo necesitas el rodaje?",w1:"En 1–2 semanas",w2:"Este mes",w3:"En 1–3 meses",f_phone:"Número de WhatsApp",f_phone_ph:"+34 600 000 000",ph_empty:"Añade tu número para que Glib pueda responder",ph_cc:"Añade el prefijo del país, p. ej. +34",ph_long:"Sobran dígitos, revisa el número",ph_short:"El número es demasiado corto",ph_es:"Los números españoles empiezan por 6, 7, 8 o 9",f_name:"Nombre",f_name_ph:"¿Cómo te llamas?",f_msg:"Unas palabras sobre el proyecto",f_note:"Sin spam. Respondo personalmente.",f_btn:"Enviar por WhatsApp",
 f_ok:"Abriendo WhatsApp con tu solicitud. Si no se abre, revisa el bloqueador de ventanas.",f_err:"Dime cómo te llamas.",
 wa_name:"Nombre",wa_page:"Página",lb_close:"Cerrar",play:"ver con sonido",
 ck_text:"Usamos cookies de Meta y Microsoft Clarity para entender cómo funciona la web y mostrar publicidad. Solo se activan si las aceptas.",ck_more:"Más información",ck_accept:"Aceptar",ck_reject:"Solo necesarias",ck_settings:"Configuración de cookies",ck_label:"Consentimiento de cookies",
@@ -341,7 +341,7 @@ if(revSec){
 
 /* ---------- package buttons fill the form ---------- */
 const PACK_PRICE={one:650,three:1500,six:2500};
-$$('[data-pick]').forEach(b=>b.addEventListener('click',()=>{track('SelectPackage',{package:b.dataset.pick,value:PACK_PRICE[b.dataset.pick]||0,currency:'EUR'});const sel=$('#form [name=package]');if(sel)sel.value=b.dataset.pick;const c=$('#contact');c&&c.scrollIntoView({behavior:RM.matches?'auto':'smooth'});setTimeout(()=>{const n=$('#form [name=name]');n&&n.focus({preventScroll:true})},RM.matches?0:700)}));
+$$('[data-pick]').forEach(b=>b.addEventListener('click',()=>{track('SelectPackage',{package:b.dataset.pick,value:PACK_PRICE[b.dataset.pick]||0,currency:'EUR'});const sel=$('#form [name=package]');if(sel)sel.value=b.dataset.pick;const c=$('#contact');c&&c.scrollIntoView({behavior:RM.matches?'auto':'smooth'});setTimeout(()=>{if(quizApi)quizApi.focusFirst();else{const n=$('#form [name=name]');n&&n.focus({preventScroll:true})}},RM.matches?0:700)}));
 
 /* ---------- lead log: a copy of every request goes to the Google Sheet before WhatsApp opens ----------
    sendBeacon survives the page switching to WhatsApp; the urlencoded body needs no CORS preflight. */
@@ -352,6 +352,100 @@ function sendLead(d){
   try{fetch(SITE.leadsEndpoint,{method:'POST',mode:'no-cors',keepalive:true,body})}catch(e){}
 }
 const cookie=n=>{const m=document.cookie.match('(?:^|; )'+n+'=([^;]*)');return m?decodeURIComponent(m[1]):''};
+
+/* ---------- quiz form: 3 steps, progress, validation, phone check ----------
+   Markup: form#form.quiz > .qstep[data-step]; fieldset[data-req] = pick one; [data-auto] = go on after a pick;
+   [data-if="field=a,b"] = shown only for those answers. Each step reached is tracked (QuizStep2, QuizStep3). */
+/* national number length by country code; anything else: 8–15 digits */
+const PH_CC={'34':[9],'380':[9],'7':[10],'375':[9],'998':[9],'996':[9],'992':[9],'993':[8],'994':[9],'995':[9],'374':[8],'373':[8],'370':[8],'371':[8],'372':[7,8],
+  '44':[10],'48':[9],'49':[10,11],'33':[9],'39':[9,10],'351':[9],'31':[9],'32':[8,9],'41':[9],'43':[10,11,12],'40':[9],'420':[9],'36':[8,9],'30':[10],'353':[9],'46':[9],'47':[8],'45':[8],'358':[9,10],
+  '1':[10],'972':[8,9],'90':[10],'971':[9],'212':[9],'52':[10],'54':[10],'55':[10,11],'57':[10]};
+function phoneCheck(raw){
+  let s=String(raw||'').trim(); if(!s)return{err:'empty'};
+  s=s.replace(/[^\d+]/g,''); if(s.startsWith('00'))s='+'+s.slice(2);
+  if(!s.startsWith('+')){
+    const x=s.replace(/\D/g,'');
+    if(x.length===9&&/^[6789]/.test(x))s='+34'+x;            // a Spanish number typed without +34
+    else if(x.length===10&&/^[6789]/.test(x))return{err:'long'}; // a Spanish number with an extra digit
+    else if(x.length>=10)s='+'+x;                               // country code typed without the +
+    else return{err:'short',soft:true};
+  }
+  const n=s.slice(1).replace(/\D/g,'');
+  let cc=null;for(const l of [3,2,1]){if(PH_CC[n.slice(0,l)]){cc=n.slice(0,l);break}}
+  if(!cc){if(n.length>15)return{err:'long'};if(n.length<8)return{err:'short',soft:true};return{ok:true,e164:'+'+n}}
+  let nat=n.slice(cc.length);const L=PH_CC[cc];
+  if(cc==='380'&&nat.length===10&&nat[0]==='0')nat=nat.slice(1);   // +380 0xx… typed with the trunk 0
+  if(nat.length>Math.max(...L))return{err:'long'};
+  if(cc==='34'&&nat.length&&!/^[6789]/.test(nat))return{err:'es'};
+  if(nat.length<Math.min(...L))return{err:'short',soft:true};
+  return{ok:true,e164:'+'+cc+nat};
+}
+const quiz=$('#form.quiz');
+let quizApi=null;
+if(quiz){
+  const steps=$$('.qstep',quiz), N=steps.length, bar=$('.qprog i',quiz), cnt=$('.qcount',quiz);
+  let cur=0;const reached=new Set([0]);
+  const errOf=box=>box&&box.querySelector(':scope > .qerr, :scope > small.qerr');
+  const setErr=(box,key)=>{const e=errOf(box);if(e){e.textContent=key?t(key):'';e.dataset.k=key||''}box.classList.toggle('bad',!!key)};
+  hooks.push(()=>$$('.qerr',quiz).forEach(e=>{if(e.dataset.k)e.textContent=t(e.dataset.k)}));
+  function applyIf(){
+    $$('[data-if]',quiz).forEach(el=>{
+      const [f,vals]=el.dataset.if.split('=');const v=quiz.elements[f]?quiz.elements[f].value:'';
+      const on=vals.split(',').includes(v);el.hidden=!on;$$('input,select,textarea',el).forEach(i=>i.disabled=!on);
+    });
+  }
+  function checkPhone(inp,final){
+    const box=inp.closest('label'),r=phoneCheck(inp.value);
+    if(r.ok){setErr(box,null);return r}
+    const show=final||(!r.soft&&r.err!=='empty');
+    setErr(box,show?{empty:'ph_empty',cc:'ph_cc',long:'ph_long',short:'ph_short',es:'ph_es'}[r.err]:null);
+    return r;
+  }
+  function validStep(i,show){
+    let ok=true;const st=steps[i];
+    const groups=[st.matches('fieldset[data-req]')?st:null,...$$('fieldset[data-req]',st)].filter(Boolean);
+    groups.forEach(g=>{if(g.hidden||g.closest('[hidden]:not(.qstep)'))return;const picked=$('input:checked',g);if(!picked){ok=false;if(show)setErr(g,'q_pick')}else setErr(g,null)});
+    $$('input[required],select[required],textarea[required]',st).forEach(f=>{
+      if(f.disabled||f.type==='radio')return;
+      if(f.name==='phone'){const r=checkPhone(f,show);if(!r.ok){ok=false;if(show)track('FormError',{field:'phone',reason:r.err})}return}
+      const box=f.closest('label');if(!String(f.value||'').trim()){ok=false;if(show)setErr(box,'q_fill')}else setErr(box,null);
+    });
+    if(show&&!ok){const b=$('.bad input, .bad select, .bad textarea',st);b&&b.focus({preventScroll:false})}
+    return ok;
+  }
+  function go(i){
+    cur=Math.max(0,Math.min(N-1,i));applyIf();
+    steps.forEach((s,k)=>{s.hidden=k!==cur});
+    if(bar)bar.style.width=((cur+1)/N*100)+'%';if(cnt)cnt.textContent=`${cur+1} / ${N}`;
+    if(!reached.has(cur)){reached.add(cur);track('QuizStep'+(cur+1),{step:cur+1})}
+    const top=quiz.getBoundingClientRect().top;if(top<90)quiz.scrollIntoView({behavior:RM.matches?'auto':'smooth',block:'start'});
+    const f=$('input:not([type=radio]):not([disabled]),select:not([disabled]),textarea:not([disabled])',steps[cur]);
+    if(f&&cur>0&&matchMedia('(pointer:fine)').matches)setTimeout(()=>f.focus({preventScroll:true}),60);
+  }
+  quiz.addEventListener('change',e=>{
+    const g=e.target.closest('fieldset[data-req]');if(g)setErr(g,null);
+    if(e.target.type==='radio')applyIf();
+    if(e.target.type==='radio'&&e.target.closest('[data-auto]')&&cur<N-1)setTimeout(()=>{if(validStep(cur,false))go(cur+1)},260);
+    if(e.target.matches('select,input:not([type=radio]),textarea')){const b=e.target.closest('label');if(b&&b.classList.contains('bad')&&e.target.name!=='phone'&&String(e.target.value).trim())setErr(b,null)}
+  });
+  quiz.addEventListener('input',e=>{
+    if(e.target.name==='phone')checkPhone(e.target,false);
+    else{const b=e.target.closest('label');if(b&&b.classList.contains('bad')&&String(e.target.value).trim())setErr(b,null)}
+  });
+  quiz.addEventListener('focusout',e=>{if(e.target.name==='phone'&&e.target.value.trim())checkPhone(e.target,true)});
+  quiz.addEventListener('click',e=>{
+    if(e.target.closest('.qnext')){if(validStep(cur,true))go(cur+1)}
+    else if(e.target.closest('.qback'))go(cur-1);
+  });
+  /* Enter in a text field moves on instead of sending early */
+  quiz.addEventListener('keydown',e=>{if(e.key==='Enter'&&cur<N-1&&e.target.matches('input')){e.preventDefault();if(validStep(cur,true))go(cur+1)}});
+  /* the send handler below runs only when every step is valid */
+  quiz.addEventListener('submit',e=>{
+    for(let i=0;i<N;i++){if(!validStep(i,false)){e.preventDefault();e.stopImmediatePropagation();if(i!==cur)go(i);validStep(i,true);return}}
+  });
+  applyIf();go(0);
+  quizApi={phone:()=>{const f=quiz.elements.phone;const r=f?phoneCheck(f.value):{};return r.ok?r.e164:''},focusFirst:()=>{const f=$('input:not([disabled]),select:not([disabled])',steps[cur]);f&&f.focus({preventScroll:true})}};
+}
 
 /* ---------- form to WhatsApp (source page + ad tags included) ---------- */
 const form=$('#form');
@@ -365,18 +459,21 @@ if(form){
     const name=form.elements.name.value.trim();
     if(!name){track('FormError',{field:'name'});form.elements.name.focus();form.elements.name.setCustomValidity(t('f_err'));form.elements.name.reportValidity();setTimeout(()=>form.elements.name.setCustomValidity(''),2000);return}
     if(hp.value){form.classList.add('sent');return}
-    const el=form.elements, val=n=>{const f=el[n];if(!f)return undefined;if(f.tagName==='SELECT')return f.value||f.options[f.selectedIndex].textContent.trim();return (f.value||'').trim()||undefined};
+    const el=form.elements, val=n=>{const f=el[n];if(!f||f.disabled)return undefined;if(f.tagName==='SELECT')return f.value||undefined;return (f.value||'').trim()||undefined};
     const leadId=Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7);
     const fbclid=Q.get('fbclid');
-    sendLead({lead_id:leadId,page:PAGE.id||'main',lang:LANG,name,role:val('role'),shoot_type:val('type'),package:val('package'),location:val('location'),message:val('msg'),
+    const phone=quizApi?quizApi.phone():val('phone');
+    sendLead({lead_id:leadId,page:PAGE.id||'main',lang:LANG,name,phone,role:val('role'),shoot_type:val('type'),when:val('when'),volume:val('volume'),objects:val('objects'),package:val('package'),location:val('location'),link:val('link'),agency:val('agency'),message:val('msg'),
       utm_source:Q.get('utm_source'),utm_medium:Q.get('utm_medium'),utm_campaign:Q.get('utm_campaign'),utm_content:Q.get('utm_content'),utm_term:Q.get('utm_term'),
       device:matchMedia('(pointer:coarse)').matches?'mobile':'desktop',referrer:document.referrer,url:location.href.split('#')[0],
       fbp:cookie('_fbp'),fbc:cookie('_fbc')||(fbclid?`fb.1.${Date.now()}.${fbclid}`:'')});
     const lines=[t('wa_hi'),'',`${t('wa_name')}: ${name}`];
     $$('[data-wa]',form).forEach(el=>{
       let v='';
+      if(el.closest('[hidden]:not(.qstep)')||el.disabled)return;
       if(el.tagName==='FIELDSET'){const c=$('input:checked',el);v=c?c.parentElement.textContent.trim():''}
-      else if(el.tagName==='SELECT'){v=el.options[el.selectedIndex].textContent.trim()}
+      else if(el.name==='phone'){v=(quizApi&&quizApi.phone())||el.value.trim()}
+      else if(el.tagName==='SELECT'){v=el.value?el.options[el.selectedIndex].textContent.trim():''}
       else v=el.value.trim();
       if(v)lines.push(`${String(t(el.dataset.wa)).replace(/[?¿]/g,'').trim()}: ${v}`);
     });
@@ -384,7 +481,7 @@ if(form){
     const url=`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(lines.join('\n'))}`;
     form.classList.add('sent');
     /* no personal data goes to the pixel: only what was chosen in the form and the ad source */
-    track('Lead',{content_name:PAGE.label||PAGE.id,method:'whatsapp_form',role:val('role'),package:val('package'),shoot_type:val('type'),value:PACK_PRICE[val('package')]||undefined,currency:PACK_PRICE[val('package')]?'EUR':undefined,utm_source:Q.get('utm_source')||undefined},{eventID:leadId});
+    track('Lead',{content_name:PAGE.label||PAGE.id,method:'whatsapp_form',role:val('role'),package:val('package'),shoot_type:val('type'),when:val('when'),volume:val('volume'),objects:val('objects'),value:PACK_PRICE[val('package')]||undefined,currency:PACK_PRICE[val('package')]?'EUR':undefined,utm_source:Q.get('utm_source')||undefined},{eventID:leadId});
     const w=window.open(url,'_blank','noopener');if(!w)location.href=url;
   });
   let started=false;
@@ -438,7 +535,7 @@ const fm=$('#form');
 if(fm){
   const p=document.createElement('p');p.className='note privacy-note';
   const s=document.createElement('span'),a=document.createElement('a');a.href=PRIVACY_URL;a.target='_blank';a.rel='noopener';
-  p.append(s,' ',a,'.');const ok=$('.ok',fm);fm.insertBefore(p,ok||null);
+  p.append(s,' ',a,'.');const ok=$('.ok',fm);(ok?ok.parentNode:fm).insertBefore(p,ok||null);
   hooks.push(()=>{s.textContent=t('f_privacy');a.textContent=t('f_privacy_link')});
 }
 

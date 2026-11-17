@@ -15,12 +15,18 @@ const COLUMNS = [
   ['received',     'Дата и время',     140],
   ['status',       'Статус',           130],
   ['name',         'Имя',              160],
+  ['phone',        'Телефон',          150],
   ['page',         'Страница',         200],
   ['role',         'Кто',              110],
   ['shoot_type',   'Что снимаем',      150],
+  ['when',         'Когда съёмка',     150],
+  ['volume',       'Объём',            170],
+  ['objects',      'Объектов в месяц', 120],
   ['package',      'Формат',           200],
   ['value',        'Сумма, €',          90],
   ['location',     'Где объект',       160],
+  ['link',         'Ссылка',           220],
+  ['agency',       'Агентство',        160],
   ['message',      'Сообщение',        320],
   ['lang',         'Язык',              60],
   ['utm_source',   'Источник',         110],
@@ -46,6 +52,9 @@ const LABELS = {
   role:       { agency: 'Агентство', developer: 'Застройщик', owner: 'Владелец' },
   package:    { one: 'Один ролик · от 650 €', three: 'Три ролика · 1 500 €', six: 'Шесть роликов · 2 500 €', unsure: 'Пока не знаю' },
   shoot_type: { food: 'Кулинария', fashion: 'Фэшн', podcast: 'Подкасты / Интервью', events: 'Ивенты', love_story: 'Love story', real_estate: 'Недвижимость', business: 'Бизнес и эксперты', other: 'Другое' },
+  when:       { '1_2_weeks': 'В ближайшие 1–2 недели', this_month: 'В этом месяце', '1_3_months': 'Через 1–3 месяца' },
+  volume:     { one: 'Один ролик', month: 'Контент на месяц', regular: 'Регулярно, каждый месяц' },
+  objects:    { '1': '1', '2_4': '2–4', '5_plus': '5+' },
   lang:       { ru: 'RU', en: 'EN', es: 'ES' },
   device:     { mobile: 'Телефон / планшет', desktop: 'Компьютер' },
 };
@@ -72,10 +81,15 @@ function doPost(e) {
       return (LABELS[key] && LABELS[key][v]) || v;
     });
 
-    sh.appendRow(row);
-    const r = sh.getLastRow();
-    sh.getRange(r, 1).setNumberFormat('dd.mm.yyyy HH:mm');
-    sh.getRange(r, col_('message')).setWrap(true);
+    // пишем по заголовкам: колонки, добавленные в новой версии, встают на своё место, старые строки не съезжают
+    const idx = headerIndex_(sh);
+    const out = new Array(sh.getLastColumn()).fill('');
+    COLUMNS.forEach(([key, title], i) => { out[idx[title] - 1] = row[i]; });
+    const r = sh.getLastRow() + 1;
+    sh.getRange(r, 1, 1, out.length).setValues([out]);
+    sh.getRange(r, idx['Дата и время']).setNumberFormat('dd.mm.yyyy HH:mm');
+    sh.getRange(r, idx['Сообщение']).setWrap(true);
+    sh.getRange(r, idx['Телефон']).setNumberFormat('@');
 
     if (NOTIFY_EMAIL) notify_(row);
     return json_({ ok: true });
@@ -128,7 +142,7 @@ function setup() {
 function testLead() {
   doPost({ parameter: {
     lead_id: 'test-' + Date.now(), page: 'real-estate', lang: 'ru', name: 'Тест',
-    role: 'agency', package: 'three', location: 'Валенсия', message: 'Тестовая заявка',
+    phone: '+34600000000', role: 'agency', when: 'this_month', objects: '2_4', package: 'three', location: 'Валенсия', message: 'Тестовая заявка',
     utm_source: 'facebook', device: 'mobile',
   }});
 }
@@ -140,6 +154,23 @@ function sheet_() {
   if (!sh) sh = ss.insertSheet(SHEET_NAME, 0);
   if (sh.getLastRow() === 0) sh.appendRow(COLUMNS.map(c => c[1]));
   return sh;
+}
+
+/* Номера колонок по заголовкам. Если колонки из COLUMNS ещё нет (таблица от старой версии), вставляет её после предыдущей */
+function headerIndex_(sh) {
+  let head = sh.getRange(1, 1, 1, Math.max(1, sh.getLastColumn())).getValues()[0];
+  COLUMNS.forEach(([key, title, w], i) => {
+    if (head.indexOf(title) !== -1) return;
+    const prev = i > 0 ? head.indexOf(COLUMNS[i - 1][1]) + 1 : 0;
+    if (prev > 0) sh.insertColumnAfter(prev); else sh.insertColumnBefore(1);
+    const at = prev + 1;
+    sh.getRange(1, at).setValue(title).setFontWeight('bold').setBackground('#111111').setFontColor('#ffffff');
+    sh.setColumnWidth(at, w);
+    head = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0];
+  });
+  const idx = {};
+  head.forEach((h, i) => { if (h) idx[h] = i + 1; });
+  return idx;
 }
 
 function col_(key) {
@@ -164,7 +195,7 @@ function isDuplicate_(sh, id) {
   const last = sh.getLastRow();
   if (last < 2) return false;
   const from = Math.max(2, last - 200);
-  const ids = sh.getRange(from, col_('lead_id'), last - from + 1, 1).getValues();
+  const ids = sh.getRange(from, headerIndex_(sh)['ID заявки'], last - from + 1, 1).getValues();
   return ids.some(r => r[0] === id);
 }
 
