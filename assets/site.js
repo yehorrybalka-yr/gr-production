@@ -14,7 +14,7 @@ const SITE = {
   legal: { name: 'Glib Rudakov', email: 'glibrudakov@gmail.com', city: 'Valencia, España' },
   /* Real client quotes only. pages: which pages show it ('main', 'real-estate'). */
   reviews: [
-    { name: 'Yarl', role: { ru: 'Недвижимость', en: 'Real estate', es: 'Inmobiliaria' }, orig: 'ru', pages: ['main', 'real-estate'], text: {
+    { name: 'Yarl', role: { ru: 'Недвижимость', en: 'Real estate', es: 'Inmobiliaria' }, orig: 'ru', pages: ['main', 'real-estate'], chat: true, text: {
       ru: 'Вау, Глеб, это реально очень круто. Видно сразу, что поработали профессионалы. Я теперь понял, о каком уровне видео ты говорил! Я уже много раз пересмотрел и наслаждаюсь. Реально хочется сотрудничать с такими профессионалами.\n\nВот это мне зашло больше всего. Реально видно, что работали профессионалы и не за один вечер сделано.',
       en: 'Wow, Glib, this is really great. You can see right away that professionals made it. Now I understand what level of video you were talking about! I have rewatched it many times and I enjoy it. It really makes me want to work with professionals like this.\n\nThis one I liked the most. You can really see professionals worked on it, and it was not made in one evening.',
       es: 'Glib, de verdad, esto está genial. Se ve enseguida que lo han hecho profesionales. ¡Ahora entiendo de qué nivel de vídeo hablabas! Ya lo he visto muchas veces y lo disfruto. Dan ganas de colaborar con profesionales así.\n\nEste es el que más me ha gustado. Se nota que han trabajado profesionales y que no se hizo en una tarde.'
