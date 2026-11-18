@@ -355,7 +355,21 @@ if(revSec){
     const b=document.createElement('b');b.textContent=r.name;who.appendChild(b);
     const s=document.createElement('span');s.className='mono';s.textContent=(r.role&&(r.role[LANG]||r.role.ru))||'';who.appendChild(s);
     if(LANG!==r.orig&&r.text[LANG]){const tr=document.createElement('span');tr.className='tr';tr.textContent=t('rev_tr');who.appendChild(tr)}
-    fig.appendChild(who);box.appendChild(fig)})});
+    fig.appendChild(who);box.appendChild(fig)});
+    /* phones: the cards become a swipe carousel with dots (only when there is more than one) */
+    let dots=revSec.querySelector('.qdots');if(dots)dots.remove();
+    if(list.length>1){
+      dots=document.createElement('div');dots.className='qdots';dots.setAttribute('aria-hidden','true');
+      list.forEach((_,i)=>{const d=document.createElement('i');if(!i)d.className='on';dots.appendChild(d)});
+      box.after(dots);
+    }});
+  const qbox=$('#quotes');let swiped=false;
+  qbox&&qbox.addEventListener('scroll',()=>{
+    const cards=[...qbox.children];if(!cards.length)return;
+    const i=Math.round(qbox.scrollLeft/(cards[0].offsetWidth+12));
+    $$('.qdots i',revSec).forEach((d,k)=>d.classList.toggle('on',k===i));
+    if(!swiped&&qbox.scrollLeft>20){swiped=true;track('ReviewsSwipe')}
+  },{passive:true});
 }
 
 /* ---------- package buttons fill the form ---------- */
