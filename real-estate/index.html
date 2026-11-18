@@ -21,9 +21,9 @@
 <meta property="og:image:alt" content="GReat Vision — real estate films across Spain">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230e0c10'/%3E%3Cpath d='M12 50V24L38 10M33 20l20 10v20M26 50h28' stroke='%23FF2D87' stroke-width='3.5' fill='none'/%3E%3Cpath d='M28 52L40 8' stroke='%23FF2D87' stroke-width='4.5' stroke-linecap='round'/%3E%3C/svg%3E">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;500;800&family=Golos+Text:wght@400;500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="preload" href="../assets/fonts/golos-text-cyrillic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/unbounded-cyrillic-300-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/fonts/fonts.css">
 <link rel="stylesheet" href="../assets/site.css">
 <!-- Tracking. Microsoft Clarity runs for everyone: cookieless (consent "denied") until the visitor accepts cookies.
      Meta Pixel loads only after "Accept" in the cookie banner (see assets/site.js). -->
@@ -80,44 +80,29 @@
 
 <main id="main" tabindex="-1">
 <span id="top"></span>
-<section id="hero" aria-label="GReat Vision">
-  <div class="stage" id="stage">
-    <div class="frame vf" id="frame">
-      <i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i>
-      <div class="screen" id="poster">
-        <video id="herov" preload="none" muted playsinline aria-hidden="true" tabindex="-1"></video>
+<section id="hero" class="hwall" aria-label="GReat Vision">
+  <div class="hw-in">
+    <div class="hw-copy">
+      <span class="mono hw-kick" data-i18n="h_kicker">GReat Vision · недвижимость · Испания</span>
+      <h1 data-i18n="hw_title">Видео объектов, которые продают до просмотра.</h1>
+      <p class="hw-rot" aria-hidden="true"><span id="hwrot" data-i18n="h_title" data-rot="h_title,h2_big,h3_big">Сначала видение. Потом просмотр.</span></p>
+      <p class="hw-sub" data-i18n="hw_sub">Для агентств, застройщиков и владельцев по всей Испании. От 650 €.</p>
+      <div class="ctas">
+        <a class="btn btn-accent" href="#contact" data-i18n="cta_request">Оставить заявку</a>
+        <a class="btn btn-ghost" href="#work" data-i18n="cta_work">Смотреть работы</a>
       </div>
-      <div class="hud" aria-hidden="true"><span class="chip rec"><i></i>REC</span><span class="chip" id="tc">00:00:00:00</span></div>
-      <div class="hud b" aria-hidden="true"><span class="chip">9:16 · 25P</span><span class="chip">ESPAÑA</span></div>
-      <svg class="ring" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="20" fill="none" stroke="currentColor" stroke-opacity=".25" stroke-width="2"/><circle id="ringp" cx="24" cy="24" r="20" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="126" style="stroke-dashoffset:var(--ld,126)"/></svg>
+      <ul class="hw-facts">
+        <li><b>2M+</b><span data-i18n="hw_f1">просмотров у ролика о недвижимости</span></li>
+        <li><b>150+</b><span data-i18n="hw_f2">заявок за день после публикации</span></li>
+        <li><b>1</b><span data-i18n="hw_f3">выезд: Reels, версия для Idealista и фото</span></li>
+      </ul>
     </div>
-
-    <div class="band b1" data-a="0" data-b="0.22">
-      <div class="l">
-        <span class="mono" data-i18n="h_kicker">GReat Vision · недвижимость · Испания</span>
-        <h1 class="split" data-split="h_title">Сначала видение. Потом просмотр.</h1>
-      </div>
-      <div class="r"><p class="sub split" data-split="h_sub">Видео объектов для агентств и владельцев по всей Испании. От 650 €.</p></div>
+    <div class="hw-wall" id="hwwall">
+      <div class="hw-col hw-c1"><div class="hw-track"><button class="hw-reel" type="button" data-v="estate1" data-v-en="estate1-en" data-h="estate1a" data-title="Villa · Barcelona"><span class="hw-scr" style="background-image:url('../assets/h/estate1a.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate2" data-v-en="estate2-en" data-h="estate2b" data-title="Villa · Costa Blanca"><span class="hw-scr" style="background-image:url('../assets/h/estate2b.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate3" data-v-en="estate3-en" data-h="estate3c" data-title="House · 2 terraces"><span class="hw-scr" style="background-image:url('../assets/h/estate3c.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate1" data-v-en="estate1-en" data-h="estate1d" data-title="Villa · Barcelona"><span class="hw-scr" style="background-image:url('../assets/h/estate1d.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate1" data-v-en="estate1-en" data-h="estate1a" data-title="Villa · Barcelona" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('../assets/h/estate1a.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate2" data-v-en="estate2-en" data-h="estate2b" data-title="Villa · Costa Blanca" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('../assets/h/estate2b.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate3" data-v-en="estate3-en" data-h="estate3c" data-title="House · 2 terraces" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('../assets/h/estate3c.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate1" data-v-en="estate1-en" data-h="estate1d" data-title="Villa · Barcelona" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('../assets/h/estate1d.jpg')"></span></button></div></div>
+      <div class="hw-col hw-c2"><div class="hw-track"><button class="hw-reel" type="button" data-v="estate2" data-v-en="estate2-en" data-h="estate2a" data-title="Villa · Costa Blanca"><span class="hw-scr" style="background-image:url('../assets/h/estate2a.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate3" data-v-en="estate3-en" data-h="estate3b" data-title="House · 2 terraces"><span class="hw-scr" style="background-image:url('../assets/h/estate3b.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate1" data-v-en="estate1-en" data-h="estate1c" data-title="Villa · Barcelona"><span class="hw-scr" style="background-image:url('../assets/h/estate1c.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate2" data-v-en="estate2-en" data-h="estate2d" data-title="Villa · Costa Blanca"><span class="hw-scr" style="background-image:url('../assets/h/estate2d.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate2" data-v-en="estate2-en" data-h="estate2a" data-title="Villa · Costa Blanca" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('../assets/h/estate2a.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate3" data-v-en="estate3-en" data-h="estate3b" data-title="House · 2 terraces" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('../assets/h/estate3b.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate1" data-v-en="estate1-en" data-h="estate1c" data-title="Villa · Barcelona" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('../assets/h/estate1c.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate2" data-v-en="estate2-en" data-h="estate2d" data-title="Villa · Costa Blanca" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('../assets/h/estate2d.jpg')"></span></button></div></div>
+      <div class="hw-col hw-c3"><div class="hw-track"><button class="hw-reel" type="button" data-v="estate3" data-v-en="estate3-en" data-h="estate3a" data-title="House · 2 terraces"><span class="hw-scr" style="background-image:url('../assets/h/estate3a.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate1" data-v-en="estate1-en" data-h="estate1b" data-title="Villa · Barcelona"><span class="hw-scr" style="background-image:url('../assets/h/estate1b.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate2" data-v-en="estate2-en" data-h="estate2c" data-title="Villa · Costa Blanca"><span class="hw-scr" style="background-image:url('../assets/h/estate2c.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate3" data-v-en="estate3-en" data-h="estate3d" data-title="House · 2 terraces"><span class="hw-scr" style="background-image:url('../assets/h/estate3d.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate3" data-v-en="estate3-en" data-h="estate3a" data-title="House · 2 terraces" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('../assets/h/estate3a.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate1" data-v-en="estate1-en" data-h="estate1b" data-title="Villa · Barcelona" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('../assets/h/estate1b.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate2" data-v-en="estate2-en" data-h="estate2c" data-title="Villa · Costa Blanca" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('../assets/h/estate2c.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate3" data-v-en="estate3-en" data-h="estate3d" data-title="House · 2 terraces" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('../assets/h/estate3d.jpg')"></span></button></div></div>
     </div>
-    <div class="band b2 mid" data-a="0.26" data-b="0.48">
-      <div class="l"><p class="big split" data-split="h2_big">Один выезд. Reels, версия для Idealista и фото.</p></div>
-      <div class="r"><p class="sub fade" data-i18n="h2_sub">Смотрим, где солнце, и выбираем час: утро для гостиной, вечер для террасы.</p></div>
-    </div>
-    <div class="band b3 mid" data-a="0.52" data-b="0.74">
-      <div class="l"><p class="sub fade" data-i18n="h3_sub">Так сработал один ролик о недвижимости, который мы сняли для клиента.</p></div>
-      <div class="r"><p class="big split" data-split="h3_big">2 миллиона просмотров. 150 заявок за день.</p></div>
-    </div>
-    <div class="band b4" data-a="0.78" data-b="1">
-      <div class="l"><p class="big split" data-split="h4_big">Нажмите REC на вашем объекте.</p></div>
-      <div class="r">
-        <p class="sub fade" data-i18n="h4_sub">Расскажите об объекте. Ответим с датой съёмки и ценой.</p>
-        <div class="ctas fade2">
-          <a class="btn btn-accent" href="#contact" data-i18n="cta_request">Оставить заявку</a>
-          <a class="btn btn-ghost" href="#work" data-i18n="cta_work">Смотреть работы</a>
-        </div>
-      </div>
-    </div>
-    <div class="cue mono" id="cue" aria-hidden="true"><span></span></div>
+    <div class="hw-strip" id="hwstrip"><div class="hw-strack"><button class="hw-reel" type="button" data-v="estate1" data-v-en="estate1-en" data-h="estate1a" data-title="Villa · Barcelona"><span class="hw-scr" style="background-image:url('../assets/h/estate1a.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate2" data-v-en="estate2-en" data-h="estate2b" data-title="Villa · Costa Blanca"><span class="hw-scr" style="background-image:url('../assets/h/estate2b.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate3" data-v-en="estate3-en" data-h="estate3c" data-title="House · 2 terraces"><span class="hw-scr" style="background-image:url('../assets/h/estate3c.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate1" data-v-en="estate1-en" data-h="estate1d" data-title="Villa · Barcelona"><span class="hw-scr" style="background-image:url('../assets/h/estate1d.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate2" data-v-en="estate2-en" data-h="estate2a" data-title="Villa · Costa Blanca"><span class="hw-scr" style="background-image:url('../assets/h/estate2a.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate3" data-v-en="estate3-en" data-h="estate3b" data-title="House · 2 terraces"><span class="hw-scr" style="background-image:url('../assets/h/estate3b.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate1" data-v-en="estate1-en" data-h="estate1c" data-title="Villa · Barcelona"><span class="hw-scr" style="background-image:url('../assets/h/estate1c.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate2" data-v-en="estate2-en" data-h="estate2d" data-title="Villa · Costa Blanca"><span class="hw-scr" style="background-image:url('../assets/h/estate2d.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate3" data-v-en="estate3-en" data-h="estate3a" data-title="House · 2 terraces"><span class="hw-scr" style="background-image:url('../assets/h/estate3a.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate1" data-v-en="estate1-en" data-h="estate1b" data-title="Villa · Barcelona"><span class="hw-scr" style="background-image:url('../assets/h/estate1b.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate2" data-v-en="estate2-en" data-h="estate2c" data-title="Villa · Costa Blanca"><span class="hw-scr" style="background-image:url('../assets/h/estate2c.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate3" data-v-en="estate3-en" data-h="estate3d" data-title="House · 2 terraces"><span class="hw-scr" style="background-image:url('../assets/h/estate3d.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate1" data-v-en="estate1-en" data-h="estate1a" data-title="Villa · Barcelona" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('../assets/h/estate1a.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate2" data-v-en="estate2-en" data-h="estate2b" data-title="Villa · Costa Blanca" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('../assets/h/estate2b.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate3" data-v-en="estate3-en" data-h="estate3c" data-title="House · 2 terraces" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('../assets/h/estate3c.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate1" data-v-en="estate1-en" data-h="estate1d" data-title="Villa · Barcelona" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('../assets/h/estate1d.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate2" data-v-en="estate2-en" data-h="estate2a" data-title="Villa · Costa Blanca" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('../assets/h/estate2a.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate3" data-v-en="estate3-en" data-h="estate3b" data-title="House · 2 terraces" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('../assets/h/estate3b.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate1" data-v-en="estate1-en" data-h="estate1c" data-title="Villa · Barcelona" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('../assets/h/estate1c.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate2" data-v-en="estate2-en" data-h="estate2d" data-title="Villa · Costa Blanca" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('../assets/h/estate2d.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate3" data-v-en="estate3-en" data-h="estate3a" data-title="House · 2 terraces" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('../assets/h/estate3a.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate1" data-v-en="estate1-en" data-h="estate1b" data-title="Villa · Barcelona" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('../assets/h/estate1b.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate2" data-v-en="estate2-en" data-h="estate2c" data-title="Villa · Costa Blanca" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('../assets/h/estate2c.jpg')"></span></button><button class="hw-reel" type="button" data-v="estate3" data-v-en="estate3-en" data-h="estate3d" data-title="House · 2 terraces" aria-hidden="true" tabindex="-1"><span class="hw-scr" style="background-image:url('../assets/h/estate3d.jpg')"></span></button></div></div>
   </div>
 </section>
 
@@ -149,11 +134,11 @@
       </figure>
       <figure>
         <button class="reel vf" data-v="estate2" data-v-en="estate2-en" data-title="Villa · Costa Blanca"><i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i><div class="screen"></div><div class="hud"><span class="chip">02</span><span class="play"><svg viewBox="0 0 12 12" fill="currentColor"><path d="M2 1l9 5-9 5z"/></svg></span></div></button>
-        <figcaption><span class="mono" data-i18n="w_c2">Вилла · Costa Blanca · 950 000 €</span><b data-i18n="w_t2">Вилла с бассейном</b></figcaption>
+        <figcaption><span class="mono" data-i18n="w_c2">Вилла · 380 м² · Costa Blanca</span><b data-i18n="w_t2">Вилла с бассейном</b></figcaption>
       </figure>
       <figure>
         <button class="reel vf" data-v="estate3" data-v-en="estate3-en" data-title="House · 2 terraces"><i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i><div class="screen"></div><div class="hud"><span class="chip">03</span><span class="play"><svg viewBox="0 0 12 12" fill="currentColor"><path d="M2 1l9 5-9 5z"/></svg></span></div></button>
-        <figcaption><span class="mono" data-i18n="w_c3">Дом · 2 террасы · 415 000 €</span><b data-i18n="w_t3">Дом с двумя террасами</b></figcaption>
+        <figcaption><span class="mono" data-i18n="w_c3">Дом · 190 м² · Costa Blanca</span><b data-i18n="w_t3">Дом с двумя террасами</b></figcaption>
       </figure>
     </div>
     <div class="after rv"><p class="ri" data-i18n="work_after">Хотите такой ролик для своего объекта?</p><a class="btn btn-accent ri" href="#contact" data-i18n="cta_request">Оставить заявку</a></div>
@@ -317,7 +302,6 @@
           <label><span data-i18n="f_name">Имя</span><input name="name" required autocomplete="name" data-i18n-ph="f_name_ph" placeholder="Как к вам обращаться"></label>
           <label class="qphone"><span data-i18n="f_phone">Номер WhatsApp</span><input name="phone" type="tel" inputmode="tel" autocomplete="tel" required data-wa="f_phone" data-i18n-ph="f_phone_ph" placeholder="+34 600 000 000"><small class="qerr" aria-live="polite"></small></label>
           <label data-if="role=agency"><span><b data-i18n="f_agency">Название агентства</b> <em class="opt" data-i18n="q_opt">по желанию</em></span><input name="agency" autocomplete="organization" data-wa="f_agency"></label>
-          <label><span><b data-i18n="f_msg">Об объекте</b> <em class="opt" data-i18n="q_opt">по желанию</em></span><textarea id="f-msg" name="msg" data-wa="f_msg" data-i18n-ph="f_msg_ph" placeholder="Площадь, террасы, вид на море, удобные даты"></textarea></label>
           <div class="qnav"><button type="button" class="btn btn-ghost qback" data-i18n="q_back">Назад</button><button class="btn btn-accent qsubmit" type="submit" data-i18n="f_btn">Отправить в WhatsApp</button></div>
           <p class="note" data-i18n="f_note">Без спама. Отвечаю лично.</p><p class="ok" role="status" data-i18n="f_ok">Открываем WhatsApp.</p>
         </div>
@@ -342,15 +326,14 @@
 <script>
 window.PAGE = {
   id: 'real-estate', label: 'GReat Vision · Real Estate', base: '../assets/',
-  hero: { src: '../assets/re-hero-scrub.mp4', bytes: 2888847, poster: '../assets/re-hero-poster.jpg', ending: '../assets/re-hero-ending.jpg', duration: 7.88 },
   T: {
 ru:{title:"GReat Vision · Видео для недвижимости в Испании",nav_work:"Работы",nav_visit:"Один выезд",nav_packages:"Цены",nav_faq:"Вопросы",cta_request:"Оставить заявку",cta_work:"Смотреть работы",
-h_kicker:"GReat Vision · недвижимость · Испания",h_title:"Сначала видение. Потом просмотр.",h_sub:"Видео объектов для агентств и владельцев по всей Испании. От 650 €.",
+hw_title:"Видео объектов, которые продают до просмотра.",hw_sub:"Для агентств, застройщиков и владельцев по всей Испании. От 650 €.",hw_f1:"просмотров у ролика о недвижимости",hw_f2:"заявок за день после публикации",hw_f3:"выезд: Reels, версия для Idealista и фото",h_kicker:"GReat Vision · недвижимость · Испания",h_title:"Сначала видение. Потом просмотр.",h_sub:"Видео объектов для агентств и владельцев по всей Испании. От 650 €.",
 h2_big:"Один выезд. Reels, версия для Idealista и фото.",h2_sub:"Смотрим, где солнце, и выбираем час: утро для гостиной, вечер для террасы.",
 h3_sub:"Так сработал один ролик о недвижимости, который мы сняли для клиента.",h3_big:"2 миллиона просмотров. 150 заявок за день.",
 h4_big:"Нажмите REC на вашем объекте.",h4_sub:"Расскажите об объекте. Ответим с датой съёмки и ценой.",
 work_k:"Работы",work_h:"Последние работы.",work_p:"Настоящие объекты, настоящий свет. Сняли и смонтировали сами. Нажмите, чтобы смотреть со звуком.",
-w_c1:"Вилла · 311 м² · Барселона",w_t1:"Вилла с террасой",w_c2:"Вилла · Costa Blanca · 950 000 €",w_t2:"Вилла с бассейном",w_c3:"Дом · 2 террасы · 415 000 €",w_t3:"Дом с двумя террасами",work_after:"Хотите такой ролик для своего объекта?",
+w_c1:"Вилла · 311 м² · Барселона",w_t1:"Вилла с террасой",w_c2:"Вилла · 380 м² · Costa Blanca",w_t2:"Вилла с бассейном",w_c3:"Дом · 190 м² · Costa Blanca",w_t3:"Дом с двумя террасами",work_after:"Хотите такой ролик для своего объекта?",
 case_k:"Результат",case_m:"просмотров у одного ролика о недвижимости",case_f1:"заявок за один день",case_f2n:"Вся Испания",case_f2:"виллы, квартиры, новостройки",case_f3:"титры на языке ваших покупателей",
 visit_k:"Один выезд",visit_h:"Один выезд. Три результата.",visit_p:"Вот что мы привозим с одной съёмки.",
 v1h:"Reels",v1p:"Вертикальный ролик для Reels и TikTok, 45–60 секунд, с титрами: метры, террасы, цена.",v2h:"Версия для Idealista",v2p:"Горизонтальная версия для Idealista и вашего сайта: объявления с видео получают больше кликов.",v3h:"Фото",v3p:"Каждая комната, терраса и вид, в том же свете, что и ролик.",
@@ -367,12 +350,12 @@ ct_k:"Заявка",ct_h:"Нажмите <em>REC.</em>",ct_p:"Расскажит
 q1_t:"Кто вы?",q2_t:"Об объекте",q3_t:"Куда прислать ответ?",f_url:"Ссылка на объявление",f_url_ph:"idealista.com/inmueble/...",f_objs:"Сколько объектов в месяц?",n_1:"1",n_2:"2–4",n_3:"5+",o0:"Выберите формат",f_agency:"Название агентства",f_loc:"Где объект?",f_loc_ph:"Валенсия, Хавеа, Марбелья...",f_role:"Вы",r1:"Агентство",r2:"Застройщик",r3:"Владелец",f_pack:"Формат",o1:"Один ролик · от 650 €",o2:"Три ролика · 1 500 €",o3:"Шесть роликов · 2 500 €",o4:"Пока не знаю",f_msg:"Об объекте",f_msg_ph:"Площадь, террасы, вид на море, удобные даты",
 wa_hi:"Здравствуйте! Заявка с сайта GReat Vision.",ft_by:"by GR Production",ft:"Валенсия · Испания"},
 en:{title:"GReat Vision · Real Estate Films in Spain",nav_work:"Work",nav_visit:"One visit",nav_packages:"Prices",nav_faq:"FAQ",cta_request:"Request a shoot",cta_work:"See the work",
-h_kicker:"GReat Vision · real estate · Spain",h_title:"Vision before viewing.",h_sub:"Property films for agencies and owners across Spain. From €650.",
+hw_title:"Property films that sell before the viewing.",hw_sub:"For agencies, developers and owners across Spain. From €650.",hw_f1:"views on a real estate film",hw_f2:"leads in a day after posting",hw_f3:"visit: a Reel, an Idealista version and photos",h_kicker:"GReat Vision · real estate · Spain",h_title:"Vision before viewing.",h_sub:"Property films for agencies and owners across Spain. From €650.",
 h2_big:"One visit. A Reel, an Idealista version and photos.",h2_sub:"We check where the sun is and pick the hour: morning for living rooms, evening for terraces.",
 h3_sub:"That is how one real estate film we made for a client performed.",h3_big:"2 million views. 150 leads in a day.",
 h4_big:"Press REC on your property.",h4_sub:"Tell us about the property. We reply with a date and a price.",
 work_k:"Work",work_h:"Recent films.",work_p:"Real properties, real light. Filmed and edited by us. Tap to watch with sound.",
-w_c1:"Villa · 311 m² · Barcelona",w_t1:"Villa with a terrace",w_c2:"Villa · Costa Blanca · €950,000",w_t2:"Villa with a pool",w_c3:"House · 2 terraces · €415,000",w_t3:"House with two terraces",work_after:"Want a film like this for your property?",
+w_c1:"Villa · 311 m² · Barcelona",w_t1:"Villa with a terrace",w_c2:"Villa · 380 m² · Costa Blanca",w_t2:"Villa with a pool",w_c3:"House · 190 m² · Costa Blanca",w_t3:"House with two terraces",work_after:"Want a film like this for your property?",
 case_k:"Result",case_m:"views on a single real estate film",case_f1:"leads in one day",case_f2n:"All of Spain",case_f2:"villas, apartments, new builds",case_f3:"titles in your buyers' language",
 visit_k:"One visit",visit_h:"One visit. Three results.",visit_p:"This is what we bring back from a single shoot.",
 v1h:"Reel",v1p:"Vertical film for Reels and TikTok, 45 to 60 seconds, with titles: metres, terraces, price.",v2h:"Idealista version",v2p:"Horizontal version for Idealista and your website, where listings with video get more clicks.",v3h:"Photos",v3p:"Every room, the terrace and the view, shot in the same light as the film.",
@@ -389,12 +372,12 @@ ct_k:"Request",ct_h:"Press <em>REC.</em>",ct_p:"Tell us about the property. What
 q1_t:"Who are you?",q2_t:"About the property",q3_t:"Where should I reply?",f_url:"Listing link",f_url_ph:"idealista.com/inmueble/...",f_objs:"How many properties a month?",n_1:"1",n_2:"2–4",n_3:"5+",o0:"Choose a format",f_agency:"Agency name",f_loc:"Where is the property?",f_loc_ph:"Valencia, Jávea, Marbella...",f_role:"You are",r1:"An agency",r2:"A developer",r3:"An owner",f_pack:"Format",o1:"One film · from €650",o2:"Three films · €1,500",o3:"Six films · €2,500",o4:"Not sure yet",f_msg:"About the property",f_msg_ph:"Size, terraces, sea view, preferred dates",
 wa_hi:"Hi! A request from the GReat Vision website.",ft_by:"by GR Production",ft:"Valencia · Spain"},
 es:{title:"GReat Vision · Vídeo inmobiliario en España",nav_work:"Trabajos",nav_visit:"Una visita",nav_packages:"Precios",nav_faq:"Preguntas",cta_request:"Solicitar rodaje",cta_work:"Ver trabajos",
-h_kicker:"GReat Vision · inmobiliaria · España",h_title:"Primero la visión. Después la visita.",h_sub:"Vídeos de propiedades para agencias y propietarios en toda España. Desde 650 €.",
+hw_title:"Vídeos de propiedades que venden antes de la visita.",hw_sub:"Para agencias, promotoras y propietarios en toda España. Desde 650 €.",hw_f1:"visualizaciones de un vídeo inmobiliario",hw_f2:"contactos en un día tras publicarlo",hw_f3:"visita: un Reel, la versión para Idealista y fotos",h_kicker:"GReat Vision · inmobiliaria · España",h_title:"Primero la visión. Después la visita.",h_sub:"Vídeos de propiedades para agencias y propietarios en toda España. Desde 650 €.",
 h2_big:"Una visita. Un Reel, la versión para Idealista y fotos.",h2_sub:"Miramos dónde está el sol y elegimos la hora: mañana para el salón, tarde para la terraza.",
 h3_sub:"Así funcionó un vídeo inmobiliario que grabamos para un cliente.",h3_big:"2 millones de visualizaciones. 150 contactos en un día.",
 h4_big:"Dale a REC en tu propiedad.",h4_sub:"Cuéntanos sobre la propiedad. Te respondemos con fecha y precio.",
 work_k:"Trabajos",work_h:"Trabajos recientes.",work_p:"Propiedades reales, luz real. Rodados y montados por nosotros. Toca para verlos con sonido.",
-w_c1:"Villa · 311 m² · Barcelona",w_t1:"Villa con terraza",w_c2:"Villa · Costa Blanca · 950.000 €",w_t2:"Villa con piscina",w_c3:"Casa · 2 terrazas · 415.000 €",w_t3:"Casa con dos terrazas",work_after:"¿Quieres un vídeo así para tu propiedad?",
+w_c1:"Villa · 311 m² · Barcelona",w_t1:"Villa con terraza",w_c2:"Villa · 380 m² · Costa Blanca",w_t2:"Villa con piscina",w_c3:"Casa · 190 m² · Costa Blanca",w_t3:"Casa con dos terrazas",work_after:"¿Quieres un vídeo así para tu propiedad?",
 case_k:"Resultado",case_m:"visualizaciones de un solo vídeo inmobiliario",case_f1:"contactos en un día",case_f2n:"Toda España",case_f2:"villas, pisos, obra nueva",case_f3:"títulos en el idioma de tus compradores",
 visit_k:"Una visita",visit_h:"Una visita. Tres resultados.",visit_p:"Esto es lo que traemos de un solo rodaje.",
 v1h:"Reel",v1p:"Vídeo vertical para Reels y TikTok, de 45 a 60 segundos, con títulos: metros, terrazas, precio.",v2h:"Versión para Idealista",v2p:"Versión horizontal para Idealista y tu web, donde los anuncios con vídeo reciben más clics.",v3h:"Fotos",v3p:"Cada estancia, la terraza y las vistas, con la misma luz que el vídeo.",

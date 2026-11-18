@@ -18,6 +18,12 @@ const SITE = {
       ru: 'Вау, Глеб, это реально очень круто. Видно сразу, что поработали профессионалы. Я теперь понял, о каком уровне видео ты говорил! Я уже много раз пересмотрел и наслаждаюсь. Реально хочется сотрудничать с такими профессионалами.\n\nВот это мне зашло больше всего. Реально видно, что работали профессионалы и не за один вечер сделано.',
       en: 'Wow, Glib, this is really great. You can see right away that professionals made it. Now I understand what level of video you were talking about! I have rewatched it many times and I enjoy it. It really makes me want to work with professionals like this.\n\nThis one I liked the most. You can really see professionals worked on it, and it was not made in one evening.',
       es: 'Glib, de verdad, esto está genial. Se ve enseguida que lo han hecho profesionales. ¡Ahora entiendo de qué nivel de vídeo hablabas! Ya lo he visto muchas veces y lo disfruto. Dan ganas de colaborar con profesionales así.\n\nEste es el que más me ha gustado. Se nota que han trabajado profesionales y que no se hizo en una tarde.'
+    }
+    },
+    { name: 'SHAURMA.ETS', role: { ru: 'Стритфуд · Telegram', en: 'Street food · Telegram', es: 'Street food · Telegram' }, orig: 'ru', pages: ['main'], chat: true, text: {
+      ru: 'Мне кажется круче только Майкл Джексон\n\nПерестань делать очень качественные видео',
+      en: 'I think only Michael Jackson is cooler\n\nStop making such high-quality videos',
+      es: 'Creo que solo Michael Jackson es más top\n\nDeja de hacer vídeos tan buenos'
     } }
   ]
 };
@@ -215,7 +221,7 @@ const lb=$('#lb'),lbv=$('#lbv');let lastFocus=null;
 const lbBox=lb&&lb.querySelector('.box');
 const isH=name=>!!document.querySelector(`[data-v="${name}"][data-orient="h"],[data-v-en="${name}"][data-orient="h"]`);
 if(lbv)lbv.addEventListener('loadedmetadata',()=>{if(lbBox&&lbv.videoWidth)lbBox.classList.toggle('h',lbv.videoWidth>lbv.videoHeight)});
-function openLb(name){if(!lb)return;lastFocus=document.activeElement;if(lbBox)lbBox.classList.toggle('h',isH(name));lbv.src=`${BASE}v/${name}.mp4`;lbv.muted=false;lbv.volume=1;lb.classList.add('open');document.body.style.overflow='hidden';reels.forEach(r=>{const v=r.querySelector('video');if(v)v.pause()});lbv.play().catch(()=>{});$('#lbclose').focus()}
+function openLb(name){if(!lb)return;lastFocus=document.activeElement;if(lbBox)lbBox.classList.toggle('h',isH(name));lbv.src=`${BASE}v/${name}.mp4`;lbv.muted=false;lbv.volume=1;lb.classList.add('open');document.body.style.overflow='hidden';setTimeout(()=>{const c=$('#lbclose');c&&c.focus({preventScroll:true})},30);reels.forEach(r=>{const v=r.querySelector('video');if(v)v.pause()});lbv.play().catch(()=>{});$('#lbclose').focus()}
 function closeLb(){lb.classList.remove('open');lbv.pause();lbv.removeAttribute('src');lbv.load();document.body.style.overflow='';if(lastFocus)lastFocus.focus()}
 reels.forEach(r=>r.addEventListener('click',()=>{openLb(srcOf(r));track('ViewContent',{content_type:'video',content_name:r.dataset.title||r.dataset.v,content_ids:[r.dataset.v]})}));
 /* ---------- hero wall (variant A) ---------- */
@@ -229,7 +235,7 @@ if(hw){
   const vis=new Set();
   function tile(r,go){
     let v=r.querySelector('video');
-    if(go&&!v){v=document.createElement('video');v.muted=true;v.loop=true;v.playsInline=true;v.setAttribute('playsinline','');v.preload='auto';v.setAttribute('aria-hidden','true');v.tabIndex=-1;v.src=`${BASE}h/${r.dataset.v}.mp4`;v.addEventListener('playing',()=>r.classList.add('playing'));r.querySelector('.hw-scr').appendChild(v)}
+    if(go&&!v){v=document.createElement('video');v.muted=true;v.loop=true;v.playsInline=true;v.setAttribute('playsinline','');v.preload='auto';v.setAttribute('aria-hidden','true');v.tabIndex=-1;v.src=`${BASE}h/${r.dataset.h||r.dataset.v}.mp4`;v.addEventListener('playing',()=>r.classList.add('playing'));r.querySelector('.hw-scr').appendChild(v)}
     if(!v)return; if(go)v.play().catch(()=>{}); else v.pause();
   }
   function syncVideos(){const ok=onScreen&&autoplayOK()&&wallVisible();$$('.hw-reel',wall||hw).forEach(r=>tile(r,ok&&vis.has(r)))}
@@ -238,7 +244,7 @@ if(hw){
   new IntersectionObserver(es=>{onScreen=es[0].isIntersecting;hw.classList.toggle('paused',!onScreen);syncVideos()}).observe(hw);
   canHover.addEventListener('change',syncVideos);RM.addEventListener('change',syncVideos);addEventListener('resize',()=>syncVideos(),{passive:true});
   // click a reel → full film with sound
-  hreels.forEach(r=>r.addEventListener('click',()=>{openLb(r.dataset.v);track('ViewContent',{content_type:'video',content_name:r.dataset.title||r.dataset.v,content_ids:[r.dataset.v],place:'hero'})}));
+  hreels.forEach(r=>r.addEventListener('click',()=>{openLb(srcOf(r));track('ViewContent',{content_type:'video',content_name:r.dataset.title||r.dataset.v,content_ids:[r.dataset.v],place:'hero'})}));
   // phones: self-moving strip that the visitor can also swipe.
   // Motion is a sub-pixel transform on the track (smooth at 60/120 Hz); a swipe hands the offset over to native scrolling.
   if(strip){
@@ -263,7 +269,7 @@ if(hw){
   }
   // rotating accent line (texts from the old scroll captions)
   if(rot){
-    const keys=['h2_big','h3_big','h4_big'];let i=0;
+    const keys=(rot.dataset.rot||'h2_big,h3_big,h4_big').split(',');let i=0;
     setInterval(()=>{
       if(!onScreen||RM.matches||document.hidden)return;
       rot.classList.add('out');
@@ -271,7 +277,7 @@ if(hw){
     },3400);
   }
 }
-if(lb){$('#lbclose').addEventListener('click',closeLb);lb.addEventListener('click',e=>{if(e.target===lb)closeLb()});addEventListener('keydown',e=>{if(e.key==='Escape'&&lb.classList.contains('open'))closeLb()})}
+if(lb){$('#lbclose').addEventListener('click',closeLb);lb.addEventListener('click',e=>{if(e.target===lb)closeLb()});addEventListener('keydown',e=>{if(!lb.classList.contains('open'))return;if(e.key==='Escape')closeLb();else if(e.key==='Tab'){const f=[$('#lbclose'),lbv].filter(Boolean);const i=f.indexOf(document.activeElement);e.preventDefault();f[(i+(e.shiftKey?f.length-1:1))%f.length].focus()}})}
 
 /* ---------- rail ---------- */
 const rail=$('#rail');
@@ -342,7 +348,9 @@ if(revSec){
   if(!list.length) revSec.hidden=true;
   else hooks.push(()=>{const box=$('#quotes');box.textContent='';list.forEach(r=>{
     const fig=document.createElement('figure');fig.className='quote';
-    const p=document.createElement('p');p.textContent=r.text[LANG]||r.text[r.orig];fig.appendChild(p);
+    const txt=r.text[LANG]||r.text[r.orig];
+    if(r.chat){fig.classList.add('chat');txt.split(/\n\n+/).forEach(m=>{const p=document.createElement('p');p.className='bubble';p.textContent=m;fig.appendChild(p)})}
+    else{const p=document.createElement('p');p.textContent=txt;fig.appendChild(p)}
     const who=document.createElement('figcaption');who.className='who';
     const b=document.createElement('b');b.textContent=r.name;who.appendChild(b);
     const s=document.createElement('span');s.className='mono';s.textContent=(r.role&&(r.role[LANG]||r.role.ru))||'';who.appendChild(s);
