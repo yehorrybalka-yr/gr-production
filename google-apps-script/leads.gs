@@ -27,7 +27,6 @@ const COLUMNS = [
   ['location',     'Где объект',       160],
   ['link',         'Ссылка',           220],
   ['agency',       'Агентство',        160],
-  ['message',      'Сообщение',        320],
   ['lang',         'Язык',              60],
   ['utm_source',   'Источник',         110],
   ['utm_medium',   'Канал',            100],
@@ -64,7 +63,7 @@ const PACKAGE_VALUE = { one: 650, three: 1500, six: 2500 };
 function doPost(e) {
   const p = (e && e.parameter) || {};
   if (p.company_site) return json_({ ok: true });            // ловушка для ботов
-  if (!p.name && !p.message) return json_({ ok: false, error: 'empty' });
+  if (!p.name) return json_({ ok: false, error: 'empty' });
 
   const lock = LockService.getScriptLock();
   lock.waitLock(20000);
@@ -88,7 +87,6 @@ function doPost(e) {
     const r = sh.getLastRow() + 1;
     sh.getRange(r, 1, 1, out.length).setValues([out]);
     sh.getRange(r, idx['Дата и время']).setNumberFormat('dd.mm.yyyy HH:mm');
-    sh.getRange(r, idx['Сообщение']).setWrap(true);
     sh.getRange(r, idx['Телефон']).setNumberFormat('@');
 
     if (NOTIFY_EMAIL) notify_(row);
@@ -104,6 +102,31 @@ function doGet() {
 }
 
 /* ===== запустить один раз вручную: создаёт и оформляет лист ===== */
+/* ОДИН РАЗ после обновления: приводит таблицу к актуальным колонкам.
+   Данные переносятся по названиям колонок, колонки, которых больше нет в COLUMNS (например «Сообщение»), удаляются.
+   Запуск: выберите функцию tidy в списке сверху и нажмите «Выполнить». */
+function tidy() {
+  const sh = sheet_();
+  const f = sh.getFilter(); if (f) f.remove();
+  const last = sh.getLastRow(), cols = sh.getLastColumn();
+  const data = sh.getRange(1, 1, Math.max(last, 1), cols).getValues();
+  const head = data[0];
+  const ALIAS = { 'Тип съёмки': 'Что снимаем', 'Роль': 'Кто', 'Пакет': 'Формат', 'Локация': 'Где объект' };
+  const from = {};
+  head.forEach((h, i) => { const t = ALIAS[h] || h; if (t && from[t] === undefined) from[t] = i; });
+  const rows = data.slice(1).filter(r => r.some(v => v !== '' && v !== null));
+  const out = [COLUMNS.map(c => c[1])].concat(rows.map(r => COLUMNS.map(([, title]) => from[title] !== undefined ? r[from[title]] : '')));
+  sh.clearConditionalFormatRules();
+  sh.getRange(1, 1, sh.getMaxRows(), sh.getMaxColumns()).clearDataValidations().clearContent();
+  if (sh.getMaxColumns() > COLUMNS.length) sh.deleteColumns(COLUMNS.length + 1, sh.getMaxColumns() - COLUMNS.length);
+  sh.getRange(1, 1, out.length, COLUMNS.length).setValues(out);
+  if (out.length > 1) {
+    sh.getRange(2, col_('received'), out.length - 1, 1).setNumberFormat('dd.mm.yyyy HH:mm');
+    sh.getRange(2, col_('phone'), out.length - 1, 1).setNumberFormat('@');
+  }
+  setup();
+}
+
 function setup() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   ss.setSpreadsheetTimeZone(TIMEZONE);
@@ -142,7 +165,7 @@ function setup() {
 function testLead() {
   doPost({ parameter: {
     lead_id: 'test-' + Date.now(), page: 'real-estate', lang: 'ru', name: 'Тест',
-    phone: '+34600000000', role: 'agency', when: 'this_month', objects: '2_4', package: 'three', location: 'Валенсия', message: 'Тестовая заявка',
+    phone: '+34600000000', role: 'agency', when: 'this_month', objects: '2_4', package: 'three', location: 'Валенсия',
     utm_source: 'facebook', device: 'mobile',
   }});
 }

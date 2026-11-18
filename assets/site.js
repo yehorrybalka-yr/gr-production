@@ -497,7 +497,7 @@ if(form){
       else v=el.value.trim();
       if(v)lines.push(`${String(t(el.dataset.wa)).replace(/[?¿]/g,'').trim()}: ${v}`);
     });
-    lines.push('',`${t('wa_page')}: ${PAGE.label||PAGE.id}${utm?' · '+utm:''}`,`ID: ${leadId}`);
+    /* page, ad tags and lead ID go to the sheet only — the WhatsApp text stays short */
     const url=`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(lines.join('\n'))}`;
     form.classList.add('sent');
     /* no personal data goes to the pixel: only what was chosen in the form and the ad source */
