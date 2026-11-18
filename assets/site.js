@@ -5,6 +5,7 @@
 const SITE = {
   whatsapp: '34695275229', // international format, digits only, e.g. 34600000000
   phone: '+34 695 275 229', // how the number is shown on the site
+  telegram: '34695275229', // Telegram: same number (opens t.me/+34…)
   /* Site languages that are switched on. The Spanish texts stay in the code: add 'es' back here (and the ES button in the pages) to bring it back. */
   langs: ['ru','en'],
   /* Google Apps Script web app URL (see google-apps-script/README.md). Empty = leads go to WhatsApp only. */
@@ -418,14 +419,15 @@ if(quiz){
     steps.forEach((s,k)=>{s.hidden=k!==cur});
     if(bar)bar.style.width=((cur+1)/N*100)+'%';if(cnt)cnt.textContent=`${cur+1} / ${N}`;
     if(!reached.has(cur)){reached.add(cur);track('QuizStep'+(cur+1),{step:cur+1})}
-    const top=quiz.getBoundingClientRect().top;if(top<90)quiz.scrollIntoView({behavior:RM.matches?'auto':'smooth',block:'start'});
+    /* keep the step in view without animated scrolling (smooth scroll judders in in-app browsers like Telegram) */
+    const top=quiz.getBoundingClientRect().top;if(top<0)window.scrollTo(0,Math.max(0,scrollY+top-84));
     const f=$('input:not([type=radio]):not([disabled]),select:not([disabled]),textarea:not([disabled])',steps[cur]);
     if(f&&cur>0&&matchMedia('(pointer:fine)').matches)setTimeout(()=>f.focus({preventScroll:true}),60);
   }
   quiz.addEventListener('change',e=>{
     const g=e.target.closest('fieldset[data-req]');if(g)setErr(g,null);
     if(e.target.type==='radio')applyIf();
-    if(e.target.type==='radio'&&e.target.closest('[data-auto]')&&cur<N-1)setTimeout(()=>{if(validStep(cur,false))go(cur+1)},260);
+    if(e.target.type==='radio'&&e.target.closest('[data-auto]')&&cur<N-1){const at=cur;setTimeout(()=>{if(cur===at&&validStep(at,false))go(at+1)},320)}
     if(e.target.matches('select,input:not([type=radio]),textarea')){const b=e.target.closest('label');if(b&&b.classList.contains('bad')&&e.target.name!=='phone'&&String(e.target.value).trim())setErr(b,null)}
   });
   quiz.addEventListener('input',e=>{
@@ -548,10 +550,17 @@ function contactLinks(){
   return out;
 }
 const ctLede=$('#contact .lede');
-if(ctLede&&(SITE.whatsapp||(SITE.legal||{}).email)){
-  const p=document.createElement('p');p.className='ct-direct ri';const lab=document.createElement('span');
-  p.appendChild(lab);contactLinks().forEach((a,i)=>{if(i)p.append(' · ');p.append(' ',a)});
-  ctLede.after(p);hooks.push(()=>{lab.textContent=t('ct_direct')});
+if(ctLede&&SITE.whatsapp){
+  const ICON={wa:'<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>',
+    tg:'<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21.9 4.6 18.8 19.3c-.2 1-.8 1.3-1.7.8l-4.7-3.5-2.3 2.2c-.3.3-.5.5-1 .5l.3-4.8 8.8-7.9c.4-.3-.1-.5-.6-.2L6.7 13.2 2.1 11.8c-1-.3-1-1 .2-1.5l17.9-6.9c.8-.3 1.6.2 1.7 1.2Z"/></svg>'};
+  const wrap=document.createElement('div');wrap.className='ct-direct ri';
+  const lab=document.createElement('p');lab.className='ct-lab';wrap.appendChild(lab);
+  const row=document.createElement('div');row.className='ct-btns';wrap.appendChild(row);
+  const mk=(href,ic,text,cls)=>{const a=document.createElement('a');a.href=href;a.target='_blank';a.rel='noopener';a.className='ct-btn '+cls;a.innerHTML=ICON[ic];const sp=document.createElement('span');sp.textContent=text;a.appendChild(sp);row.appendChild(a);return a};
+  const waBtn=mk(`https://wa.me/${SITE.whatsapp}`,'wa','WhatsApp','ct-wa');
+  mk(`https://t.me/+${SITE.telegram||SITE.whatsapp}`,'tg','Telegram','ct-tg');
+  ctLede.after(wrap);
+  hooks.push(()=>{lab.textContent=t('ct_direct');waBtn.href=`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(t('wa_hi')||'')}`});
 }
 if(foot){const fc=document.createElement('span');fc.className='foot-contact';contactLinks().forEach((a,i)=>{if(i)fc.append(' · ');fc.append(a)});if(fc.childNodes.length)foot.insertBefore(fc,foot.querySelector('.foot-legal'))}
 
