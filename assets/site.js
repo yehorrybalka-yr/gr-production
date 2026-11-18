@@ -20,7 +20,7 @@ const SITE = {
       es: 'Glib, de verdad, esto está genial. Se ve enseguida que lo han hecho profesionales. ¡Ahora entiendo de qué nivel de vídeo hablabas! Ya lo he visto muchas veces y lo disfruto. Dan ganas de colaborar con profesionales así.\n\nEste es el que más me ha gustado. Se nota que han trabajado profesionales y que no se hizo en una tarde.'
     }
     },
-    { name: 'SHAURMA.ETS', role: { ru: 'Стритфуд · Telegram', en: 'Street food · Telegram', es: 'Street food · Telegram' }, orig: 'ru', pages: ['main'], chat: true, text: {
+    { name: 'SHAURMA.ETS', role: { ru: 'Стритфуд', en: 'Street food', es: 'Street food' }, orig: 'ru', pages: ['main'], chat: true, text: {
       ru: 'Мне кажется круче только Майкл Джексон\n\nПерестань делать очень качественные видео',
       en: 'I think only Michael Jackson is cooler\n\nStop making such high-quality videos',
       es: 'Creo que solo Michael Jackson es más top\n\nDeja de hacer vídeos tan buenos'
