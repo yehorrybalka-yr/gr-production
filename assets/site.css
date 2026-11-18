@@ -591,3 +591,15 @@ html[lang="ru"] .legal [data-l="ru"],html[lang="en"] .legal [data-l="en"],html[l
 @media (prefers-reduced-motion:reduce){.quiz .qstep{animation:none}.quiz .qprog .bar i{transition:none}}
 .quiz,#contact{overflow-anchor:none}
 .quiz{scroll-margin-top:96px}
+
+/* 7.11: the culinary pair must not grow wider than the screen */
+.cat-a>*,.recwrap{min-width:0}
+.cat-a .pair{grid-template-columns:repeat(2,minmax(0,1fr))}
+.reccue{min-width:0}
+/* 7.5: phones get a still background — no drifting glow, no moving grain (also calmer in in-app browsers) */
+@media (max-width:900px),(pointer:coarse){
+  .env::before{animation:none}
+  .env::after{animation:none;inset:0}
+}
+/* hero strip moves with transform (smooth at any refresh rate) */
+.hw-strack{will-change:transform;backface-visibility:hidden}

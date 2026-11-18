@@ -5,7 +5,7 @@
 const SITE = {
   whatsapp: '34695275229', // international format, digits only, e.g. 34600000000
   phone: '+34 695 275 229', // how the number is shown on the site
-  telegram: '34695275229', // Telegram: same number (opens t.me/+34…)
+  telegram: 'gr_production_eu', // Telegram username (t.me/…)
   /* Site languages that are switched on. The Spanish texts stay in the code: add 'es' back here (and the ES button in the pages) to bring it back. */
   langs: ['ru','en'],
   /* Google Apps Script web app URL (see google-apps-script/README.md). Empty = leads go to WhatsApp only. */
@@ -29,19 +29,19 @@ q_next:"Дальше",q_back:"Назад",q_opt:"по желанию",q_pick:"В
 f_ok:"Открываем WhatsApp с вашей заявкой. Если окно не открылось, проверьте блокировщик всплывающих окон.",f_err:"Напишите, как к вам обращаться.",
 wa_name:"Имя",wa_page:"Страница",lb_close:"Закрыть",play:"смотреть со звуком",
 ck_text:"Мы используем cookie Meta и Microsoft Clarity, чтобы понимать, как работает сайт, и показывать рекламу. Они включатся, только если вы согласитесь.",ck_more:"Подробнее",ck_accept:"Принять",ck_reject:"Только необходимые",ck_settings:"Настройки cookie",ck_label:"Согласие на cookie",
-privacy:"Политика конфиденциальности",ct_direct:"Или напишите напрямую:",rec2_hint:"Нажмите REC, чтобы включить работы",rec2_live:"Идёт запись. Нажмите на ролик, чтобы смотреть со звуком.",rec2_sr:"Включить запись: оживить работы",f_privacy:"Отправляя заявку, вы соглашаетесь с",f_privacy_link:"политикой конфиденциальности"},
+privacy:"Политика конфиденциальности",ct_direct:"Или напишите напрямую:",u_mln:" млн",rec2_hint:"Нажмите REC, чтобы включить работы",rec2_live:"Идёт запись. Нажмите на ролик, чтобы смотреть со звуком.",rec2_sr:"Включить запись: оживить работы",f_privacy:"Отправляя заявку, вы соглашаетесь с",f_privacy_link:"политикой конфиденциальности"},
 en:{skip:"Skip to content",photo_tag:"GLIB · DOP",rev_k:"Reviews",rev_h:"What clients say.",rev_tr:"Translated from Russian",
 q_next:"Next",q_back:"Back",q_opt:"optional",q_pick:"Choose an option",q_fill:"Please fill this in",q_when:"When do you need the shoot?",w1:"In the next 1–2 weeks",w2:"This month",w3:"In 1–3 months",f_phone:"WhatsApp number",f_phone_ph:"+34 600 000 000",ph_empty:"Add your number so Glib can reply",ph_cc:"Add the country code, e.g. +34",ph_long:"Too many digits — please check",ph_short:"The number is too short — please check",ph_es:"Spanish numbers start with 6, 7, 8 or 9",f_name:"Name",f_name_ph:"What should I call you",f_msg:"A few words about the project",f_note:"No spam. I reply personally.",f_btn:"Send via WhatsApp",
 f_ok:"Opening WhatsApp with your request. If nothing opened, check your pop-up blocker.",f_err:"Please tell me your name.",
 wa_name:"Name",wa_page:"Page",lb_close:"Close",play:"watch with sound",
 ck_text:"We use Meta and Microsoft Clarity cookies to understand how the site works and to show ads. They are switched on only if you agree.",ck_more:"Learn more",ck_accept:"Accept",ck_reject:"Only necessary",ck_settings:"Cookie settings",ck_label:"Cookie consent",
-privacy:"Privacy policy",ct_direct:"Or reach me directly:",rec2_hint:"Press REC to bring the work to life",rec2_live:"Recording. Tap a film to watch it with sound.",rec2_sr:"Start recording: bring the work to life",f_privacy:"By sending the request you agree to the",f_privacy_link:"privacy policy"},
+privacy:"Privacy policy",ct_direct:"Or reach me directly:",u_mln:"M",rec2_hint:"Press REC to bring the work to life",rec2_live:"Recording. Tap a film to watch it with sound.",rec2_sr:"Start recording: bring the work to life",f_privacy:"By sending the request you agree to the",f_privacy_link:"privacy policy"},
 es:{skip:"Ir al contenido",photo_tag:"GLIB · DOP",rev_k:"Opiniones",rev_h:"Lo que dicen los clientes.",rev_tr:"Traducido del ruso",
 q_next:"Siguiente",q_back:"Atrás",q_opt:"opcional",q_pick:"Elige una opción",q_fill:"Rellena este campo",q_when:"¿Cuándo necesitas el rodaje?",w1:"En 1–2 semanas",w2:"Este mes",w3:"En 1–3 meses",f_phone:"Número de WhatsApp",f_phone_ph:"+34 600 000 000",ph_empty:"Añade tu número para que Glib pueda responder",ph_cc:"Añade el prefijo del país, p. ej. +34",ph_long:"Sobran dígitos, revisa el número",ph_short:"El número es demasiado corto",ph_es:"Los números españoles empiezan por 6, 7, 8 o 9",f_name:"Nombre",f_name_ph:"¿Cómo te llamas?",f_msg:"Unas palabras sobre el proyecto",f_note:"Sin spam. Respondo personalmente.",f_btn:"Enviar por WhatsApp",
 f_ok:"Abriendo WhatsApp con tu solicitud. Si no se abre, revisa el bloqueador de ventanas.",f_err:"Dime cómo te llamas.",
 wa_name:"Nombre",wa_page:"Página",lb_close:"Cerrar",play:"ver con sonido",
 ck_text:"Usamos cookies de Meta y Microsoft Clarity para entender cómo funciona la web y mostrar publicidad. Solo se activan si las aceptas.",ck_more:"Más información",ck_accept:"Aceptar",ck_reject:"Solo necesarias",ck_settings:"Configuración de cookies",ck_label:"Consentimiento de cookies",
-privacy:"Política de privacidad",ct_direct:"O escríbeme directamente:",rec2_hint:"Pulsa REC para dar vida a los trabajos",rec2_live:"Grabando. Pulsa un vídeo para verlo con sonido.",rec2_sr:"Empezar a grabar: dar vida a los trabajos",f_privacy:"Al enviar la solicitud aceptas la",f_privacy_link:"política de privacidad"}
+privacy:"Política de privacidad",ct_direct:"O escríbeme directamente:",u_mln:" M",rec2_hint:"Pulsa REC para dar vida a los trabajos",rec2_live:"Grabando. Pulsa un vídeo para verlo con sonido.",rec2_sr:"Empezar a grabar: dar vida a los trabajos",f_privacy:"Al enviar la solicitud aceptas la",f_privacy_link:"política de privacidad"}
 };
 
 (function(){
@@ -117,7 +117,12 @@ const rvObs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.t
 $$('.rv').forEach(el=>rvObs.observe(el));
 
 /* ---------- counters ---------- */
-function runCount(el){const to=+el.dataset.count,suf=el.dataset.suffix||'';if(RM.matches){el.textContent=to+suf;return}const t0=performance.now(),D=1600;(function f(n){const k=clamp((n-t0)/D,0,1),e=1-Math.pow(1-k,3);el.textContent=Math.round(to*e)+suf;if(k<1)requestAnimationFrame(f)})(t0)}
+/* data-count = final number; data-decimals = digits shown while counting (0.4 → 1.3 → 2 instead of 0 → 1 → 2);
+   data-suffix = fixed suffix, data-suffix-key = translated suffix (e.g. " млн" / "M") */
+const cSuf=el=>el.dataset.suffixKey?t(el.dataset.suffixKey):(el.dataset.suffix||'');
+const cFmt=(v,dec)=>dec?v.toFixed(dec).replace('.',LANG==='ru'?',':'.'):String(Math.round(v));
+function runCount(el){const to=+el.dataset.count,dec=+(el.dataset.decimals||0);const end=()=>{el.textContent=to+cSuf(el);el.dataset.done='1'};if(RM.matches){end();return}const t0=performance.now(),D=1600;(function f(n){const k=clamp((n-t0)/D,0,1),e=1-Math.pow(1-k,3);if(k<1){el.textContent=cFmt(to*e,dec)+cSuf(el);requestAnimationFrame(f)}else end()})(t0)}
+hooks.push(()=>$$('[data-count][data-done]').forEach(el=>{el.textContent=el.dataset.count+cSuf(el)}));
 const cObs=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;cObs.unobserve(e.target);runCount(e.target)}),{threshold:.6});
 $$('[data-count]').forEach(el=>cObs.observe(el));
 
@@ -234,22 +239,27 @@ if(hw){
   canHover.addEventListener('change',syncVideos);RM.addEventListener('change',syncVideos);addEventListener('resize',()=>syncVideos(),{passive:true});
   // click a reel → full film with sound
   hreels.forEach(r=>r.addEventListener('click',()=>{openLb(r.dataset.v);track('ViewContent',{content_type:'video',content_name:r.dataset.title||r.dataset.v,content_ids:[r.dataset.v],place:'hero'})}));
-  // phones: self-moving strip that the visitor can also swipe
+  // phones: self-moving strip that the visitor can also swipe.
+  // Motion is a sub-pixel transform on the track (smooth at 60/120 Hz); a swipe hands the offset over to native scrolling.
   if(strip){
-    let pausedUntil=0,interacted=false,x=null,last=0;
-    const hold=()=>{pausedUntil=performance.now()+2600};
-    strip.addEventListener('touchstart',hold,{passive:true});strip.addEventListener('pointerdown',hold);strip.addEventListener('wheel',hold,{passive:true});
-    strip.addEventListener('touchend',()=>{pausedUntil=performance.now()+2600},{passive:true});
+    const strk=$('.hw-strack',strip);
+    let pausedUntil=0,interacted=false,x=0,last=0,touching=false;
+    const commit=()=>{if(x){const sl=strip.scrollLeft+x;strk.style.transform='';x=0;strip.scrollLeft=sl}};
+    const hold=()=>{commit();pausedUntil=performance.now()+2600};
+    strip.addEventListener('touchstart',()=>{touching=true;hold()},{passive:true});
+    strip.addEventListener('touchend',()=>{touching=false;pausedUntil=performance.now()+2600},{passive:true});
+    strip.addEventListener('pointerdown',hold);strip.addEventListener('wheel',hold,{passive:true});
+    strip.addEventListener('scroll',()=>{if(performance.now()<pausedUntil||touching){if(!interacted){interacted=true;track('HeroStripSwipe')}const half=strip.scrollWidth/2;if(!touching&&strip.scrollLeft>=half)strip.scrollLeft-=half}},{passive:true});
     const step=now=>{
       requestAnimationFrame(step);
-      if(!onScreen||RM.matches||getComputedStyle(strip).display==='none'||now<pausedUntil){last=now;x=null;return}
-      const dt=Math.min(50,now-(last||now));last=now;
-      if(x===null)x=strip.scrollLeft;
-      const half=strip.scrollWidth/2; x+=dt*0.028; if(x>=half)x-=half;
-      strip.scrollLeft=x;
+      const dt=Math.min(40,now-(last||now));last=now;
+      if(!onScreen||RM.matches||touching||now<pausedUntil||getComputedStyle(strip).display==='none')return;
+      const half=strip.scrollWidth/2;if(!half)return;
+      x+=dt*0.032;
+      if(strip.scrollLeft+x>=half){if(strip.scrollLeft>=half)strip.scrollLeft-=half;else x-=half}
+      strk.style.transform=`translate3d(${-x}px,0,0)`;
     };
     requestAnimationFrame(step);
-    strip.addEventListener('scroll',()=>{if(performance.now()<pausedUntil){if(!interacted){interacted=true;track('HeroStripSwipe')}const half=strip.scrollWidth/2;if(strip.scrollLeft>=half)strip.scrollLeft-=half}},{passive:true});
   }
   // rotating accent line (texts from the old scroll captions)
   if(rot){
@@ -558,7 +568,7 @@ if(ctLede&&SITE.whatsapp){
   const row=document.createElement('div');row.className='ct-btns';wrap.appendChild(row);
   const mk=(href,ic,text,cls)=>{const a=document.createElement('a');a.href=href;a.target='_blank';a.rel='noopener';a.className='ct-btn '+cls;a.innerHTML=ICON[ic];const sp=document.createElement('span');sp.textContent=text;a.appendChild(sp);row.appendChild(a);return a};
   const waBtn=mk(`https://wa.me/${SITE.whatsapp}`,'wa','WhatsApp','ct-wa');
-  mk(`https://t.me/+${SITE.telegram||SITE.whatsapp}`,'tg','Telegram','ct-tg');
+  mk(SITE.telegram?`https://t.me/${SITE.telegram}`:`https://t.me/+${SITE.whatsapp}`,'tg','Telegram','ct-tg');
   ctLede.after(wrap);
   hooks.push(()=>{lab.textContent=t('ct_direct');waBtn.href=`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(t('wa_hi')||'')}`});
 }
@@ -605,7 +615,7 @@ const seen=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)retu
 $$('.faq details').forEach(d=>d.addEventListener('toggle',()=>{if(d.open)track('FAQOpen',{question:label(d.querySelector('summary'))})}));
 
 /* ---------- reduced motion ---------- */
-function pin(){recApi&&recApi.activate('reduced_motion');$$('.rv').forEach(el=>el.classList.add('in','done'));$$('[data-count]').forEach(el=>{el.textContent=el.dataset.count+(el.dataset.suffix||'')});reels.forEach(r=>{const v=r.querySelector('video');if(v)v.pause()})}
+function pin(){recApi&&recApi.activate('reduced_motion');$$('.rv').forEach(el=>el.classList.add('in','done'));$$('[data-count]').forEach(el=>{el.textContent=el.dataset.count+cSuf(el);el.dataset.done='1'});reels.forEach(r=>{const v=r.querySelector('video');if(v)v.pause()})}
 RM.addEventListener('change',e=>{if(e.matches)pin();heroApi&&heroApi.apply()});
 if(RM.matches)pin();
 
