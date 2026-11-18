@@ -116,7 +116,7 @@ $$('.lang button').forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.l
 /* ---------- nav ---------- */
 const nav=$('#nav');let navSolid=false;
 function navCheck(){const s=scrollY>innerHeight*.6;if(s!==navSolid){navSolid=s;nav&&nav.classList.toggle('solid',s)}}
-addEventListener('scroll',navCheck,{passive:true});navCheck();
+addEventListener('scroll',navCheck,{passive:true});requestAnimationFrame(navCheck);
 
 /* ---------- reveals ---------- */
 const rvObs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');rvObs.unobserve(e.target);setTimeout(()=>e.target.classList.add('done'),1500)}}),{rootMargin:'0px 0px -12% 0px'});
@@ -270,8 +270,10 @@ if(hw){
   // rotating accent line (texts from the old scroll captions)
   if(rot){
     const keys=(rot.dataset.rot||'h2_big,h3_big,h4_big').split(',');let i=0;
+    /* start rotating only after the first user action: a text swap before that would be counted as a late LCP */
+    let rotGo=false;const goRot=()=>{rotGo=true;['scroll','pointermove','touchstart','keydown','wheel'].forEach(e=>removeEventListener(e,goRot))};['scroll','pointermove','touchstart','keydown','wheel'].forEach(e=>addEventListener(e,goRot,{passive:true}));
     setInterval(()=>{
-      if(!onScreen||RM.matches||document.hidden)return;
+      if(!rotGo||!onScreen||RM.matches||document.hidden)return;
       rot.classList.add('out');
       setTimeout(()=>{i=(i+1)%keys.length;rot.dataset.i18n=keys[i];rot.textContent=t(keys[i]);rot.classList.remove('out')},450);
     },3400);
