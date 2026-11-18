@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Страница не найдена · GR Production</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0e0c10">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230e0c10'/%3E%3Cpath d='M10 22V10h12M42 10h12v12M54 42v12H42M22 54H10V42' stroke='%23ece6df' stroke-width='3' fill='none'/%3E%3Cpath d='M36 18 28 46' stroke='%23ff2d87' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/unbounded-cyrillic-300-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/fonts/fonts.css">
+<link rel="stylesheet" href="/assets/site.css">
+<!-- Tracking. Microsoft Clarity runs for everyone: cookieless (consent "denied") until the visitor accepts cookies.
+     Meta Pixel loads only after "Accept" in the cookie banner (see assets/site.js). -->
+<script>
+(function(){
+  var consented=false;try{consented=localStorage.getItem('gr-consent')==='all'}catch(e){}
+  /* Microsoft Clarity */
+  (function(c,l,a,r,i,t,y){
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+  })(window, document, "clarity", "script", "zehzh2i2qh");
+  window.clarity('consentv2',{ad_Storage:consented?'granted':'denied',analytics_Storage:consented?'granted':'denied'});
+  window.grLoadTracking=function(){
+    if(window.grTrackingLoaded)return;window.grTrackingLoaded=true;
+    window.clarity('consentv2',{ad_Storage:'granted',analytics_Storage:'granted'});
+    /* Meta Pixel */
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '2116482185898263');
+    fbq('track', 'PageView');
+  };
+  if(consented)window.grLoadTracking();
+})();
+</script>
+<style>
+.nf{min-height:calc(100svh - 160px);display:flex;align-items:center;padding:120px var(--pad) 60px;max-width:1100px;margin:0 auto}
+.nf .chip{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border:1px solid var(--line-strong);border-radius:999px;font:400 12px/1 var(--mono);letter-spacing:.12em;color:var(--text-2)}
+.nf .chip i{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);animation:blink 1.6s ease-in-out infinite}
+.nf .code{font:300 clamp(96px,18vw,220px)/.9 var(--display);letter-spacing:-.04em;margin:28px 0 8px;color:var(--text)}
+.nf .code em{font-style:normal;color:var(--accent)}
+.nf h1{font:300 clamp(28px,3.4vw,48px)/1.1 var(--display);letter-spacing:-.02em;margin:0 0 16px}
+.nf p{color:var(--text-2);font-size:clamp(16px,1.2vw,18px);max-width:46ch;margin:0}
+.nf .ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
+@media (prefers-reduced-motion:reduce){.nf .chip i{animation:none}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main" data-i18n="skip">К содержанию</a>
+<div class="env" aria-hidden="true"></div>
+<nav class="nav solid" id="nav" aria-label="Main">
+  <a class="logo" href="/" aria-label="GR Production"><span class="grlogo" aria-hidden="true"><i></i><i></i><i></i><i></i><b>GR</b><small>PRODUCTION</small></span></a>
+  <div class="lang" role="group" aria-label="Language" style="margin-left:auto">
+    <button type="button" data-lang="ru" aria-pressed="true">RU</button>
+    <button type="button" data-lang="en" aria-pressed="false">EN</button>
+  </div>
+</nav>
+<main id="main" tabindex="-1">
+  <section class="nf">
+    <div>
+      <span class="chip" aria-hidden="true"><i></i>REC · <span data-i18n="nf_chip">КАДР ПОТЕРЯН</span></span>
+      <div class="code" aria-hidden="true">4<em>0</em>4</div>
+      <h1 data-i18n="nf_h">Этого кадра нет в монтаже.</h1>
+      <p data-i18n="nf_p">Страница переехала или ссылка устарела. Зато работы и заявка — на своих местах.</p>
+      <div class="ctas">
+        <a class="btn btn-accent" href="/" data-i18n="nf_home">На главную</a>
+        <a class="btn btn-ghost" href="/real-estate/" data-i18n="nf_re">Видео для недвижимости</a>
+        <a class="btn btn-ghost" href="/#contact" data-i18n="cta_main">Обсудить съёмку</a>
+      </div>
+    </div>
+  </section>
+</main>
+<footer>
+  <div class="wrap" style="display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;padding-top:28px;padding-bottom:28px">
+    <a class="logo" href="/" aria-label="GR Production"><span class="grlogo" aria-hidden="true"><i></i><i></i><i></i><i></i><b>GR</b><small>PRODUCTION</small></span></a>
+    <span class="mono">© 2026 GR Production</span>
+  </div>
+</footer>
+<script>
+window.PAGE = { id: '404', label: 'Not found', base: '/assets/', T: {
+  ru: { title: 'Страница не найдена · GR Production', nf_chip: 'КАДР ПОТЕРЯН', nf_h: 'Этого кадра нет в монтаже.', nf_p: 'Страница переехала или ссылка устарела. Зато работы и заявка — на своих местах.', nf_home: 'На главную', nf_re: 'Видео для недвижимости', cta_main: 'Обсудить съёмку' },
+  en: { title: 'Page not found · GR Production', nf_chip: 'LOST FRAME', nf_h: 'This shot didn’t make the cut.', nf_p: 'The page has moved or the link is out of date. The work and the request form are right where they should be.', nf_home: 'Home', nf_re: 'Real estate films', cta_main: 'Discuss a shoot' },
+  es: { title: 'Página no encontrada · GR Production', nf_chip: 'PLANO PERDIDO', nf_h: 'Este plano no entró en el montaje.', nf_p: 'La página se ha movido o el enlace está desactualizado. Los trabajos y el formulario siguen en su sitio.', nf_home: 'Inicio', nf_re: 'Vídeos inmobiliarios', cta_main: 'Hablar del rodaje' }
+}};
+</script>
+<script src="/assets/site.js"></script>
+<script>try{track('NotFound',{path:location.pathname})}catch(e){}</script>
+</body>
+</html>
