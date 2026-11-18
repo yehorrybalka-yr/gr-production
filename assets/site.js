@@ -115,7 +115,7 @@ $$('.lang button').forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.l
 
 /* ---------- nav ---------- */
 const nav=$('#nav');let navSolid=false;
-function navCheck(){const s=scrollY>innerHeight*.6;if(s!==navSolid){navSolid=s;nav&&nav.classList.toggle('solid',s)}}
+function navCheck(){const s=scrollY>(innerWidth<=900?40:innerHeight*.6); /* phones: solid header as soon as the hero strip slides under it */if(s!==navSolid){navSolid=s;nav&&nav.classList.toggle('solid',s)}}
 addEventListener('scroll',navCheck,{passive:true});requestAnimationFrame(navCheck);
 
 /* ---------- reveals ---------- */
