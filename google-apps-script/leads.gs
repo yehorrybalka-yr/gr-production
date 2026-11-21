@@ -9,6 +9,8 @@
 const SHEET_NAME = 'Заявки';
 const TIMEZONE = 'Europe/Madrid';
 const NOTIFY_EMAIL = 'glibrudakov@gmail.com';   // адрес для письма о каждой новой заявке, например 'gleb@example.com'. Пусто = без писем
+/* Telegram: токен бота хранится не в коде, а в «Настройки проекта → Свойства скрипта» → TG_TOKEN.
+   Чаты, куда слать, функция connectTelegram() находит сама и сохраняет в TG_CHATS. Инструкция: README.md */
 
 /* Колонки таблицы: [ключ из формы, заголовок, ширина в px] */
 const COLUMNS = [
@@ -89,6 +91,7 @@ function doPost(e) {
     sh.getRange(r, idx['Дата и время']).setNumberFormat('dd.mm.yyyy HH:mm');
     sh.getRange(r, idx['Телефон']).setNumberFormat('@');
 
+    try { telegram_(row, p); } catch (err) { console.error('telegram', err); }   // ошибка Telegram не мешает сохранить заявку
     if (NOTIFY_EMAIL) notify_(row);
     return json_({ ok: true });
   } finally {
@@ -231,6 +234,61 @@ function notify_(row) {
     .map(([t, v]) => `${t}: ${v}`);
   const url = SpreadsheetApp.getActiveSpreadsheet().getUrl();
   MailApp.sendEmail(NOTIFY_EMAIL, `Новая заявка с сайта: ${get('name')}`, lines.join('\n') + `\n\nТаблица: ${url}`);
+}
+
+/* ===== Telegram ===== */
+
+/* Запустить один раз после того, как вы (и все, кто должен получать заявки) нажали «Старт» в боте
+   или добавили бота в группу и написали там любое сообщение. Можно запускать повторно, чтобы добавить новый чат. */
+function connectTelegram() {
+  const props = PropertiesService.getScriptProperties();
+  const token = props.getProperty('TG_TOKEN');
+  if (!token) throw new Error('Нет TG_TOKEN: «Настройки проекта» → «Свойства скрипта» → добавить TG_TOKEN = токен от @BotFather');
+  const res = JSON.parse(UrlFetchApp.fetch(`https://api.telegram.org/bot${token}/getUpdates`, { muteHttpExceptions: true }).getContentText());
+  if (!res.ok) throw new Error('Telegram не принял токен: ' + res.description);
+  const chats = {};
+  (props.getProperty('TG_CHATS') || '').split(',').filter(Boolean).forEach(id => chats[id] = id);
+  res.result.forEach(u => {
+    const m = u.message || u.channel_post || u.my_chat_member;
+    if (m && m.chat) chats[m.chat.id] = m.chat.title || m.chat.first_name || m.chat.username || m.chat.id;
+  });
+  const ids = Object.keys(chats);
+  if (!ids.length) throw new Error('Чатов нет: нажмите «Старт» в боте (или напишите в группе с ботом) и запустите ещё раз');
+  props.setProperty('TG_CHATS', ids.join(','));
+  ids.forEach(id => tgSend_(token, id, '✅ Бот подключён. Сюда будут приходить заявки с сайта GR Production.'));
+  console.log('Подключены чаты: ' + ids.map(id => `${chats[id]} (${id})`).join(', '));
+}
+
+/* Тестовое сообщение в Telegram — проверить, как выглядит заявка */
+function testTelegram() {
+  telegram_(COLUMNS.map(([key]) => ({ name: 'Тест', phone: '+34600000000', page: 'GR Production (главная)', shoot_type: 'Кулинария', when: 'В этом месяце', volume: 'Контент на месяц', lang: 'RU', device: 'Телефон / планшет', utm_source: 'facebook', lead_id: 'test' }[key] || '')), {});
+}
+
+function telegram_(row, p) {
+  const props = PropertiesService.getScriptProperties();
+  const token = props.getProperty('TG_TOKEN'), chats = (props.getProperty('TG_CHATS') || '').split(',').filter(Boolean);
+  if (!token || !chats.length) return;
+  const get = key => row[col_(key) - 1];
+  const esc = v => String(v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/^'/, '');
+  const phone = esc(get('phone')), digits = String(get('phone')).replace(/\D/g, '');
+  const skip = ['status', 'comment', 'fbp', 'fbc', 'received', 'name', 'phone', 'url', 'lead_id', 'referrer'];
+  const lines = COLUMNS
+    .filter(([key]) => !skip.includes(key))
+    .map(([key, title]) => [title, get(key)])
+    .filter(([, v]) => v !== '' && v !== undefined)
+    .map(([t, v]) => `${esc(t)}: <b>${esc(v)}</b>`);
+  const text = `🔥 <b>Новая заявка</b>\n\n👤 <b>${esc(get('name'))}</b>\n📞 ${phone}\n\n` + lines.join('\n');
+  const buttons = [];
+  if (digits.length >= 8) buttons.push({ text: 'Написать в WhatsApp', url: `https://wa.me/${digits}` });
+  buttons.push({ text: 'Таблица', url: SpreadsheetApp.getActiveSpreadsheet().getUrl() });
+  chats.forEach(id => tgSend_(token, id, text, { inline_keyboard: [buttons] }));
+}
+
+function tgSend_(token, chatId, text, markup) {
+  const payload = { chat_id: chatId, text: text, parse_mode: 'HTML', disable_web_page_preview: true };
+  if (markup) payload.reply_markup = JSON.stringify(markup);
+  const r = UrlFetchApp.fetch(`https://api.telegram.org/bot${token}/sendMessage`, { method: 'post', payload: payload, muteHttpExceptions: true });
+  if (r.getResponseCode() !== 200) console.error('telegram', chatId, r.getContentText());
 }
 
 function json_(obj) {
