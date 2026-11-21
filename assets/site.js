@@ -24,6 +24,11 @@ const SITE = {
       ru: 'Мне кажется круче только Майкл Джексон\n\nПерестань делать очень качественные видео',
       en: 'I think only Michael Jackson is cooler\n\nStop making such high-quality videos',
       es: 'Creo que solo Michael Jackson es más top\n\nDeja de hacer vídeos tan buenos'
+    } },
+    { name: 'Sergi', role: { ru: 'Тренер по боксу', en: 'Boxing coach', es: 'Entrenador de boxeo' }, orig: 'ru', pages: ['main'], chat: true, text: {
+      ru: 'Нет, ну это вообще другое дело\n\nЭто очень хорошо\n\n🔥🔥🔥',
+      en: 'Now this is a whole different story\n\nThis is really good\n\n🔥🔥🔥',
+      es: 'Esto ya es otra cosa\n\nEstá muy bien\n\n🔥🔥🔥'
     } }
   ]
 };

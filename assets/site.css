@@ -645,3 +645,5 @@ html[lang="ru"] .legal [data-l="ru"],html[lang="en"] .legal [data-l="en"],html[l
 }
 @media (max-width:350px){.qcards{grid-template-columns:1fr}}
 @media (max-width:300px){.ct-btns{grid-template-columns:1fr}}
+/* three or more reviews: one row of equal cards on wide screens, no orphan card */
+@media (min-width:880px){.quotes:has(.quote:nth-child(3)){grid-template-columns:repeat(3,minmax(0,1fr))}}
