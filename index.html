@@ -49,8 +49,10 @@
     t.src=v;s=b.getElementsByTagName(e)[0];
     s.parentNode.insertBefore(t,s)}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '2116482185898263');
-    fbq('track', 'PageView');
+    fbq('init', '1424387709488259');
+    /* the same eventID goes to the Conversions API (assets/site.js) so Meta counts this view once */
+    window.grPv=window.grPv||('pv.'+Date.now()+'.'+Math.random().toString(36).slice(2,8));
+    fbq('track', 'PageView', {}, {eventID: window.grPv});
   };
   if(consented)window.grLoadTracking();
 })();

@@ -35,8 +35,10 @@
     t.src=v;s=b.getElementsByTagName(e)[0];
     s.parentNode.insertBefore(t,s)}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '2116482185898263');
-    fbq('track', 'PageView');
+    fbq('init', '1424387709488259');
+    /* the same eventID goes to the Conversions API (assets/site.js) so Meta counts this view once */
+    window.grPv=window.grPv||('pv.'+Date.now()+'.'+Math.random().toString(36).slice(2,8));
+    fbq('track', 'PageView', {}, {eventID: window.grPv});
   };
   if(consented)window.grLoadTracking();
 })();
@@ -59,7 +61,7 @@
 <!-- ============ ES ============ -->
 <article data-l="es">
   <h1>Política de privacidad y cookies</h1>
-  <p class="upd">Última actualización: 18.11.2026</p>
+  <p class="upd">Última actualización: 24.11.2026</p>
 
   <h2>1. Responsable del tratamiento</h2>
   <p><span data-legal="name"></span> (GR Production · GReat Vision), <span data-legal="city"></span>.<br>Contacto: <span data-legal="contact"></span>.</p>
@@ -75,7 +77,7 @@
   <h2>3. Para qué y con qué base legal</h2>
   <ul>
     <li><b>Responder a tu solicitud y preparar un presupuesto</b> — medidas precontractuales a petición tuya (art. 6.1.b RGPD).</li>
-    <li><b>Publicidad y analítica con cookies</b> (Meta Pixel; Microsoft Clarity con cookies) — tu consentimiento (art. 6.1.a RGPD y art. 22.2 LSSI). Puedes retirarlo en cualquier momento.</li>
+    <li><b>Publicidad y analítica con cookies</b> (Meta Pixel y API de conversiones de Meta; Microsoft Clarity con cookies) — tu consentimiento (art. 6.1.a RGPD y art. 22.2 LSSI). Puedes retirarlo en cualquier momento. Con este consentimiento, las visitas, los contactos y las solicitudes también se envían a Meta desde nuestro servidor; tu nombre y teléfono, solo cifrados (hash SHA-256).</li>
     <li><b>Analítica básica sin cookies</b> (Microsoft Clarity en modo sin cookies, si no aceptas o no eliges) — nuestro interés legítimo en mejorar la web (art. 6.1.f RGPD). No se guarda nada en tu dispositivo y cada página se cuenta por separado. Puedes oponerte escribiéndonos.</li>
   </ul>
 
@@ -83,7 +85,7 @@
   <p>Las solicitudes, hasta 12 meses desde el último contacto si no llegamos a trabajar juntos. Si contratas el servicio, durante la relación y los plazos que exija la ley. Las cookies, según la tabla del punto 7.</p>
 
   <h2>5. Con quién se comparten</h2>
-  <p>No vendemos tus datos. Los usan proveedores que nos prestan servicio: Google (hoja de cálculo donde se guardan las solicitudes), Meta Platforms (WhatsApp y, con tu consentimiento, Meta Pixel), Microsoft (Clarity, con tu consentimiento) y Vercel (alojamiento de la web). Algunos están en EE. UU.; esas transferencias se amparan en el Marco de Privacidad de Datos UE-EE. UU. o en cláusulas contractuales tipo de la Comisión Europea.</p>
+  <p>No vendemos tus datos. Los usan proveedores que nos prestan servicio: Google (hoja de cálculo donde se guardan las solicitudes), Meta Platforms (WhatsApp y, con tu consentimiento, Meta Pixel y API de conversiones), Microsoft (Clarity, con tu consentimiento) y Vercel (alojamiento de la web). Algunos están en EE. UU.; esas transferencias se amparan en el Marco de Privacidad de Datos UE-EE. UU. o en cláusulas contractuales tipo de la Comisión Europea.</p>
 
   <h2>6. Tus derechos</h2>
   <p>Puedes pedir acceso, rectificación, supresión, oposición, limitación y portabilidad de tus datos, y retirar tu consentimiento, escribiendo a <span data-legal="contact"></span>. Si crees que no hemos atendido bien tu petición, puedes reclamar ante la Agencia Española de Protección de Datos (<a href="https://www.aepd.es" target="_blank" rel="noopener">www.aepd.es</a>).</p>
@@ -103,7 +105,7 @@
 <!-- ============ RU ============ -->
 <article data-l="ru">
   <h1>Политика конфиденциальности и cookie</h1>
-  <p class="upd">Обновлено: 18.11.2026</p>
+  <p class="upd">Обновлено: 24.11.2026</p>
 
   <h2>1. Кто обрабатывает данные</h2>
   <p><span data-legal="name"></span> (GR Production · GReat Vision), <span data-legal="city"></span>.<br>Связь: <span data-legal="contact"></span>.</p>
@@ -119,7 +121,7 @@
   <h2>3. Зачем и на каком основании</h2>
   <ul>
     <li><b>Ответить на заявку и подготовить расчёт</b> — действия до заключения договора по вашему запросу (ст. 6.1.b GDPR).</li>
-    <li><b>Реклама и аналитика с cookie</b> (Meta Pixel; Microsoft Clarity с cookie) — ваше согласие (ст. 6.1.a GDPR и ст. 22.2 LSSI). Его можно отозвать в любой момент.</li>
+    <li><b>Реклама и аналитика с cookie</b> (Meta Pixel и Conversions API Meta; Microsoft Clarity с cookie) — ваше согласие (ст. 6.1.a GDPR и ст. 22.2 LSSI). Его можно отозвать в любой момент. С этим согласием просмотры, обращения и заявки также передаются в Meta с нашего сервера; имя и телефон — только в зашифрованном виде (хеш SHA-256).</li>
     <li><b>Базовая аналитика без cookie</b> (Microsoft Clarity в режиме без cookie, если вы отказались или не сделали выбор) — наш законный интерес улучшать сайт (ст. 6.1.f GDPR). На ваше устройство ничего не записывается, каждая страница учитывается отдельно. Вы можете возразить, написав нам.</li>
   </ul>
 
@@ -127,7 +129,7 @@
   <p>Заявки — до 12 месяцев с последнего контакта, если работа не состоялась. Если вы заказали съёмку — на время работы и в сроки, которые требует закон. Cookie — по таблице в пункте 7.</p>
 
   <h2>5. Кому передаются данные</h2>
-  <p>Мы не продаём ваши данные. Их обрабатывают сервисы, которыми мы пользуемся: Google (таблица, где хранятся заявки), Meta Platforms (WhatsApp и, с вашего согласия, Meta Pixel), Microsoft (Clarity, с вашего согласия) и Vercel (хостинг сайта). Часть из них находится в США; такая передача основана на Рамочной программе защиты данных ЕС–США или на стандартных договорных условиях Еврокомиссии.</p>
+  <p>Мы не продаём ваши данные. Их обрабатывают сервисы, которыми мы пользуемся: Google (таблица, где хранятся заявки), Meta Platforms (WhatsApp и, с вашего согласия, Meta Pixel и Conversions API), Microsoft (Clarity, с вашего согласия) и Vercel (хостинг сайта). Часть из них находится в США; такая передача основана на Рамочной программе защиты данных ЕС–США или на стандартных договорных условиях Еврокомиссии.</p>
 
   <h2>6. Ваши права</h2>
   <p>Вы можете запросить доступ к своим данным, их исправление, удаление, ограничение обработки и перенос, возразить против обработки и отозвать согласие, написав на <span data-legal="contact"></span>. Если считаете, что ваш запрос не выполнен, можно подать жалобу в Испанское агентство по защите данных (<a href="https://www.aepd.es" target="_blank" rel="noopener">www.aepd.es</a>).</p>
@@ -147,7 +149,7 @@
 <!-- ============ EN ============ -->
 <article data-l="en">
   <h1>Privacy and cookie policy</h1>
-  <p class="upd">Last updated: 18.11.2026</p>
+  <p class="upd">Last updated: 24.11.2026</p>
 
   <h2>1. Data controller</h2>
   <p><span data-legal="name"></span> (GR Production · GReat Vision), <span data-legal="city"></span>.<br>Contact: <span data-legal="contact"></span>.</p>
@@ -163,7 +165,7 @@
   <h2>3. Why, and on what legal basis</h2>
   <ul>
     <li><b>Replying to your request and preparing a quote</b> — steps taken at your request before a contract (Art. 6(1)(b) GDPR).</li>
-    <li><b>Advertising and analytics with cookies</b> (Meta Pixel; Microsoft Clarity with cookies) — your consent (Art. 6(1)(a) GDPR and Art. 22.2 LSSI). You can withdraw it at any time.</li>
+    <li><b>Advertising and analytics with cookies</b> (Meta Pixel and Meta Conversions API; Microsoft Clarity with cookies) — your consent (Art. 6(1)(a) GDPR and Art. 22.2 LSSI). You can withdraw it at any time. With this consent, page views, contacts and requests are also sent to Meta from our server; your name and phone number only in hashed form (SHA-256).</li>
     <li><b>Basic cookieless analytics</b> (Microsoft Clarity in cookieless mode, if you decline or make no choice) — our legitimate interest in improving the site (Art. 6(1)(f) GDPR). Nothing is stored on your device and each page is counted separately. You can object by writing to us.</li>
   </ul>
 
@@ -171,7 +173,7 @@
   <p>Requests: up to 12 months after the last contact if we do not end up working together. If you hire us: for the duration of the work and the periods required by law. Cookies: see the table in section 7.</p>
 
   <h2>5. Who it is shared with</h2>
-  <p>We do not sell your data. It is processed by providers we use: Google (the spreadsheet where requests are stored), Meta Platforms (WhatsApp and, with your consent, Meta Pixel), Microsoft (Clarity, with your consent) and Vercel (website hosting). Some are based in the US; those transfers rely on the EU-US Data Privacy Framework or the European Commission's standard contractual clauses.</p>
+  <p>We do not sell your data. It is processed by providers we use: Google (the spreadsheet where requests are stored), Meta Platforms (WhatsApp and, with your consent, Meta Pixel and Conversions API), Microsoft (Clarity, with your consent) and Vercel (website hosting). Some are based in the US; those transfers rely on the EU-US Data Privacy Framework or the European Commission's standard contractual clauses.</p>
 
   <h2>6. Your rights</h2>
   <p>You can ask for access, rectification, erasure, objection, restriction and portability, and withdraw your consent, by writing to <span data-legal="contact"></span>. If you think your request was not handled properly, you can complain to the Spanish Data Protection Agency (<a href="https://www.aepd.es" target="_blank" rel="noopener">www.aepd.es</a>).</p>

@@ -9,6 +9,8 @@ const SITE = {
   /* Site languages that are switched on. The Spanish texts stay in the code: add 'es' back here (and the ES button in the pages) to bring it back. */
   langs: ['ru','en'],
   /* Google Apps Script web app URL (see google-apps-script/README.md). Empty = leads go to WhatsApp only. */
+  /* Vercel function that forwards events to the Meta Conversions API (api/capi.js; token lives in the Vercel env var META_CAPI_TOKEN). Empty = off. */
+  capiEndpoint: '/api/capi',
   leadsEndpoint: 'https://script.google.com/macros/s/AKfycbya89YpeqR7c74vf4GfUQIfeXYbFmgUZdx1zaO3ZdTtWO6NyaptHpDTPmpT0p5tzCFh/exec',
   /* Data controller shown on the privacy page. Empty email = WhatsApp is shown as the contact. */
   legal: { name: 'Glib Rudakov', email: 'glibrudakov@gmail.com', city: 'Valencia, España' },
@@ -78,7 +80,25 @@ function track(name,params,opts){
   if(store.get('gr-consent')!=='all')return;
   const p=Object.assign({page:PAGE.id||'main',lang:LANG},params||{});
   /* opts.eventID lets the same event be deduplicated later if it is also sent server-side (Conversions API) */
-  try{if(window.fbq)(STD_EVENTS.includes(name)?fbq('track',name,p,opts||{}):fbq('trackCustom',name,p,opts||{}))}catch(e){}
+  opts=Object.assign({},opts||{});const user=opts.user;delete opts.user;
+  if(CAPI_EVENTS.includes(name)&&!opts.eventID)opts.eventID=evId(name);
+  try{if(window.fbq)(STD_EVENTS.includes(name)?fbq('track',name,p,opts):fbq('trackCustom',name,p,opts))}catch(e){}
+  if(CAPI_EVENTS.includes(name))capi(name,p,opts.eventID,user);
+}
+/* ---------- Conversions API: the key events are also sent from the server, with the same eventID as the pixel (Meta deduplicates them).
+   Only with cookie consent, like the pixel. Name and phone (Lead only) are hashed on the server before they go to Meta. ---------- */
+const CAPI_EVENTS=['PageView','ViewContent','Contact','Lead'];
+function evId(name){return name.toLowerCase()+'.'+Date.now()+'.'+Math.random().toString(36).slice(2,8)}
+function capi(name,data,eventId,user){
+  try{
+    if(!SITE.capiEndpoint||store.get('gr-consent')!=='all')return;
+    const ck=n=>{const m=document.cookie.match('(?:^|; )'+n+'=([^;]*)');return m?decodeURIComponent(m[1]):''};
+    let vid=store.get('gr-vid');if(!vid){vid=Date.now().toString(36)+Math.random().toString(36).slice(2,10);store.set('gr-vid',vid)}
+    const fbclid=new URLSearchParams(location.search).get('fbclid');
+    const body=JSON.stringify({event_name:name,event_id:eventId,event_source_url:location.href.split('#')[0],fbp:ck('_fbp'),fbc:ck('_fbc')||(fbclid?`fb.1.${Date.now()}.${fbclid}`:''),external_id:vid,custom_data:data||{},user:user||undefined});
+    if(navigator.sendBeacon&&navigator.sendBeacon(SITE.capiEndpoint,new Blob([body],{type:'text/plain'})))return;
+    fetch(SITE.capiEndpoint,{method:'POST',keepalive:true,body,headers:{'content-type':'text/plain'}}).catch(()=>{});
+  }catch(e){}
 }
 window.grTrack=track;
 try{if(window.clarity)clarity('set','page',PAGE.id||'main')}catch(e){}
@@ -116,7 +136,7 @@ function setLang(l){
   store.set('gr-lang',l);
   hooks.forEach(f=>{try{f(l)}catch(e){}});
 }
-$$('.lang button').forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.lang)));
+$$('.lang button').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.lang!==LANG)track('LangSwitch',{to:b.dataset.lang});setLang(b.dataset.lang)}));
 
 /* ---------- nav ---------- */
 const nav=$('#nav');let navSolid=false;
@@ -227,7 +247,10 @@ const lbBox=lb&&lb.querySelector('.box');
 const isH=name=>!!document.querySelector(`[data-v="${name}"][data-orient="h"],[data-v-en="${name}"][data-orient="h"]`);
 if(lbv)lbv.addEventListener('loadedmetadata',()=>{if(lbBox&&lbv.videoWidth)lbBox.classList.toggle('h',lbv.videoWidth>lbv.videoHeight)});
 function openLb(name){if(!lb)return;lastFocus=document.activeElement;if(lbBox)lbBox.classList.toggle('h',isH(name));lbv.src=`${BASE}v/${name}.mp4`;lbv.muted=false;lbv.volume=1;lb.classList.add('open');document.body.style.overflow='hidden';setTimeout(()=>{const c=$('#lbclose');c&&c.focus({preventScroll:true})},30);reels.forEach(r=>{const v=r.querySelector('video');if(v)v.pause()});lbv.play().catch(()=>{});$('#lbclose').focus()}
-function closeLb(){lb.classList.remove('open');lbv.pause();lbv.removeAttribute('src');lbv.load();document.body.style.overflow='';if(lastFocus)lastFocus.focus()}
+/* how far each film is watched in the lightbox: VideoProgress 25 / 50 / 75 / 95 % (once per opening) */
+let lbMarks=new Set();
+if(lbv)lbv.addEventListener('timeupdate',()=>{if(!lbv.duration||!lb.classList.contains('open'))return;const pc=lbv.currentTime/lbv.duration*100;[25,50,75,95].forEach(m=>{if(pc>=m&&!lbMarks.has(m)){lbMarks.add(m);track('VideoProgress',{percent:m,video:(lbv.getAttribute('src')||'').split('/').pop().replace('.mp4','')})}})});
+function closeLb(){lbMarks=new Set();lb.classList.remove('open');lbv.pause();lbv.removeAttribute('src');lbv.load();document.body.style.overflow='';if(lastFocus)lastFocus.focus()}
 reels.forEach(r=>r.addEventListener('click',()=>{openLb(srcOf(r));track('ViewContent',{content_type:'video',content_name:r.dataset.title||r.dataset.v,content_ids:[r.dataset.v]})}));
 /* ---------- hero wall (variant A) ---------- */
 const hw=$('#hero.hwall');
@@ -522,7 +545,7 @@ if(form){
     const url=`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(lines.join('\n'))}`;
     form.classList.add('sent');
     /* no personal data goes to the pixel: only what was chosen in the form and the ad source */
-    track('Lead',{content_name:PAGE.label||PAGE.id,method:'whatsapp_form',role:val('role'),package:val('package'),shoot_type:val('type'),when:val('when'),volume:val('volume'),objects:val('objects'),value:PACK_PRICE[val('package')]||undefined,currency:PACK_PRICE[val('package')]?'EUR':undefined,utm_source:Q.get('utm_source')||undefined},{eventID:leadId});
+    track('Lead',{content_name:PAGE.label||PAGE.id,method:'whatsapp_form',role:val('role'),package:val('package'),shoot_type:val('type'),when:val('when'),volume:val('volume'),objects:val('objects'),value:PACK_PRICE[val('package')]||undefined,currency:PACK_PRICE[val('package')]?'EUR':undefined,utm_source:Q.get('utm_source')||undefined},{eventID:leadId,user:{ph:phone,fn:name}});
     const w=window.open(url,'_blank','noopener');if(!w)location.href=url;
   });
   let started=false;
@@ -551,12 +574,14 @@ ck.querySelector('.ck-accept').addEventListener('click',()=>{
   try{window.clarity&&clarity('consentv2',{ad_Storage:'granted',analytics_Storage:'granted'})}catch(e){}
   try{window.fbq&&fbq('consent','grant')}catch(e){}
   track('ConsentGranted');
+  if(window.grPv)capi('PageView',{page:PAGE.id||'main',lang:LANG},window.grPv);
 });
 ck.querySelector('.ck-reject').addEventListener('click',()=>{
   const wasOn=consentGet()==='all';store.set('gr-consent','necessary');ckOpen(false);
   try{window.clarity&&clarity('consentv2',{ad_Storage:'denied',analytics_Storage:'denied'})}catch(e){}
   try{window.fbq&&fbq('consent','revoke')}catch(e){}
   if(wasOn)wipeTrackingCookies();
+  track('ConsentDenied');
 });
 hooks.push(()=>{ck.querySelector('.ck-text span').textContent=t('ck_text');ck.querySelector('.ck-more').textContent=t('ck_more');ck.querySelector('.ck-accept').textContent=t('ck_accept');ck.querySelector('.ck-reject').textContent=t('ck_reject');ck.setAttribute('aria-label',t('ck_label'))});
 if(!consentGet())ckOpen(true);
@@ -638,7 +663,7 @@ $$('[data-legal]').forEach(el=>{
 
 /* ---------- section views worth knowing about (once per page load) ---------- */
 const seen=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;seen.unobserve(e.target);track(e.target.dataset.seenEvent)}),{threshold:.4});
-[['#packages','ViewPackages'],['#contact','ViewForm'],['#reviews','ViewReviews']].forEach(([s,n])=>{const el=$(s);if(el&&!el.hidden){el.dataset.seenEvent=n;seen.observe(el)}});
+[['#work','ViewWorks'],['#case','ViewCase'],['#process','ViewProcess'],['#packages','ViewPackages'],['#reviews','ViewReviews'],['#faq','ViewFAQ'],['#contact','ViewForm']].forEach(([s,n])=>{const el=$(s);if(el&&!el.hidden){el.dataset.seenEvent=n;seen.observe(el)}});
 
 /* ---------- FAQ: which questions people open ---------- */
 $$('.faq details').forEach(d=>d.addEventListener('toggle',()=>{if(d.open)track('FAQOpen',{question:label(d.querySelector('summary'))})}));
@@ -661,4 +686,5 @@ document.addEventListener('visibilitychange',()=>document.body.classList.toggle(
   setLang(store.get('gr-lang')||auto);
 })();
 heroApi&&heroApi.apply();
+if(window.grPv&&consentGet()==='all')capi('PageView',{page:PAGE.id||'main',lang:LANG},window.grPv);
 })();
