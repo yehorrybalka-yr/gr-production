@@ -9,8 +9,9 @@ const SITE = {
   /* Site languages that are switched on. The Spanish texts stay in the code: add 'es' back here (and the ES button in the pages) to bring it back. */
   langs: ['ru','en'],
   /* Google Apps Script web app URL (see google-apps-script/README.md). Empty = leads go to WhatsApp only. */
-  /* Vercel function that forwards events to the Meta Conversions API (api/capi.js; token lives in the Vercel env var META_CAPI_TOKEN). Empty = off. */
-  capiEndpoint: '/api/capi',
+  /* Server endpoint that forwards PageView / ViewContent / Contact to the Meta Conversions API (api/capi.js works on Vercel only).
+     Empty = off. The Lead event goes to Conversions API through the Google Apps Script (google-apps-script/leads.gs), whatever the hosting. */
+  capiEndpoint: '',
   leadsEndpoint: 'https://script.google.com/macros/s/AKfycbya89YpeqR7c74vf4GfUQIfeXYbFmgUZdx1zaO3ZdTtWO6NyaptHpDTPmpT0p5tzCFh/exec',
   /* Data controller shown on the privacy page. Empty email = WhatsApp is shown as the contact. */
   legal: { name: 'Glib Rudakov', email: 'glibrudakov@gmail.com', city: 'Valencia, España' },
@@ -530,7 +531,9 @@ if(form){
     sendLead({lead_id:leadId,page:PAGE.id||'main',lang:LANG,name,phone,role:val('role'),shoot_type:val('type'),when:val('when'),volume:val('volume'),objects:val('objects'),package:val('package'),location:val('location'),link:val('link'),agency:val('agency'),message:val('msg'),
       utm_source:Q.get('utm_source'),utm_medium:Q.get('utm_medium'),utm_campaign:Q.get('utm_campaign'),utm_content:Q.get('utm_content'),utm_term:Q.get('utm_term'),
       device:matchMedia('(pointer:coarse)').matches?'mobile':'desktop',referrer:document.referrer,url:location.href.split('#')[0],
-      fbp:cookie('_fbp'),fbc:cookie('_fbc')||(fbclid?`fb.1.${Date.now()}.${fbclid}`:'')});
+      fbp:cookie('_fbp'),fbc:cookie('_fbc')||(fbclid?`fb.1.${Date.now()}.${fbclid}`:''),
+      /* Conversions API for the Lead runs in the Apps Script, only with cookie consent (same as the pixel) */
+      ...(store.get('gr-consent')==='all'?{capi:'1',ua:navigator.userAgent,vid:(store.get('gr-vid')||(()=>{const v=Date.now().toString(36)+Math.random().toString(36).slice(2,10);store.set('gr-vid',v);return v})())}:{})});
     const lines=[t('wa_hi'),'',`${t('wa_name')}: ${name}`];
     $$('[data-wa]',form).forEach(el=>{
       let v='';

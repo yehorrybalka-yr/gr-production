@@ -92,6 +92,7 @@ function doPost(e) {
     sh.getRange(r, idx['Телефон']).setNumberFormat('@');
 
     try { telegram_(row, p); } catch (err) { console.error('telegram', err); }   // ошибка Telegram не мешает сохранить заявку
+    try { capiLead_(p); } catch (err) { console.error('capi', err); }               // и ошибка Conversions API тоже
     if (NOTIFY_EMAIL) notify_(row);
     return json_({ ok: true });
   } finally {
@@ -234,6 +235,57 @@ function notify_(row) {
     .map(([t, v]) => `${t}: ${v}`);
   const url = SpreadsheetApp.getActiveSpreadsheet().getUrl();
   MailApp.sendEmail(NOTIFY_EMAIL, `Новая заявка с сайта: ${get('name')}`, lines.join('\n') + `\n\nТаблица: ${url}`);
+}
+
+/* ===== Meta Conversions API: событие Lead с сервера =====
+   Токен: «Настройки проекта» → «Свойства скрипта» → CAPI_TOKEN (Events Manager → Настройки → Conversions API → Сгенерировать маркер доступа).
+   Для проверки в Events Manager → «Тестовые события»: свойство CAPI_TEST_CODE (после проверки удалить).
+   Отправляется только если посетитель принял cookie (сайт присылает capi=1). event_id = lead_id — тот же, что у события Lead в пикселе,
+   поэтому Meta считает заявку один раз. Имя и телефон уходят только в виде хеша SHA-256. */
+const META_PIXEL_ID = '1424387709488259';
+const META_API_VERSION = 'v26.0';
+
+function capiLead_(p) {
+  const props = PropertiesService.getScriptProperties();
+  const token = props.getProperty('CAPI_TOKEN');
+  if (!token || p.capi !== '1') return;
+  const sha = v => Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, v, Utilities.Charset.UTF_8)
+    .map(b => ('0' + (b & 255).toString(16)).slice(-2)).join('');
+  const user = {};
+  const ph = String(p.phone || '').replace(/\D/g, '');
+  if (ph.length >= 8) user.ph = [sha(ph)];
+  const fn = String(p.name || '').trim().toLowerCase().split(/\s+/)[0].replace(/[^\p{L}]/gu, '');
+  if (fn) user.fn = [sha(fn)];
+  if (p.fbp) user.fbp = String(p.fbp).slice(0, 200);
+  if (p.fbc) user.fbc = String(p.fbc).slice(0, 500);
+  if (p.ua) user.client_user_agent = String(p.ua).slice(0, 500);
+  if (p.vid) user.external_id = [sha(String(p.vid).slice(0, 100))];
+  const custom = { content_name: LABELS.page[p.page] || p.page || '', method: 'whatsapp_form' };
+  ['package', 'shoot_type', 'role', 'utm_source'].forEach(k => { if (p[k]) custom[k] = String(p[k]).slice(0, 100); });
+  if (PACKAGE_VALUE[p.package]) { custom.value = PACKAGE_VALUE[p.package]; custom.currency = 'EUR'; }
+  const payload = {
+    data: [{
+      event_name: 'Lead',
+      event_time: Math.floor(Date.now() / 1000),
+      event_id: String(p.lead_id || ''),
+      event_source_url: String(p.url || '').slice(0, 1000),
+      action_source: 'website',
+      user_data: user,
+      custom_data: custom,
+    }],
+  };
+  const test = props.getProperty('CAPI_TEST_CODE');
+  if (test) payload.test_event_code = test;
+  const r = UrlFetchApp.fetch(`https://graph.facebook.com/${META_API_VERSION}/${META_PIXEL_ID}/events?access_token=${encodeURIComponent(token)}`,
+    { method: 'post', contentType: 'application/json', payload: JSON.stringify(payload), muteHttpExceptions: true });
+  if (r.getResponseCode() !== 200) throw new Error('Conversions API ' + r.getResponseCode() + ': ' + r.getContentText().slice(0, 500));
+}
+
+/* Проверка токена: отправляет тестовую заявку (видна в Events Manager → «Тестовые события», если задан CAPI_TEST_CODE) */
+function testCapi() {
+  if (!PropertiesService.getScriptProperties().getProperty('CAPI_TOKEN')) throw new Error('Нет свойства CAPI_TOKEN');
+  capiLead_({ capi: '1', lead_id: 'test-' + Date.now(), name: 'Test', phone: '+34600000000', page: 'main', url: 'https://gr-production.vercel.app/', ua: 'Apps Script test' });
+  console.log('Готово: Meta приняла событие, токен работает.');
 }
 
 /* ===== Telegram ===== */
